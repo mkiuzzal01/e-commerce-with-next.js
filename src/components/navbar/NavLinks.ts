@@ -1,48 +1,45 @@
+
 import { TNavLink } from "./TNavbar";
 
-export const navLinks: TNavLink = [
+// Sample data structure for e-commerce categories
+export const megaMenuData: TNavLink = [
   {
-    MainCategoryName: "Men",
-    link: "/men",
+    MainCategoryName: "Fashion",
+    link: "/fashion",
     Category: [
       {
-        categoryName: "Clothing",
-        link: "/men/clothing",
+        categoryName: "Women's Fashion",
+        link: "/fashion/women",
         subCategory: [
-          { subCategoryName: "T-Shirts", link: "/men/clothing/tshirts" },
-          { subCategoryName: "Shirts", link: "/men/clothing/shirts" },
-          { subCategoryName: "Jackets", link: "/men/clothing/jackets" },
+          { subCategoryName: "Dresses", link: "/fashion/women/dresses" },
+          { subCategoryName: "Tops & Blouses", link: "/fashion/women/tops" },
+          { subCategoryName: "Jeans & Pants", link: "/fashion/women/pants" },
+          { subCategoryName: "Shoes", link: "/fashion/women/shoes" },
+          {
+            subCategoryName: "Accessories",
+            link: "/fashion/women/accessories",
+          },
         ],
       },
       {
-        categoryName: "Footwear",
-        link: "/men/footwear",
+        categoryName: "Men's Fashion",
+        link: "/fashion/men",
         subCategory: [
-          { subCategoryName: "Sneakers", link: "/men/footwear/sneakers" },
-          { subCategoryName: "Sandals", link: "/men/footwear/sandals" },
-        ],
-      },
-    ],
-  },
-  {
-    MainCategoryName: "Women",
-    link: "/women",
-    Category: [
-      {
-        categoryName: "Clothing",
-        link: "/women/clothing",
-        subCategory: [
-          { subCategoryName: "Dresses", link: "/women/clothing/dresses" },
-          { subCategoryName: "Tops", link: "/women/clothing/tops" },
-          { subCategoryName: "Skirts", link: "/women/clothing/skirts" },
+          { subCategoryName: "Shirts", link: "/fashion/men/shirts" },
+          { subCategoryName: "Pants & Jeans", link: "/fashion/men/pants" },
+          { subCategoryName: "Shoes", link: "/fashion/men/shoes" },
+          { subCategoryName: "Watches", link: "/fashion/men/watches" },
+          { subCategoryName: "Jackets", link: "/fashion/men/jackets" },
         ],
       },
       {
-        categoryName: "Accessories",
-        link: "/women/accessories",
+        categoryName: "Kids Fashion",
+        link: "/fashion/kids",
         subCategory: [
-          { subCategoryName: "Bags", link: "/women/accessories/bags" },
-          { subCategoryName: "Watches", link: "/women/accessories/watches" },
+          { subCategoryName: "Boys Clothing", link: "/fashion/kids/boys" },
+          { subCategoryName: "Girls Clothing", link: "/fashion/kids/girls" },
+          { subCategoryName: "Baby Clothes", link: "/fashion/kids/baby" },
+          { subCategoryName: "Kids Shoes", link: "/fashion/kids/shoes" },
         ],
       },
     ],
@@ -52,56 +49,132 @@ export const navLinks: TNavLink = [
     link: "/electronics",
     Category: [
       {
-        categoryName: "Mobiles",
-        link: "/electronics/mobiles",
+        categoryName: "Mobile & Tablets",
+        link: "/electronics/mobile",
         subCategory: [
           {
             subCategoryName: "Smartphones",
-            link: "/electronics/mobiles/smartphones",
+            link: "/electronics/mobile/smartphones",
+          },
+          { subCategoryName: "Tablets", link: "/electronics/mobile/tablets" },
+          {
+            subCategoryName: "Cases & Covers",
+            link: "/electronics/mobile/cases",
+          },
+          { subCategoryName: "Chargers", link: "/electronics/mobile/chargers" },
+        ],
+      },
+      {
+        categoryName: "Computers",
+        link: "/electronics/computers",
+        subCategory: [
+          {
+            subCategoryName: "Laptops",
+            link: "/electronics/computers/laptops",
           },
           {
-            subCategoryName: "Feature Phones",
-            link: "/electronics/mobiles/feature-phones",
+            subCategoryName: "Desktops",
+            link: "/electronics/computers/desktops",
+          },
+          {
+            subCategoryName: "Gaming PCs",
+            link: "/electronics/computers/gaming",
+          },
+          {
+            subCategoryName: "Accessories",
+            link: "/electronics/computers/accessories",
           },
         ],
       },
       {
-        categoryName: "Laptops",
-        link: "/electronics/laptops",
+        categoryName: "Audio & Video",
+        link: "/electronics/audio",
         subCategory: [
           {
-            subCategoryName: "Gaming Laptops",
-            link: "/electronics/laptops/gaming",
+            subCategoryName: "Headphones",
+            link: "/electronics/audio/headphones",
           },
-          {
-            subCategoryName: "Ultrabooks",
-            link: "/electronics/laptops/ultrabooks",
-          },
+          { subCategoryName: "Speakers", link: "/electronics/audio/speakers" },
+          { subCategoryName: "TVs", link: "/electronics/audio/tvs" },
+          { subCategoryName: "Cameras", link: "/electronics/audio/cameras" },
         ],
       },
     ],
   },
   {
-    MainCategoryName: "Beauty",
-    link: "/beauty",
+    MainCategoryName: "Home & Garden",
+    link: "/home-garden",
     Category: [
       {
-        categoryName: "Skin Care",
-        link: "/beauty/skin-care",
+        categoryName: "Furniture",
+        link: "/home-garden/furniture",
         subCategory: [
-          { subCategoryName: "Face Wash", link: "/beauty/skin-care/face-wash" },
           {
-            subCategoryName: "Moisturizers",
-            link: "/beauty/skin-care/moisturizers",
+            subCategoryName: "Living Room",
+            link: "/home-garden/furniture/living-room",
+          },
+          {
+            subCategoryName: "Bedroom",
+            link: "/home-garden/furniture/bedroom",
+          },
+          {
+            subCategoryName: "Kitchen",
+            link: "/home-garden/furniture/kitchen",
+          },
+          { subCategoryName: "Office", link: "/home-garden/furniture/office" },
+        ],
+      },
+      {
+        categoryName: "Home Decor",
+        link: "/home-garden/decor",
+        subCategory: [
+          { subCategoryName: "Wall Art", link: "/home-garden/decor/wall-art" },
+          { subCategoryName: "Lighting", link: "/home-garden/decor/lighting" },
+          {
+            subCategoryName: "Rugs & Carpets",
+            link: "/home-garden/decor/rugs",
+          },
+          { subCategoryName: "Curtains", link: "/home-garden/decor/curtains" },
+        ],
+      },
+      {
+        categoryName: "Garden",
+        link: "/home-garden/garden",
+        subCategory: [
+          { subCategoryName: "Plants", link: "/home-garden/garden/plants" },
+          { subCategoryName: "Tools", link: "/home-garden/garden/tools" },
+          {
+            subCategoryName: "Outdoor Furniture",
+            link: "/home-garden/garden/outdoor-furniture",
+          },
+          { subCategoryName: "Seeds", link: "/home-garden/garden/seeds" },
+        ],
+      },
+    ],
+  },
+  {
+    MainCategoryName: "Sports & Fitness",
+    link: "/sports",
+    Category: [
+      {
+        categoryName: "Fitness Equipment",
+        link: "/sports/fitness",
+        subCategory: [
+          { subCategoryName: "Gym Equipment", link: "/sports/fitness/gym" },
+          { subCategoryName: "Yoga & Pilates", link: "/sports/fitness/yoga" },
+          {
+            subCategoryName: "Cardio Equipment",
+            link: "/sports/fitness/cardio",
           },
         ],
       },
       {
-        categoryName: "Hair Care",
-        link: "/beauty/hair-care",
+        categoryName: "Sports Gear",
+        link: "/sports/gear",
         subCategory: [
-          { subCategoryName: "Shampoo", link: "/beauty/hair-care/shampoo" },
-          { subCategoryName: "Hair Oil", link: "/beauty/hair-care/hair-oil" },
+          { subCategoryName: "Football", link: "/sports/gear/football" },
+          { subCategoryName: "Basketball", link: "/sports/gear/basketball" },
+          { subCategoryName: "Tennis", link: "/sports/gear/tennis" },
         ],
       },
     ],

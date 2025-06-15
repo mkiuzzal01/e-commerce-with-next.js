@@ -1,342 +1,289 @@
 "use client";
-import React, { useState } from "react";
-import Link from "next/link";
+import React, { useState, useRef, useEffect } from "react";
 import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
+  ChevronDown,
+  Search,
+  ShoppingCart,
+  Heart,
+  User,
   Menu,
-  MenuItem,
-  Box,
-  IconButton,
-  Badge,
-  InputBase,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  Collapse,
-  Divider,
-} from "@mui/material";
-import {
-  Menu as MenuIcon,
-  Search as SearchIcon,
-  ShoppingCart as CartIcon,
-  Person as PersonIcon,
-  Favorite as FavoriteIcon,
-  ExpandLess,
-  ExpandMore,
-} from "@mui/icons-material";
-import { navLinks } from "./NavLinks";
+  X,
+} from "lucide-react";
+import { megaMenuData } from "./NavLinks";
+export default function EcommerceMegaMenu() {
+  const [activeMenu, setActiveMenu] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileExpandedCategories, setMobileExpandedCategories] = useState([]);
+  const timeoutRef = useRef(null);
 
-export default function Navbar() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [openCategoryIndex, setOpenCategoryIndex] = useState<number | null>(
-    null
-  );
-  const [subAnchorEl, setSubAnchorEl] = useState<null | HTMLElement>(null);
-  const [openSubIndex, setOpenSubIndex] = useState<number | null>(null);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [mobileExpandedCategories, setMobileExpandedCategories] = useState<
-    number[]
-  >([]);
-
-  const handleMenuOpen = (
-    event: React.MouseEvent<HTMLElement>,
-    index: number
-  ) => {
-    setAnchorEl(event.currentTarget);
-    setOpenCategoryIndex(index);
+  const handleMouseEnter = (index: any) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setActiveMenu(index);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    setOpenCategoryIndex(null);
-    setSubAnchorEl(null);
-    setOpenSubIndex(null);
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setActiveMenu(null);
+    }, 150);
   };
 
-  const handleSubMenuOpen = (
-    event: React.MouseEvent<HTMLElement>,
-    index: number
-  ) => {
-    setSubAnchorEl(event.currentTarget);
-    setOpenSubIndex(index);
-  };
-
-  const handleMobileDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  const handleMobileCategoryToggle = (index: number) => {
+  const handleMobileCategoryToggle = (index: any) => {
     setMobileExpandedCategories((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
   };
 
-  const drawer = (
-    <Box sx={{ width: 280 }} role="presentation">
-      <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>
-        <Typography variant="h6" className="text-green-600 font-bold">
-          MyShop
-        </Typography>
-      </Box>
-      <List>
-        {navLinks.map((main, mainIdx) => (
-          <div key={mainIdx}>
-            <ListItem
-              button
-              onClick={() => handleMobileCategoryToggle(mainIdx)}
-              sx={{ py: 1.5 }}
-            >
-              <ListItemText
-                primary={main.MainCategoryName}
-                primaryTypographyProps={{ fontWeight: "medium" }}
-              />
-              {mobileExpandedCategories.includes(mainIdx) ? (
-                <ExpandLess />
-              ) : (
-                <ExpandMore />
-              )}
-            </ListItem>
-            <Collapse
-              in={mobileExpandedCategories.includes(mainIdx)}
-              timeout="auto"
-              unmountOnExit
-            >
-              <List component="div" disablePadding>
-                {main.Category.map((cat, catIdx) => (
-                  <div key={catIdx}>
-                    <ListItem
-                      button
-                      sx={{ pl: 4, py: 1 }}
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      <Link href={cat.link} className="w-full">
-                        <ListItemText
-                          primary={cat.categoryName}
-                          primaryTypographyProps={{ fontSize: "0.9rem" }}
-                        />
-                      </Link>
-                    </ListItem>
-                    {cat.subCategory.map((sub, subIdx) => (
-                      <ListItem
-                        key={subIdx}
-                        button
-                        sx={{ pl: 6, py: 0.5 }}
-                        onClick={() => setMobileOpen(false)}
-                      >
-                        <Link href={sub.link} className="w-full">
-                          <ListItemText
-                            primary={sub.subCategoryName}
-                            primaryTypographyProps={{
-                              fontSize: "0.8rem",
-                              color: "text.secondary",
-                            }}
-                          />
-                        </Link>
-                      </ListItem>
-                    ))}
-                  </div>
-                ))}
-              </List>
-            </Collapse>
-            <Divider />
-          </div>
-        ))}
-      </List>
-    </Box>
-  );
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
-    <>
-      <AppBar
-        position="static"
-        sx={{
-          backgroundColor: "#fff",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-          borderBottom: "1px solid #e0e0e0",
-        }}
-      >
-        <Toolbar className="container mx-auto flex justify-between items-center px-4 lg:px-8">
-          {/* Mobile Menu Button */}
-          <Box className="md:hidden">
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleMobileDrawerToggle}
-              sx={{ color: "#333" }}
+    <div className="relative">
+      {/* Desktop Header */}
+      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div className="container mx-auto px-4">
+          {/* Top Bar */}
+          <div className="hidden lg:flex justify-between items-center py-2 text-sm text-gray-600 border-b">
+            <div className="flex items-center space-x-4">
+              <span>Free shipping on orders over $50</span>
+              <span>|</span>
+              <span>24/7 Customer Support</span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <a href="#" className="hover:text-blue-600">
+                Help
+              </a>
+              <a href="#" className="hover:text-blue-600">
+                Track Order
+              </a>
+              <a href="#" className="hover:text-blue-600">
+                Store Locator
+              </a>
+            </div>
+          </div>
+
+          {/* Main Navigation */}
+          <div className="flex items-center justify-between py-4">
+            {/* Mobile Menu Button */}
+            <button
+              className="lg:hidden p-2 rounded-md hover:bg-gray-100"
+              onClick={() => setIsMobileMenuOpen(true)}
             >
-              <MenuIcon />
-            </IconButton>
-          </Box>
+              <Menu className="w-6 h-6" />
+            </button>
 
-          {/* Logo */}
-          <Typography variant="h6" className="text-xl font-bold text-green-600">
-            <Link href="/" className="flex items-center">
-              MyShop
-            </Link>
-          </Typography>
+            {/* Logo */}
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-blue-600">ShopMega</h1>
+            </div>
 
-          {/* Desktop Navigation */}
-          <Box className="hidden md:flex gap-2">
-            {navLinks.map((main, mainIdx) => (
-              <div key={mainIdx}>
-                <Button
-                  onMouseEnter={(e) => handleMenuOpen(e, mainIdx)}
-                  className="text-gray-800 normal-case px-4 py-2 hover:bg-gray-100 rounded-md transition-colors"
-                  sx={{
-                    minWidth: "auto",
-                    "&:hover": { backgroundColor: "#f5f5f5" },
-                  }}
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center space-x-8">
+              {megaMenuData.map((item, index) => (
+                <div
+                  key={index}
+                  className="relative"
+                  onMouseEnter={() => handleMouseEnter(index)}
+                  onMouseLeave={handleMouseLeave}
                 >
-                  {main.MainCategoryName}
-                </Button>
+                  <button className="flex items-center space-x-1 px-3 py-2 text-gray-700 hover:text-blue-600 font-medium transition-colors">
+                    <span>{item.MainCategoryName}</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </nav>
 
-                {/* First-level Category Menu */}
-                <Menu
-                  anchorEl={anchorEl}
-                  open={openCategoryIndex === mainIdx}
-                  onClose={handleMenuClose}
-                  onMouseLeave={handleMenuClose}
-                  MenuListProps={{
-                    onMouseLeave: handleMenuClose,
-                    sx: { py: 1 },
-                  }}
-                  PaperProps={{
-                    sx: {
-                      mt: 1,
-                      minWidth: 200,
-                      boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-                      border: "1px solid #e0e0e0",
-                    },
-                  }}
-                >
-                  {main.Category.map((cat, catIdx) => (
-                    <div key={catIdx}>
-                      <MenuItem
-                        onMouseEnter={(e) => handleSubMenuOpen(e, catIdx)}
-                        onClick={handleMenuClose}
-                        sx={{
-                          py: 1.5,
-                          "&:hover": { backgroundColor: "#f8f9fa" },
-                        }}
-                      >
-                        <Link href={cat.link} className="w-full font-medium">
-                          {cat.categoryName}
-                        </Link>
-                      </MenuItem>
-
-                      {/* Second-level SubCategory Menu */}
-                      <Menu
-                        anchorEl={subAnchorEl}
-                        open={
-                          openSubIndex === catIdx &&
-                          openCategoryIndex === mainIdx
-                        }
-                        onClose={handleMenuClose}
-                        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "left",
-                        }}
-                        PaperProps={{
-                          sx: {
-                            minWidth: 180,
-                            boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-                            border: "1px solid #e0e0e0",
-                          },
-                        }}
-                      >
-                        {cat.subCategory.map((sub, subIdx) => (
-                          <MenuItem
-                            key={subIdx}
-                            onClick={handleMenuClose}
-                            sx={{
-                              py: 1,
-                              "&:hover": { backgroundColor: "#f8f9fa" },
-                            }}
-                          >
-                            <Link href={sub.link} className="w-full text-sm">
-                              {sub.subCategoryName}
-                            </Link>
-                          </MenuItem>
-                        ))}
-                      </Menu>
-                    </div>
-                  ))}
-                </Menu>
+            {/* Search Bar */}
+            <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
+              <div className="relative w-full">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
               </div>
-            ))}
-          </Box>
+            </div>
 
-          {/* Search Bar */}
-          <Box className="hidden lg:flex items-center bg-gray-100 rounded-full px-4 py-2 min-w-[300px]">
-            <SearchIcon sx={{ color: "#666", mr: 1 }} />
-            <InputBase
-              placeholder="Search products..."
-              sx={{
-                flex: 1,
-                fontSize: "0.9rem",
-                "& input::placeholder": {
-                  color: "#666",
-                  opacity: 1,
-                },
-              }}
-            />
-          </Box>
+            {/* Right Icons */}
+            <div className="flex items-center space-x-4">
+              <button className="md:hidden p-2 rounded-md hover:bg-gray-100">
+                <Search className="w-5 h-5" />
+              </button>
+              <button className="p-2 rounded-md hover:bg-gray-100 relative">
+                <User className="w-5 h-5" />
+              </button>
+              <button className="p-2 rounded-md hover:bg-gray-100 relative">
+                <Heart className="w-5 h-5" />
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  2
+                </span>
+              </button>
+              <button className="p-2 rounded-md hover:bg-gray-100 relative">
+                <ShoppingCart className="w-5 h-5" />
+                <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  3
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
 
-          {/* Right Side Icons */}
-          <Box className="flex items-center gap-2">
-            {/* Search Icon for Mobile */}
-            <IconButton className="lg:hidden" sx={{ color: "#333" }}>
-              <SearchIcon />
-            </IconButton>
+        {/* Mega Menu Dropdown */}
+        {activeMenu !== null && (
+          <div
+            className="absolute top-full left-0 w-full bg-white shadow-xl border-t z-40"
+            onMouseEnter={() => handleMouseEnter(activeMenu)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div className="container mx-auto px-4 py-8">
+              <div className="grid grid-cols-4 gap-8">
+                {megaMenuData[activeMenu]?.Category.map(
+                  (category, catIndex) => (
+                    <div key={catIndex} className="space-y-4">
+                      <h3 className="font-semibold text-gray-900 text-lg border-b border-gray-200 pb-2">
+                        <a
+                          href={category.link}
+                          className="hover:text-blue-600 transition-colors"
+                        >
+                          {category.categoryName}
+                        </a>
+                      </h3>
+                      <ul className="space-y-2">
+                        {category.subCategory.map((sub, subIndex) => (
+                          <li key={subIndex}>
+                            <a
+                              href={sub.link}
+                              className="text-gray-600 hover:text-blue-600 transition-colors block py-1"
+                            >
+                              {sub.subCategoryName}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )
+                )}
 
-            {/* User Account */}
-            <IconButton sx={{ color: "#333" }}>
-              <PersonIcon />
-            </IconButton>
+                {/* Featured Section */}
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg p-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">
+                    Featured Products
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-12 h-12 bg-blue-200 rounded-lg flex items-center justify-center">
+                        <span className="text-blue-600 font-bold">NEW</span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">Summer Collection</p>
+                        <p className="text-xs text-gray-500">Up to 50% off</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-12 h-12 bg-red-200 rounded-lg flex items-center justify-center">
+                        <span className="text-red-600 font-bold">HOT</span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">Best Sellers</p>
+                        <p className="text-xs text-gray-500">Trending now</p>
+                      </div>
+                    </div>
+                  </div>
+                  <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition-colors">
+                    View All Deals
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </header>
 
-            {/* Wishlist */}
-            <IconButton sx={{ color: "#333" }}>
-              <Badge badgeContent={2} color="error">
-                <FavoriteIcon />
-              </Badge>
-            </IconButton>
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          <div className="fixed top-0 left-0 w-80 h-full bg-white shadow-xl">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h2 className="text-xl font-bold text-blue-600">ShopMega</h2>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 rounded-md hover:bg-gray-100"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
 
-            {/* Shopping Cart */}
-            <IconButton sx={{ color: "#333" }}>
-              <Badge badgeContent={3} color="error">
-                <CartIcon />
-              </Badge>
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
+            <div className="p-4">
+              <div className="relative mb-6">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
 
-      {/* Mobile Drawer */}
-      <Drawer
-        variant="temporary"
-        open={mobileOpen}
-        onClose={handleMobileDrawerToggle}
-        ModalProps={{
-          keepMounted: true, // Better open performance on mobile
-        }}
-        sx={{
-          display: { xs: "block", md: "none" },
-          "& .MuiDrawer-paper": {
-            boxSizing: "border-box",
-            width: 280,
-            top: 0,
-            height: "100vh",
-          },
-        }}
-      >
-        {drawer}
-      </Drawer>
-    </>
+            <div className="overflow-y-auto h-full pb-20">
+              {megaMenuData.map((main, mainIdx) => (
+                <div key={mainIdx} className="border-b">
+                  <button
+                    className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50"
+                    onClick={() => handleMobileCategoryToggle(mainIdx)}
+                  >
+                    <span className="font-medium">{main.MainCategoryName}</span>
+                    <ChevronDown
+                      className={`w-5 h-5 transition-transform ${
+                        mobileExpandedCategories.includes(mainIdx)
+                          ? "rotate-180"
+                          : ""
+                      }`}
+                    />
+                  </button>
+
+                  {mobileExpandedCategories.includes(mainIdx) && (
+                    <div className="bg-gray-50">
+                      {main.Category.map((cat, catIdx) => (
+                        <div key={catIdx}>
+                          <a
+                            href={cat.link}
+                            className="block px-6 py-3 font-medium text-gray-700 hover:text-blue-600 border-b border-gray-200"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            {cat.categoryName}
+                          </a>
+                          {cat.subCategory.map((sub, subIdx) => (
+                            <a
+                              key={subIdx}
+                              href={sub.link}
+                              className="block px-8 py-2 text-sm text-gray-600 hover:text-blue-600"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              {sub.subCategoryName}
+                            </a>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
