@@ -5,10 +5,10 @@ import React, { ReactNode } from "react";
 export default function layout({ children }: { children: ReactNode }) {
   return (
     <div>
-      <header>
+      <header className="sticky top-0 z-50">
         <Navbar />
       </header>
-      <main>{children}</main>
+      <main className="min-h-[calc(100vh-389px)] py-1">{children}</main>
       <footer>
         <Footer />
       </footer>

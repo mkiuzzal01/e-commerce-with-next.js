@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import {
@@ -10,11 +11,17 @@ import {
   X,
 } from "lucide-react";
 import { megaMenuData } from "./NavLinks";
+import logo from "../../../public/assets/logo/logo1.png";
+import Image from "next/image";
+import Link from "next/link";
+
 export default function EcommerceMegaMenu() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mobileExpandedCategories, setMobileExpandedCategories] = useState([]);
-  const timeoutRef = useRef(null);
+  const [mobileExpandedCategories, setMobileExpandedCategories] = useState<
+    number[]
+  >([]);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = (index: any) => {
     if (timeoutRef.current) {
@@ -46,7 +53,7 @@ export default function EcommerceMegaMenu() {
   return (
     <div className="relative">
       {/* Desktop Header */}
-      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
+      <header className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4">
           {/* Top Bar */}
           <div className="hidden lg:flex justify-between items-center py-2 text-sm text-gray-600 border-b">
@@ -79,9 +86,11 @@ export default function EcommerceMegaMenu() {
             </button>
 
             {/* Logo */}
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">ShopMega</h1>
-            </div>
+            <Link href={"/"}>
+              <div className="flex items-center">
+                <Image src={logo} alt={""} width={70} />
+              </div>
+            </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
@@ -216,7 +225,9 @@ export default function EcommerceMegaMenu() {
           />
           <div className="fixed top-0 left-0 w-80 h-full bg-white shadow-xl">
             <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-xl font-bold text-blue-600">ShopMega</h2>
+              <div className="flex items-center">
+                <Image src={logo} alt={""} width={70} />
+              </div>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="p-2 rounded-md hover:bg-gray-100"

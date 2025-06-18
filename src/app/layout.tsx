@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 
 const roboto = Roboto({
   variable: "--font-geist-sans",
@@ -20,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.variable} antialiased`}>
-        <main>{children}</main>
+        <main>
+          {children}
+        </main>
       </body>
     </html>
   );

@@ -1,1 +1,62 @@
 @import "tailwindcss";
+
+
+/* Custom CSS variables (global colors) */
+:root {
+  --color-brand-primary: #b8860b;
+  --color-brand-secondary: #c1272d;
+  --color-brand-background: #121212;
+  --color-brand-heading: #ffffff;
+  --color-brand-paragraph: #dddddd;
+}
+
+/* Custom components */
+@layer components {
+  .btn-primary {
+    background-color: var(--color-brand-primary);
+    color: var(--color-brand-paragraph);
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 0.25rem;
+    transition: opacity 150ms;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
+  }
+
+  .btn-secondary {
+    background-color: var(--color-brand-secondary);
+    color: var(--color-brand-background);
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 0.25rem;
+    transition: opacity 150ms;
+  }
+
+  .btn-secondary:hover {
+    opacity: 0.9;
+  }
+
+  .site-header,
+  .site-footer {
+    background-color: var(--color-brand-background);
+    color: var(--color-brand-secondary);
+  }
+
+  .heading {
+    color: var(--color-brand-heading);
+    font-weight: bold;
+    font-size: 1.875rem; /* text-3xl */
+    line-height: 2.25rem;
+  }
+
+  .paragraph {
+    color: var(--color-brand-paragraph);
+    font-size: 1rem; /* text-base */
+  }
+}
