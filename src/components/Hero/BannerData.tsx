@@ -2,6 +2,19 @@ import image1 from "../../../public/assets/banner/summer-removebg-preview.png";
 import image2 from "../../../public/assets/banner/images1-removebg-preview.png";
 import image3 from "../../../public/assets/banner/womenDress-removebg-preview.png";
 
+export interface BannerItem {
+  id: number;
+  offer?: string;
+  subtitle?: string;
+  title: string;
+  description: string;
+  buttonLabel: string;
+  image: string;
+  imageAlt?: string;
+  link?: string;
+  buttonAction?: () => void;
+}
+
 export const bannerData = [
   {
     id: 1,

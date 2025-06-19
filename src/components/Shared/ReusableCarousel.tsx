@@ -1,25 +1,75 @@
-import Slider from "react-slick";
+import { Swiper } from "swiper/react";
+import { Pagination, Navigation, Autoplay, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/effect-fade";
 import React from "react";
 
-type Props = {
+interface CarouselProps {
   children: React.ReactNode;
-};
-export default function ReusableCarousel({ children }: Props) {
-  const settings = {
-    dots: true,
-    infinite: true,
-    autoplay: true,
-    speed: 400,
-    autoplaySpeed: 3000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    fade: true,
-    pauseOnHover: true,
-    customPaging: (i) => (
-      <div className="w-3 h-3 bg-white/50 rounded-full hover:bg-white transition-colors duration-300"></div>
-    ),
-    dotsClass: "slick-dots !bottom-6 !flex !justify-center !gap-2",
+  autoplay?: boolean;
+  navigation?: boolean;
+  pagination?: boolean;
+  effect?: "slide" | "fade" | "cube" | "coverflow" | "flip";
+  speed?: number;
+  spaceBetween?: number;
+  loop?: boolean;
+  className?: string;
+  breakpoints?: {
+    [key: number]: {
+      slidesPerView: number;
+      spaceBetween?: number;
+    };
   };
-  return <Slider {...settings}>{children}</Slider>;
+}
+
+export default function ReusableCarousel({
+  children,
+  autoplay = true,
+  navigation = false,
+  pagination = true,
+  effect = "slide",
+  speed = 600,
+  spaceBetween = 0,
+  loop = true,
+  className = "",
+  breakpoints,
+}: CarouselProps) {
+  const modules = [Pagination];
+
+  if (navigation) modules.push(Navigation);
+  if (autoplay) modules.push(Autoplay);
+  if (effect === "fade") modules.push(EffectFade);
+
+  const swiperConfig = {
+    modules,
+    pagination: pagination
+      ? {
+          clickable: true,
+          dynamicBullets: true,
+        }
+      : false,
+    navigation: navigation,
+    autoplay: autoplay
+      ? {
+          delay: 4000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }
+      : false,
+    effect,
+    speed,
+    spaceBetween,
+    loop,
+    breakpoints,
+    className: `mySwiper ${className}`,
+    a11y: {
+      prevSlideMessage: "Previous slide",
+      nextSlideMessage: "Next slide",
+      paginationBulletMessage: "Go to slide {{index}}",
+    },
+  };
+
+  return <Swiper {...swiperConfig}>{children}</Swiper>;
 }
