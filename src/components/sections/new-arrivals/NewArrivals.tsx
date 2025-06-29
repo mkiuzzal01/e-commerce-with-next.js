@@ -14,37 +14,8 @@ import {
   Tab,
 } from "@mui/material";
 import { Heart, ShoppingCart } from "lucide-react";
-
-const productData = [
-  {
-    id: 1,
-    name: "Linen Summer Dress",
-    image: "/products/summer-dress.jpg",
-    price: 1450,
-    category: "Women",
-  },
-  {
-    id: 2,
-    name: "Men's Polo T-Shirt",
-    image: "/products/polo.jpg",
-    price: 990,
-    category: "Men",
-  },
-  {
-    id: 3,
-    name: "Girls Denim Jacket",
-    image: "/products/girls-jacket.jpg",
-    price: 1190,
-    category: "Kids",
-  },
-  {
-    id: 4,
-    name: "Unisex Hoodie",
-    image: "/products/unisex-hoodie.jpg",
-    price: 1750,
-    category: "Unisex",
-  },
-];
+import { productData } from "./NewArrivalsData";
+import Image from "next/image";
 
 const categories = ["All", "Women", "Men", "Kids", "Unisex"];
 
@@ -57,7 +28,7 @@ export default function NewArrivals() {
       : productData.filter((p) => p.category === selected);
 
   return (
-    <Box mt={6}>
+    <div className="container mx-auto pt-10">
       <Typography variant="h5" fontWeight="bold" mb={2}>
         🆕 New Arrivals
       </Typography>
@@ -108,13 +79,16 @@ export default function NewArrivals() {
                 fontWeight: 600,
               }}
             />
-            <CardMedia
-              component="img"
-              height="220"
-              image={product.image}
-              alt={product.name}
-              sx={{ objectFit: "cover" }}
-            />
+
+            <div className="relative aspect-[3/4] transform transition-transform duration-500 hover:scale-105">
+              <Image
+                src={product?.image}
+                alt={product?.name}
+                placeholder="blur"
+                className="object-cover"
+                fill
+              />
+            </div>
             <CardContent>
               <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
                 {product.name}
@@ -129,7 +103,7 @@ export default function NewArrivals() {
                   fullWidth
                 >
                   Add to Cart
-                </Button>   
+                </Button>
                 <Button
                   variant="text"
                   color="error"
@@ -142,6 +116,6 @@ export default function NewArrivals() {
           </Card>
         ))}
       </Stack>
-    </Box>
+    </div>
   );
 }

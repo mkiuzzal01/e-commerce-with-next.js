@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
-  Box,
   Typography,
   Button,
   Card,
@@ -11,30 +10,8 @@ import {
   Chip,
 } from "@mui/material";
 import { ShoppingCart } from "lucide-react";
-
-const flashProducts = [
-  {
-    id: 1,
-    name: "Slim Fit T-Shirt",
-    image: "/products/tshirt.jpg",
-    price: 950,
-    originalPrice: 1300,
-  },
-  {
-    id: 2,
-    name: "Women's Crop Top",
-    image: "/products/croptop.jpg",
-    price: 780,
-    originalPrice: 1100,
-  },
-  {
-    id: 3,
-    name: "Men's Hoodie",
-    image: "/products/hoodie.jpg",
-    price: 1950,
-    originalPrice: 2500,
-  },
-];
+import { flashProducts } from "./flashProductsData";
+import Image from "next/image";
 
 const calculateTimeLeft = (target: string) => {
   const difference = +new Date(target) - +new Date();
@@ -72,7 +49,7 @@ export default function FlashSale() {
   }, []);
 
   return (
-    <Box mt={6}>
+    <div className="container m-auto pt-10">
       <Stack
         direction={{ xs: "column", md: "row" }}
         alignItems="center"
@@ -113,13 +90,15 @@ export default function FlashSale() {
               },
             }}
           >
-            <CardMedia
-              component="img"
-              height="220"
-              image={product.image}
-              alt={product.name}
-              sx={{ objectFit: "cover" }}
-            />
+            <div className="relative aspect-[3/4] transform transition-transform duration-500 hover:scale-105">
+              <Image
+                src={product?.image}
+                alt={product?.name}
+                placeholder="blur"
+                className="object-cover"
+                fill
+              />
+            </div>
             <CardContent>
               <Typography
                 variant="subtitle1"
@@ -163,6 +142,6 @@ export default function FlashSale() {
           </Card>
         ))}
       </Stack>
-    </Box>
+    </div>
   );
 }

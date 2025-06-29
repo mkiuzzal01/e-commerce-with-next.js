@@ -1,12 +1,10 @@
 "use client";
-
 import React from "react";
 import {
   Box,
   Typography,
   IconButton,
   Card,
-  CardMedia,
   CardContent,
   Tooltip,
   Stack,
@@ -14,12 +12,12 @@ import {
 import { Heart, Eye, ShoppingCart } from "lucide-react";
 import ReusableCarousel from "../../Shared/ReusableCarousel";
 import { SwiperSlide } from "swiper/react";
+import Image from "next/image";
 import { trendingProducts } from "./TrendingProductData";
-
 
 export default function TrendingProducts() {
   return (
-    <Box mt={5}>
+    <div className="container mx-auto pt-10">
       <Typography variant="h5" fontWeight="bold" mb={2}>
         🔥 Trending Products
       </Typography>
@@ -37,23 +35,16 @@ export default function TrendingProducts() {
       >
         {trendingProducts.map((product) => (
           <SwiperSlide key={product.id}>
-            <Card
-              sx={{
-                position: "relative",
-                borderRadius: 3,
-                overflow: "hidden",
-                boxShadow: 3,
-                transition: "transform 0.3s",
-                "&:hover": { transform: "scale(1.02)" },
-              }}
-            >
-              <CardMedia
-                component="img"
-                image={product.image.src}
-                alt={product.name}
-                height="220"
-                sx={{ objectFit: "cover" }}
-              />
+            <Card>
+              <div className="relative aspect-[3/2] transform transition-transform duration-500 hover:scale-105">
+                <Image
+                  src={product?.image}
+                  alt={product?.name}
+                  placeholder="blur"
+                  className="object-cover"
+                  fill
+                />
+              </div>
               <CardContent>
                 <Typography variant="subtitle1" fontWeight={600} noWrap>
                   {product.name}
@@ -104,6 +95,6 @@ export default function TrendingProducts() {
           </SwiperSlide>
         ))}
       </ReusableCarousel>
-    </Box>
+    </div>
   );
 }

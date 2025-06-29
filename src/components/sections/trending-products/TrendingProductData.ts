@@ -1,8 +1,8 @@
-import image1 from "../../../public/assets/products/trending-products/shirt.jpg";
-import image2 from "../../../public/assets/products/trending-products/denim.jpg";
-import image3 from "../../../public/assets/products/trending-products/dress.jpg";
-import image4 from "../../../public/assets/products/trending-products/kids-shirt.jpg";
-import image5 from "../../../public/assets/products/trending-products/sneakers.jpg";
+import image1 from "../../../../public/assets/products/trendingProducts/denim.jpg"
+import image2 from "../../../../public/assets/products/trendingProducts/denim.jpg"
+import image3 from "../../../../public/assets/products/trendingProducts/dress.jpg";
+import image4 from "../../../../public/assets/products/trendingProducts/kids-shirt.jpg";
+import image5 from "../../../../public/assets/products/trendingProducts/sneakers.jpg";
 
 export const trendingProducts = [
   {

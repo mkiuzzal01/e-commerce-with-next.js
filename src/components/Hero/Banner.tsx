@@ -95,17 +95,16 @@ export default function Banner() {
                           {/* Decorative background */}
                           <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-transparent rounded-full blur-3xl" />
 
-                          <Image
-                            src={item.image}
-                            alt={item.imageAlt || item.title}
-                            width={500}
-                            height={400}
-                            priority={index === 0}
-                            className="relative z-10 w-full h-auto object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105"
-                            placeholder="blur"
-                            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          />
+                          <div className="relative aspect-[3/4] transform transition-transform duration-500 hover:scale-105">
+                            <Image
+                              src={item.image}
+                              alt={item.title}
+                              priority={index === 0}
+                              placeholder="blur"
+                              className="object-cover"
+                              fill
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>

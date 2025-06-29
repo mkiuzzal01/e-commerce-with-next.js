@@ -1,9 +1,9 @@
-import image1 from "../../../public/assets/categories/men-fashion.jpg";
-import image2 from "../../../public/assets/categories/women-fashion.jpg";
-import image3 from "../../../public/assets/categories/mobile-gadgets.jpg";
-import image4 from "../../../public/assets/categories/home-appliances.jpg";
-import image5 from "../../../public/assets/categories/kids-fashion.jpg";
-import image6 from "../../../public/assets/categories/beauty.jpg";
+import image1 from "../../../../public/assets/categories/men-fashion.jpg";
+import image2 from "../../../../public/assets/categories/women-fashion.jpg";
+import image3 from "../../../../public/assets/categories/mobile-gadgets.jpg";
+import image4 from "../../../../public/assets/categories/home-appliances.jpg";
+import image5 from "../../../../public/assets/categories/kids-fashion.jpg";
+import image6 from "../../../../public/assets/categories/beauty.jpg";
 
 export const featuredCategories = [
   {
