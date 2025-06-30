@@ -2,6 +2,7 @@ import image1 from "../../../../public/assets/products/newArrivals/Linen Summer 
 import image2 from "../../../../public/assets/products/newArrivals/Men's Polo T-Shirt.jpg";
 import image3 from "../../../../public/assets/products/newArrivals/Girls Denim Jacket.jpeg";
 import image4 from "../../../../public/assets/products/newArrivals/Unisex Hoodie.jpeg";
+import image5 from "../../../../public/assets/products/newArrivals/Girls Denim Jacket.jpeg";
 
 export const productData = [
   {
@@ -29,6 +30,13 @@ export const productData = [
     id: 4,
     name: "Unisex Hoodie",
     image: image4,
+    price: 1750,
+    category: "Unisex",
+  },
+  {
+    id: 5,
+    name: "Unisex Hoodie",
+    image: image5,
     price: 1750,
     category: "Unisex",
   },

@@ -7,102 +7,86 @@ import { SwiperSlide } from "swiper/react";
 
 export default function Banner() {
   const handleButtonClick = useCallback((item: BannerItem) => {
-    // Add your button click logic here
     console.log(`Button clicked for: ${item.title}`);
-    // Example: router.push(item.link) or any other action
   }, []);
 
   return (
     <section
-      className="bg-gradient-to-r from-black/40 via-black/20 to-transparent z-[1]"
-      aria-label="Featured content carousel"
+      className="relative third-color overflow-hidden"
+      aria-label="Featured product collections"
     >
-      <div className="container m-auto relative overflow-hidden">
+      <div className="relative z-10">
         <ReusableCarousel
           autoplay={true}
-          navigation={false}
+          navigation={true}
           pagination={true}
           effect="slide"
-          speed={800}
+          speed={1000}
           loop={true}
         >
           {bannerData.map((item, index) => (
             <SwiperSlide key={item.id}>
-              <article className="relative h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
-                {/* Content Container */}
-                <div className="relative z-[2] h-full flex items-center">
-                  <div className="container mx-auto px-6 lg:px-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center h-full">
-                      {/* Left Side - Text Content */}
-                      <div className="text-y space-y-6 animate-fade-in-left">
-                        {/* Offer Badge */}
+              <article className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[700px] flex items-center">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    <div className="lg:col-span-7 order-2 lg:order-1 text-center lg:text-left">
+                      <div className="space-y-6 lg:space-y-8">
                         {item.offer && (
-                          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm font-medium text-white">
-                            <span className="relative flex h-2 w-2">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75" />
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-yellow-400" />
+                          <div className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 backdrop-blur-sm border border-amber-500/30 rounded-full px-6 py-3 text-sm font-semibold text-amber-400 shadow-lg">
+                            <span className="relative flex h-2.5 w-2.5">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-400" />
                             </span>
                             {item.offer}
                           </div>
                         )}
 
-                        {/* Subtitle */}
                         {item.subtitle && (
-                          <div className="text-sm font-semibold tracking-widest text-yellow-400 uppercase">
+                          <div className="text-xs sm:text-sm font-bold tracking-[0.2em] text-amber-400 uppercase opacity-90">
                             {item.subtitle}
                           </div>
                         )}
 
-                        {/* Main Title */}
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl leading-tight font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                          {item.title}
+                        <h1 className="heading">
+                          <span className="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
+                            {item.title}
+                          </span>
                         </h1>
 
-                        {/* Description */}
-                        <p className="paragraph text-lg md:text-xl leading-relaxed max-w-lg opacity-90 text-gray-200">
+                        <p className="paragraph max-w-2xl mx-auto lg:mx-0 opacity-90">
                           {item.description}
                         </p>
 
-                        {/* CTA Button */}
-                        <div className="pt-4">
+                        <div className="pt-4 lg:pt-6">
                           <button
                             onClick={() => handleButtonClick(item)}
-                            className="btn-primary inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold rounded-full hover:scale-105 transform transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-yellow-400/50"
+                            className="btn-primary group relative inline-flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/25 focus:outline-none focus:ring-4 focus:ring-amber-500/50"
                             aria-label={`${item.buttonLabel} - ${item.title}`}
                           >
-                            {item.buttonLabel}
-                            <svg
-                              className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                              aria-hidden="true"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
+                            <span className="text-base sm:text-lg">
+                              {item.buttonLabel}
+                            </span>
                           </button>
                         </div>
                       </div>
+                    </div>
 
-                      {/* Right Side - Image */}
-                      <div className="hidden lg:flex justify-end items-center">
-                        <div className="w-full max-w-md relative">
-                          {/* Decorative background */}
-                          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-transparent rounded-full blur-3xl" />
+                    <div className="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end">
+                      <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg">
+                        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 via-orange-500/10 to-transparent rounded-full blur-3xl transform -rotate-6" />
+                        <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-gradient-to-r from-amber-400/30 to-orange-500/30 rounded-full blur-2xl transform -translate-x-1/2 -translate-y-1/2" />
 
-                          <div className="relative aspect-[3/4] transform transition-transform duration-500 hover:scale-105">
+                        <div className="relative aspect-[3/4] transform transition-all duration-700 hover:scale-105 hover:rotate-1">
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl backdrop-blur-sm border border-white/20 shadow-2xl" />
+
+                          <div className="relative h-full rounded-3xl overflow-hidden">
                             <Image
                               src={item.image}
-                              alt={item.title}
+                              alt={item.imageAlt || item.title}
                               priority={index === 0}
-                              placeholder="blur"
-                              className="object-cover"
+                              className="object-contain p-4 transition-transform duration-500 hover:scale-110"
                               fill
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                             />
                           </div>
                         </div>
@@ -115,10 +99,6 @@ export default function Banner() {
           ))}
         </ReusableCarousel>
       </div>
-
-      {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-400/5 rounded-full blur-2xl pointer-events-none" />
     </section>
   );
 }

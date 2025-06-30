@@ -1,45 +1,52 @@
-import image1 from "../../../../public/assets/categories/men-fashion.jpg";
-import image2 from "../../../../public/assets/categories/women-fashion.jpg";
-import image3 from "../../../../public/assets/categories/mobile-gadgets.jpg";
-import image4 from "../../../../public/assets/categories/home-appliances.jpg";
-import image5 from "../../../../public/assets/categories/kids-fashion.jpg";
-import image6 from "../../../../public/assets/categories/beauty.jpg";
+import men from "../../../../public/assets/products/flashProducts/Men's Hoodie.jpeg";
+import women from "../../../../public/assets/products/flashProducts/Women's Crop Top.jpg";
+import kids from "../../../../public/assets/products/newArrivals/Girls Denim Jacket.jpeg";
+import seasonal from "../../../../public/assets/products/trendingProducts/dress.jpg";
 
 export const featuredCategories = [
   {
     id: 1,
-    title: "Men's Fashion",
-    image: image1,
-    link: "/fashion/men",
+    title: "Men",
+    image: men,
+    description: "Explore the latest trends in men's fashion",
+    itemCount: 2847,
+    slug: "men",
+    link: "/men",
+    highlights: ["T-Shirts", "Jeans", "Watches", "Casual Shoes"],
   },
   {
     id: 2,
-    title: "Women's Fashion",
-    image: image2,
-    link: "/fashion/women",
+    title: "Women",
+    image: women,
+    description: "Style up with the latest for her",
+    itemCount: 1923,
+    slug: "women",
+    link: "/women",
+    highlights: ["Dresses", "Tops", "Handbags", "Heels"],
   },
   {
     id: 3,
-    title: "Mobile & Gadgets",
-    image: image3,
-    link: "/electronics/mobile",
+    title: "Kids & Baby",
+    image: kids,
+    description: "Adorable styles for the little ones",
+    itemCount: 1456,
+    slug: "kids",
+    link: "/kids",
+    highlights: ["Boys Wear", "Girls Wear", "Baby Items", "Ethnic Wear"],
   },
   {
     id: 4,
-    title: "Home Appliances",
-    image: image4,
-    link: "/home-garden/furniture",
-  },
-  {
-    id: 5,
-    title: "Kids' Fashion",
-    image: image5,
-    link: "/fashion/kids",
-  },
-  {
-    id: 6,
-    title: "Beauty & Personal Care",
-    image: image6,
-    link: "/beauty",
+    title: "Seasonal Trends",
+    image: seasonal,
+    description: "Explore the best of seasonal fashion",
+    itemCount: 987,
+    slug: "seasonal",
+    link: "/seasonal",
+    highlights: [
+      "Winter Collection",
+      "Summer Styles",
+      "Festive Wear",
+      "Trending Now",
+    ],
   },
 ];

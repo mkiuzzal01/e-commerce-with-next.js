@@ -1,62 +1,69 @@
 @import "tailwindcss";
 
-
-/* Custom CSS variables (global colors) */
+/* 🌐 Global Brand Variables */
 :root {
-  --color-brand-primary: #b8860b;
+  --color-brand-primary: #fe6731;
   --color-brand-secondary: #c1272d;
-  --color-brand-background: #121212;
+  --color-brand-purple: #4f1c51;
+  --color-brand-background: #210f37;
   --color-brand-heading: #ffffff;
   --color-brand-paragraph: #dddddd;
 }
 
-/* Custom components */
+/* 🧩 Tailwind Component Extensions */
 @layer components {
-  .btn-primary {
-    background-color: var(--color-brand-primary);
-    color: var(--color-brand-paragraph);
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-radius: 0.25rem;
-    transition: opacity 150ms;
+  /* 🎨 Background Utility Classes */
+  .primary-color {
+    background: linear-gradient(135deg, var(--color-brand-primary), #f4c542);
   }
 
-  .btn-primary:hover {
-    opacity: 0.9;
+  .secondary-color {
+    background: linear-gradient(135deg, var(--color-brand-secondary), #8f1f25);
   }
 
-  .btn-secondary {
-    background-color: var(--color-brand-secondary);
-    color: var(--color-brand-background);
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-radius: 0.25rem;
-    transition: opacity 150ms;
+  .third-color {
+    background: linear-gradient(135deg, var(--color-brand-purple), #371c48);
   }
 
-  .btn-secondary:hover {
-    opacity: 0.9;
-  }
-
+  /* 🧱 Layout Styling */
   .site-header,
   .site-footer {
     background-color: var(--color-brand-background);
     color: var(--color-brand-secondary);
+    padding-block: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
+  /* ✍️ Typography Utilities */
   .heading {
     color: var(--color-brand-heading);
-    font-weight: bold;
-    font-size: 1.875rem; /* text-3xl */
-    line-height: 2.25rem;
+    font-size: 2.25rem; /* text-4xl */
+    font-weight: 700;
+    line-height: 2.75rem;
+    letter-spacing: -0.01em;
   }
 
   .paragraph {
     color: var(--color-brand-paragraph);
-    font-size: 1rem; /* text-base */
+    font-size: 1.125rem; /* text-lg */
+    line-height: 1.75rem;
+    font-weight: 400;
+  }
+
+  /* 🔘 Button Components */
+  .btn-primary {
+    @apply bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg;
+  }
+
+  .btn-primary:hover {
+    @apply from-orange-600 to-red-600;
+  }
+
+  .btn-secondary {
+    @apply bg-[var(--color-brand-secondary)] text-white font-semibold py-3 px-6 rounded-md transition-all duration-300 shadow-md;
+  }
+
+  .btn-secondary:hover {
+    @apply bg-[#a32027] -translate-y-0.5 shadow-lg;
   }
 }
