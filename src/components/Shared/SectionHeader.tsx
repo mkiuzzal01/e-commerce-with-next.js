@@ -1,4 +1,5 @@
 import React from "react";
+import { Box, Typography, Stack, useTheme } from "@mui/material";
 
 type SectionHeaderProps = {
   title: string;
@@ -15,38 +16,67 @@ export default function SectionHeader({
   icon,
   alignment = "center",
 }: SectionHeaderProps) {
-  const alignmentMap: Record<string, string> = {
-    left: "items-start text-left",
-    center: "items-center text-center",
-    right: "items-end text-right",
+  const theme = useTheme();
+
+  const alignmentProps = {
+    left: { alignItems: "flex-start", textAlign: "left" as const },
+    center: { alignItems: "center", textAlign: "center" as const },
+    right: { alignItems: "flex-end", textAlign: "right" as const },
   };
 
-  const alignmentClass = alignmentMap[alignment] || alignmentMap.left;
-  const isCentered = alignment === "center";
+  const currentAlignment = alignmentProps[alignment] || alignmentProps.left;
 
   return (
-    <div className={`flex flex-col gap-3 ${alignmentClass}`}>
-      <div
-        className={`flex ${
-          isCentered ? "flex-col gap-4" : "flex-row gap-3"
-        } items-center`}
+    <Stack spacing={3} {...currentAlignment}>
+      <Stack
+        direction={alignment === "center" ? "column" : "row"}
+        spacing={alignment === "center" ? 2 : 3}
+        alignItems="center"
       >
         {icon && (
-          <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-full">
+          <Box
+            width={48}
+            height={48}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="50%"
+            sx={{
+              background: `linear-gradient(to right, ${theme.palette.warning.main}, ${theme.palette.error.main})`,
+              color: theme.palette.common.white,
+            }}
+          >
             {icon}
-          </div>
+          </Box>
         )}
-        <div>
-          <h3 className="text-sm font-semibold text-amber-500 uppercase tracking-wider">
+        <Box>
+          <Typography
+            variant="subtitle2"
+            sx={{
+              color: theme.palette.warning.main,
+              textTransform: "uppercase",
+              letterSpacing: 1,
+              fontWeight: 600,
+            }}
+          >
             {subTitle}
-          </h3>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+          </Typography>
+          <Typography
+            variant="h4"
+            component="h2"
+            fontWeight={700}
+            color="text.primary"
+          >
             {title}
-          </h2>
-        </div>
-      </div>
+          </Typography>
+        </Box>
+      </Stack>
 
-      {description && <p className="text-gray-600 max-w-2xl">{description}</p>}
-    </div>
+      {description && (
+        <Typography variant="body1" color="text.secondary" maxWidth="700px">
+          {description}
+        </Typography>
+      )}
+    </Stack>
   );
 }

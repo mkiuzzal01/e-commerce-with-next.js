@@ -1,24 +1,41 @@
 "use client";
 
-import React, { useState } from "react";
-import { Heart, Eye, ShoppingCart, Star, Flame } from "lucide-react";
+import { useRef, useState } from "react";
+import {
+  Typography,
+  Button,
+  Card,
+  Box,
+  Stack,
+  IconButton,
+} from "@mui/material";
+import {
+  ShoppingCart,
+  Eye,
+  Heart,
+  Flame,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import Image from "next/image";
 import { trendingProducts } from "./TrendingProductData";
-import ReusableCarousel from "@/components/Shared/ReusableCarousel";
-import { SwiperSlide } from "swiper/react";
+import ReusableCarousel, {
+  CarouselRef,
+} from "@/components/Shared/ReusableCarousel";
 import SectionHeader from "@/components/Shared/SectionHeader";
+import { SwiperSlide } from "swiper/react";
+import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 
 export default function TrendingProducts() {
   const [wishlistItems, setWishlistItems] = useState<Set<number>>(new Set());
+  const carouselRef = useRef<CarouselRef>(null);
 
   const toggleWishlist = (productId: number) => {
     setWishlistItems((prev) => {
       const updated = new Set(prev);
-      if (updated.has(productId)) {
-        updated.delete(productId);
-      } else {
-        updated.add(productId);
-      }
+      updated.has(productId)
+        ? updated.delete(productId)
+        : updated.add(productId);
       return updated;
     });
   };
@@ -26,7 +43,6 @@ export default function TrendingProducts() {
   return (
     <section className="py-16 bg-gradient-to-br from-orange-50 via-white to-red-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
         <div className="mb-12">
           <SectionHeader
             title="Trending Products"
@@ -37,135 +53,158 @@ export default function TrendingProducts() {
           />
         </div>
 
-        {/* Products Carousel */}
-        <div className="relative overflow-hidden">
-          <ReusableCarousel
-            autoplay
-            navigation
-            pagination
-            effect="slide"
-            speed={1000}
-            loop
-            spaceBetween={24}
-            breakpoints={{
-              320: { slidesPerView: 1 },
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
-              1280: { slidesPerView: 4 },
-            }}
+        {/* Pagination Buttons */}
+        <Stack direction="row" spacing={2} justifyContent="end" my={4}>
+          <IconButton
+            onClick={() => carouselRef.current?.slidePrev()}
+            sx={{ bgcolor: "grey.200", "&:hover": { bgcolor: "grey.300" } }}
           >
-            {trendingProducts.map((product) => (
-              <SwiperSlide key={product.id}>
-                <div className="">
-                  <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:-translate-y-2">
-                    {/* Product Image */}
-                    <div className="relative aspect-[4/3] overflow-hidden">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+            <ArrowBackIosNew fontSize="small" />
+          </IconButton>
+          <IconButton
+            onClick={() => carouselRef.current?.slideNext()}
+            sx={{ bgcolor: "grey.200", "&:hover": { bgcolor: "grey.300" } }}
+          >
+            <ArrowForwardIos fontSize="small" />
+          </IconButton>
+        </Stack>
+
+        <ReusableCarousel
+          ref={carouselRef}
+          autoplay={false}
+          pagination={false}
+          navigation={false}
+          effect="slide"
+          loop
+          spaceBetween={24}
+          speed={1000}
+          breakpoints={{
+            320: { slidesPerView: 1 },
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+            1280: { slidesPerView: 4 },
+          }}
+        >
+          {trendingProducts.map((product) => (
+            <SwiperSlide key={product.id}>
+              <Card
+                sx={{
+                  height: "100%",
+                  boxShadow: 3,
+                  borderRadius: 3,
+                  overflow: "hidden",
+                  position: "relative",
+                  "&:hover": { boxShadow: 6 },
+                }}
+              >
+                <Box className="relative aspect-[3/4] overflow-hidden">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover transition-transform duration-500 hover:scale-105"
+                  />
+
+                  <Box className="absolute top-4 left-4 flex flex-col gap-2">
+                    {product.isNew && (
+                      <span className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        NEW
+                      </span>
+                    )}
+                    <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                      -{product.discount}%
+                    </span>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      bgcolor: "rgba(0,0,0,0.6)",
+                      color: "white",
+                      p: 2,
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1,
+                    }}
+                  >
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="600"
+                      className="line-clamp-1"
+                      sx={{ color: "white" }}
+                    >
+                      {product.name}
+                    </Typography>
+
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Typography fontWeight="bold" sx={{ color: "white" }}>
+                        ৳{product.price.toLocaleString()}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          textDecoration: "line-through",
+                          color: "rgba(255,255,255,0.7)",
+                        }}
+                      >
+                        ৳{product.originalPrice.toLocaleString()}
+                      </Typography>
+                    </Stack>
+
+                    <Stack direction="row" spacing={1} mt={1}>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                        startIcon={<ShoppingCart size={18} />}
+                        sx={{
+                          bgcolor: "rgba(255,255,255,0.15)",
+                          color: "white",
+                          borderColor: "white",
+                          "&:hover": { bgcolor: "rgba(255,255,255,0.3)" },
+                        }}
+                      >
+                        Add to Cart
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        fullWidth
+                        sx={{ whiteSpace: "nowrap" }}
+                      >
+                        Buy Now
+                      </Button>
+                    </Stack>
+                  </Box>
+
+                  <Box className="absolute top-4 right-4 flex flex-col gap-2">
+                    <IconButton className="bg-white hover:bg-blue-50">
+                      <Eye className="w-4 h-4 text-gray-600 hover:text-blue-600" />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => toggleWishlist(product.id)}
+                      className={`bg-white ${
+                        wishlistItems.has(product.id)
+                          ? "text-red-500"
+                          : "hover:bg-red-50 text-gray-600 hover:text-red-500"
+                      }`}
+                    >
+                      <Heart
+                        className={`w-4 h-4 ${
+                          wishlistItems.has(product.id) ? "fill-current" : ""
+                        }`}
                       />
+                    </IconButton>
+                  </Box>
+                </Box>
+              </Card>
+            </SwiperSlide>
+          ))}
+        </ReusableCarousel>
 
-                      {/* Badges */}
-                      <div className="absolute top-4 left-4 flex flex-col space-y-2">
-                        {product.isNew && (
-                          <span className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                            NEW
-                          </span>
-                        )}
-                        <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                          -{product.discount}%
-                        </span>
-                      </div>
-
-                      {/* Action Icons */}
-                      <div className="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button className="p-2 bg-white rounded-full shadow-lg hover:bg-blue-50 transition-colors duration-200">
-                          <Eye className="w-4 h-4 text-gray-600 hover:text-blue-600" />
-                        </button>
-                        <button
-                          onClick={() => toggleWishlist(product.id)}
-                          className={`p-2 bg-white rounded-full shadow-lg transition-colors duration-200 ${
-                            wishlistItems.has(product.id)
-                              ? "bg-red-50 text-red-500"
-                              : "hover:bg-red-50 text-gray-600 hover:text-red-500"
-                          }`}
-                        >
-                          <Heart
-                            className={`w-4 h-4 ${
-                              wishlistItems.has(product.id)
-                                ? "fill-current"
-                                : ""
-                            }`}
-                          />
-                        </button>
-                        <button className="p-2 bg-white rounded-full shadow-lg hover:bg-green-50 transition-colors duration-200">
-                          <ShoppingCart className="w-4 h-4 text-gray-600 hover:text-green-600" />
-                        </button>
-                      </div>
-
-                      {/* Quick Add to Cart Overlay */}
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="p-4">
-                          <button className="btn-secondary w-full text-center transition-colors duration-200">
-                            Quick Add to Cart
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Product Info */}
-                    <div className="p-5">
-                      <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors duration-200">
-                        {product.name}
-                      </h3>
-
-                      {/* Rating */}
-                      <div className="flex items-center space-x-1 mb-3">
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < Math.floor(product.rating)
-                                  ? "text-yellow-400 fill-current"
-                                  : "text-gray-300"
-                              }`}
-                            />
-                          ))}
-                        </div>
-                        <span className="text-sm text-gray-600">
-                          {product.rating} ({product.reviews})
-                        </span>
-                      </div>
-
-                      {/* Price */}
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xl font-bold text-gray-900">
-                          ৳{product.price.toLocaleString()}
-                        </span>
-                        <span className="text-sm text-gray-500 line-through">
-                          ৳{product.originalPrice.toLocaleString()}
-                        </span>
-                      </div>
-
-                      {/* Savings */}
-                      <p className="text-sm text-green-600 font-medium mt-1">
-                        Save ৳
-                        {(
-                          product.originalPrice - product.price
-                        ).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </ReusableCarousel>
-        </div>
-
-        {/* View All Button */}
         <div className="text-center mt-12">
           <button className="btn-primary transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
             View All Trending Products

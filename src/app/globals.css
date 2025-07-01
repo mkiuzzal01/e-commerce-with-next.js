@@ -1,18 +1,15 @@
 @import "tailwindcss";
 
-/* 🌐 Global Brand Variables */
 :root {
   --color-brand-primary: #fe6731;
   --color-brand-secondary: #c1272d;
-  --color-brand-purple: #4f1c51;
+  --color-brand-purple: #4a274b;
   --color-brand-background: #210f37;
   --color-brand-heading: #ffffff;
   --color-brand-paragraph: #dddddd;
 }
 
-/* 🧩 Tailwind Component Extensions */
 @layer components {
-  /* 🎨 Background Utility Classes */
   .primary-color {
     background: linear-gradient(135deg, var(--color-brand-primary), #f4c542);
   }
@@ -22,10 +19,9 @@
   }
 
   .third-color {
-    background: linear-gradient(135deg, var(--color-brand-purple), #371c48);
+    background: linear-gradient(135deg, var(--color-brand-purple), #a077b9);
   }
 
-  /* 🧱 Layout Styling */
   .site-header,
   .site-footer {
     background-color: var(--color-brand-background);
@@ -34,10 +30,9 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
-  /* ✍️ Typography Utilities */
   .heading {
     color: var(--color-brand-heading);
-    font-size: 2.25rem; /* text-4xl */
+    font-size: 2.25rem;
     font-weight: 700;
     line-height: 2.75rem;
     letter-spacing: -0.01em;
@@ -45,12 +40,11 @@
 
   .paragraph {
     color: var(--color-brand-paragraph);
-    font-size: 1.125rem; /* text-lg */
+    font-size: 1.125rem;
     line-height: 1.75rem;
     font-weight: 400;
   }
 
-  /* 🔘 Button Components */
   .btn-primary {
     @apply bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg;
   }

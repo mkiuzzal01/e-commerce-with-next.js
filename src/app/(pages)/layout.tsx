@@ -8,7 +8,7 @@ export default function layout({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-50">
         <Navbar />
       </header>
-      <main className="min-h-[calc(100vh-389px)] py-1">{children}</main>
+      <main className="min-h-[calc(100vh-389px)]">{children}</main>
       <footer>
         <Footer />
       </footer>

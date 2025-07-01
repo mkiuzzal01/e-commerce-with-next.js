@@ -18,9 +18,8 @@ export default function Banner() {
       <div className="relative z-10">
         <ReusableCarousel
           autoplay={true}
-          navigation={true}
           pagination={true}
-          effect="slide"
+          effect="cube"
           speed={1000}
           loop={true}
         >
