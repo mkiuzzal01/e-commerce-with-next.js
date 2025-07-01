@@ -29,7 +29,7 @@ const Testimonials = () => {
         py: 4,
       }}
     >
-      <Box className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <Box className="container mx-auto ">
         <SectionHeader
           title="What Our Clients Say"
           subTitle="Testimonials"
@@ -51,15 +51,12 @@ const Testimonials = () => {
             slidesPerView="auto"
             breakpoints={{
               320: { slidesPerView: 1 },
-              768: { slidesPerView: 2 },
+              768: { slidesPerView: 1 },
               1024: { slidesPerView: 3 },
             }}
           >
             {testimonialsData.map((item, index) => (
-              <SwiperSlide
-                key={index}
-                className="max-w-[90%] md:max-w-[80%] lg:max-w-[70%]"
-              >
+              <SwiperSlide key={index}>
                 <Card
                   elevation={3}
                   sx={{

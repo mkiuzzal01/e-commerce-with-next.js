@@ -38,8 +38,8 @@ export default function NewArrivals() {
       : productData.filter((p) => p.category === selected);
 
   return (
-    <section className="py-16 bg-gradient-to-br from-orange-50 via-white to-red-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-6 bg-gradient-to-br from-orange-50 via-white to-red-50">
+      <div className="container mx-auto px-4">
         <SectionHeader
           title="New Arrivals"
           subTitle="🆕 Latest Trends"
@@ -48,11 +48,13 @@ export default function NewArrivals() {
           alignment="center"
         />
 
-        <Box sx={{
-          display:"flex",
-          justifyContent:"space-between",
-          alignItems:"center"
-        }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           {/* Tabs */}
           <Box display="flex" justifyContent="center" mb={6}>
             <Tabs
@@ -116,7 +118,7 @@ export default function NewArrivals() {
           pagination={false}
           navigation={false}
           loop={false}
-          spaceBetween={24}
+          spaceBetween={5}
           breakpoints={{
             320: { slidesPerView: 1 },
             640: { slidesPerView: 2 },
@@ -126,23 +128,7 @@ export default function NewArrivals() {
         >
           {filtered.map((product) => (
             <SwiperSlide key={product.id}>
-              <Card
-                sx={{
-                  maxWidth: 320,
-                  height: "100%",
-                  borderRadius: 4,
-                  boxShadow:
-                    "0 4px 15px rgba(255,107,107,0.15), 0 1px 3px rgba(0,0,0,0.05)",
-                  overflow: "hidden",
-                  position: "relative",
-                  transition: "transform 0.3s ease",
-                  "&:hover": {
-                    transform: "translateY(-6px)",
-                    boxShadow:
-                      "0 10px 25px rgba(255,107,107,0.3), 0 4px 6px rgba(0,0,0,0.1)",
-                  },
-                }}
-              >
+              <Card>
                 <Box className="relative aspect-[3/4] overflow-hidden">
                   <Image
                     src={product.image}

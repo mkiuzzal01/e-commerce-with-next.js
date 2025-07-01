@@ -50,8 +50,8 @@ export default function FlashSale() {
   }, []);
 
   return (
-    <section className="py-16 bg-gradient-to-br from-red-50 via-white to-orange-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-6">
+      <div className="container mx-auto px-4">
         <SectionHeader
           title="Flash Sale"
           subTitle="⚡ Today’s Deals"
@@ -195,7 +195,7 @@ export default function FlashSale() {
                         </Button>
                         <Button
                           variant="contained"
-                          color="error"
+                          color="primary"
                           fullWidth
                           sx={{ whiteSpace: "nowrap" }}
                         >

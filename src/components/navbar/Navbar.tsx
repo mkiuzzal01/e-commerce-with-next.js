@@ -123,16 +123,18 @@ export default function Navbar() {
               </button>
 
               {/* Logo */}
-              <Link href="/" className="flex-shrink-0">
-                <Image
-                  src={logo}
-                  alt="Company Logo"
-                  width={isScrolled ? 60 : 80}
-                  height={isScrolled ? 40 : 50}
-                  className="transition-all duration-300"
-                  priority
-                />
-              </Link>
+              <div className="hidden lg:block">
+                <Link href="/" className="flex-shrink-0">
+                  <Image
+                    src={logo}
+                    alt="Company Logo"
+                    width={isScrolled ? 60 : 80}
+                    height={isScrolled ? 40 : 50}
+                    className="transition-all duration-300"
+                    priority
+                  />
+                </Link>
+              </div>
 
               {/* Desktop Navigation */}
               <nav className="hidden lg:flex items-center space-x-2">
@@ -391,19 +393,6 @@ export default function Navbar() {
           </div>
         </div>
       )}
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
 }

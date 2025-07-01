@@ -9,14 +9,7 @@ import {
   Stack,
   IconButton,
 } from "@mui/material";
-import {
-  ShoppingCart,
-  Eye,
-  Heart,
-  Flame,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { ShoppingCart, Eye, Heart, Flame } from "lucide-react";
 import Image from "next/image";
 import { trendingProducts } from "./TrendingProductData";
 import ReusableCarousel, {
@@ -41,9 +34,9 @@ export default function TrendingProducts() {
   };
 
   return (
-    <section className="py-16 bg-gradient-to-br from-orange-50 via-white to-red-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-12">
+    <section className="py-6 bg-[#fff7f7]">
+      <div className="container mx-auto px-4">
+        <div className="text-center">
           <SectionHeader
             title="Trending Products"
             subTitle="Hot Picks"
@@ -55,17 +48,17 @@ export default function TrendingProducts() {
 
         {/* Pagination Buttons */}
         <Stack direction="row" spacing={2} justifyContent="end" my={4}>
-          <IconButton
-            onClick={() => carouselRef.current?.slidePrev()}
-            sx={{ bgcolor: "grey.200", "&:hover": { bgcolor: "grey.300" } }}
-          >
-            <ArrowBackIosNew fontSize="small" />
+          <IconButton className="hover:btn-primary">
+            <ArrowBackIosNew
+              fontSize="small"
+              onClick={() => carouselRef.current?.slidePrev()}
+            />
           </IconButton>
-          <IconButton
-            onClick={() => carouselRef.current?.slideNext()}
-            sx={{ bgcolor: "grey.200", "&:hover": { bgcolor: "grey.300" } }}
-          >
-            <ArrowForwardIos fontSize="small" />
+          <IconButton className=" hover:btn-primary">
+            <ArrowForwardIos
+              fontSize="small"
+              onClick={() => carouselRef.current?.slideNext()}
+            />
           </IconButton>
         </Stack>
 
@@ -87,16 +80,8 @@ export default function TrendingProducts() {
         >
           {trendingProducts.map((product) => (
             <SwiperSlide key={product.id}>
-              <Card
-                sx={{
-                  height: "100%",
-                  boxShadow: 3,
-                  borderRadius: 3,
-                  overflow: "hidden",
-                  position: "relative",
-                  "&:hover": { boxShadow: 6 },
-                }}
-              >
+              <Card className="h-full rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow relative">
+                {/* Image */}
                 <Box className="relative aspect-[3/4] overflow-hidden">
                   <Image
                     src={product.image}
@@ -105,50 +90,35 @@ export default function TrendingProducts() {
                     className="object-cover transition-transform duration-500 hover:scale-105"
                   />
 
-                  <Box className="absolute top-4 left-4 flex flex-col gap-2">
+                  {/* Badges */}
+                  <Box className="absolute top-4 left-4 flex flex-col gap-2 z-10">
                     {product.isNew && (
                       <span className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full">
                         NEW
                       </span>
                     )}
-                    <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    <span className="bg-[var(--color-brand-secondary)] text-white text-xs font-bold px-2 py-1 rounded-full">
                       -{product.discount}%
                     </span>
                   </Box>
 
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      bgcolor: "rgba(0,0,0,0.6)",
-                      color: "white",
-                      p: 2,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 1,
-                    }}
-                  >
+                  {/* Overlay Content */}
+                  <Box className="absolute bottom-0 left-0 right-0 bg-[rgba(0,0,0,0.6)] text-white p-4 flex flex-col gap-2">
                     <Typography
                       variant="subtitle1"
                       fontWeight="600"
-                      className="line-clamp-1"
-                      sx={{ color: "white" }}
+                      className="line-clamp-1 text-white"
                     >
                       {product.name}
                     </Typography>
 
                     <Stack direction="row" spacing={1} alignItems="center">
-                      <Typography fontWeight="bold" sx={{ color: "white" }}>
+                      <Typography fontWeight="bold" className="text-white">
                         ৳{product.price.toLocaleString()}
                       </Typography>
                       <Typography
                         variant="body2"
-                        sx={{
-                          textDecoration: "line-through",
-                          color: "rgba(255,255,255,0.7)",
-                        }}
+                        className="line-through text-white/70"
                       >
                         ৳{product.originalPrice.toLocaleString()}
                       </Typography>
@@ -157,30 +127,25 @@ export default function TrendingProducts() {
                     <Stack direction="row" spacing={1} mt={1}>
                       <Button
                         variant="outlined"
-                        color="primary"
                         fullWidth
                         startIcon={<ShoppingCart size={18} />}
-                        sx={{
-                          bgcolor: "rgba(255,255,255,0.15)",
-                          color: "white",
-                          borderColor: "white",
-                          "&:hover": { bgcolor: "rgba(255,255,255,0.3)" },
-                        }}
+                        className="!text-white !border-white !bg-white/20 hover:!bg-white/30"
                       >
                         Add to Cart
                       </Button>
                       <Button
                         variant="contained"
-                        color="error"
+                        color="primary"
                         fullWidth
-                        sx={{ whiteSpace: "nowrap" }}
+                        className="whitespace-nowrap"
                       >
                         Buy Now
                       </Button>
                     </Stack>
                   </Box>
 
-                  <Box className="absolute top-4 right-4 flex flex-col gap-2">
+                  {/* Action Buttons */}
+                  <Box className="absolute top-4 right-4 flex flex-col gap-2 z-10">
                     <IconButton className="bg-white hover:bg-blue-50">
                       <Eye className="w-4 h-4 text-gray-600 hover:text-blue-600" />
                     </IconButton>
@@ -188,8 +153,8 @@ export default function TrendingProducts() {
                       onClick={() => toggleWishlist(product.id)}
                       className={`bg-white ${
                         wishlistItems.has(product.id)
-                          ? "text-red-500"
-                          : "hover:bg-red-50 text-gray-600 hover:text-red-500"
+                          ? "text-[var(--color-brand-secondary)]"
+                          : "hover:bg-red-50 text-gray-600 hover:text-[var(--color-brand-secondary)]"
                       }`}
                     >
                       <Heart
@@ -205,10 +170,9 @@ export default function TrendingProducts() {
           ))}
         </ReusableCarousel>
 
+        {/* View All Button */}
         <div className="text-center mt-12">
-          <button className="btn-primary transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-            View All Trending Products
-          </button>
+          <button className="btn-primary">View All Trending Products</button>
         </div>
       </div>
     </section>

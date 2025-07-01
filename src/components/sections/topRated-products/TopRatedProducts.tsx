@@ -1,108 +1,118 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Rating,
-  Typography,
-  Button,
-  Card,
-  CardContent,
-} from "@mui/material";
+import { Box, Rating, Typography, IconButton, Button } from "@mui/material";
 import Image from "next/image";
 import SectionHeader from "@/components/Shared/SectionHeader";
 import { topRatedProducts } from "./TopRatedProductsData";
+import { SwiperSlide } from "swiper/react";
+import ReusableCarousel, {
+  CarouselRef,
+} from "@/components/Shared/ReusableCarousel";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef } from "react";
 
 const TopRatedProducts = () => {
+  const carouselRef = useRef<CarouselRef>(null);
+
   return (
-    <Box className="py-10 px-4 md:px-16 bg-gray-50">
-      {/* Use SectionHeader reusable component */}
-      <div className="container mx-auto">
+    <Box className="bg-gray-50 py-16">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
           title="Top Rated"
           subTitle="🌟 Best Sellers"
           description="Explore our highest rated and most popular products chosen by our customers."
           alignment="center"
-          icon={null} // you can add an icon here if you want, e.g. a star icon
         />
 
-        <Box className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8">
+        {/* Controls */}
+        <Box className="flex justify-start mb-6 gap-3">
+          <IconButton
+            onClick={() => carouselRef.current?.slidePrev()}
+            className="bg-white shadow-md hover:bg-[var(--color-brand-primary)] hover:text-white transition"
+          >
+            <ChevronLeft />
+          </IconButton>
+          <IconButton
+            onClick={() => carouselRef.current?.slideNext()}
+            className="bg-white shadow-md hover:bg-[var(--color-brand-primary)] hover:text-white transition"
+          >
+            <ChevronRight />
+          </IconButton>
+        </Box>
+
+        {/* Carousel */}
+        <ReusableCarousel
+          ref={carouselRef}
+          autoplay={false}
+          pagination={false}
+          navigation={false}
+          loop={false}
+          spaceBetween={16}
+          breakpoints={{
+            320: { slidesPerView: 1 },
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+            1280: { slidesPerView: 4 },
+          }}
+        >
           {topRatedProducts.map((product) => (
-            <Card
-              key={product._id}
-              className="hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-              sx={{
-                borderRadius: 3,
-                overflow: "hidden",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-              }}
-              onClick={() => {
-                // Optional: navigate to product page or handle click
-                // router.push(`/products/${product.slug}`);
-              }}
-            >
-              <div className="relative h-52 w-full">
+            <SwiperSlide key={product._id}>
+              <div className="relative aspect-[3/4] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                {/* Product Image */}
                 <Image
                   src={product.image}
                   alt={product.name}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  priority={true}
+                  priority
                 />
-              </div>
 
-              <CardContent sx={{ px: 2, pb: 2 }}>
-                <Typography
-                  variant="h6"
-                  className="font-semibold mb-1 line-clamp-1"
-                  color="text.primary"
-                >
-                  {product.name}
-                </Typography>
-
-                <Box className="flex items-center gap-1 mb-1">
-                  <Rating
-                    value={product.rating}
-                    precision={0.5}
-                    readOnly
-                    size="small"
-                    sx={{ color: "#FF6B6B" }}
-                  />
-                  <Typography variant="body2" color="text.secondary">
-                    ({product.reviewCount})
+                {/* Overlay Gradient */}
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4 flex flex-col justify-end h-full">
+                  {/* Product Name */}
+                  <Typography
+                    variant="h6"
+                    className="text-white font-semibold line-clamp-1"
+                  >
+                    {product.name}
                   </Typography>
-                </Box>
 
-                <Typography
-                  variant="subtitle1"
-                  className="text-black font-bold mb-3"
-                  color="text.primary"
-                >
-                  ${product.price.toFixed(2)}
-                </Typography>
+                  {/* Rating */}
+                  <div className="flex items-center gap-1">
+                    <Rating
+                      value={product.rating}
+                      precision={0.5}
+                      readOnly
+                      size="small"
+                      sx={{ color: "#FF6B6B" }}
+                    />
+                    <Typography variant="body2" className="text-gray-300">
+                      ({product.reviewCount})
+                    </Typography>
+                  </div>
 
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  sx={{
-                    fontWeight: "600",
-                    textTransform: "none",
-                    boxShadow: "0 4px 12px rgb(255 107 107 / 0.4)",
-                    "&:hover": {
-                      bgcolor: "primary.dark",
-                      boxShadow: "0 6px 20px rgb(255 107 107 / 0.7)",
-                    },
-                  }}
-                  onClick={() => console.log("Add to cart", product._id)}
-                >
-                  Add to Cart
-                </Button>
-              </CardContent>
-            </Card>
+                  {/* Price */}
+                  <Typography
+                    variant="subtitle1"
+                    className="text-white font-bold"
+                  >
+                    ${product.price.toFixed(2)}
+                  </Typography>
+
+                  {/* CTA */}
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    className="btn-primary !mt-2 !text-white !text-sm !rounded-md"
+                    onClick={() => console.log("Add to cart", product._id)}
+                  >
+                    Add to Cart
+                  </Button>
+                </div>
+              </div>
+            </SwiperSlide>
           ))}
-        </Box>
+        </ReusableCarousel>
       </div>
     </Box>
   );
