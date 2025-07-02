@@ -385,7 +385,7 @@ export default function Navbar() {
                       mb: 4,
                     }}
                   >
-                    <Link href={cat?.link}>
+                    <AppLink href={cat?.link}>
                       <Typography
                         variant="subtitle1"
                         fontWeight="600"
@@ -400,14 +400,14 @@ export default function Navbar() {
                       >
                         {cat?.categoryName}
                       </Typography>
-                    </Link>
+                    </AppLink>
                     <Box
                       component="ul"
                       sx={{ pl: 2, mt: 0, listStyle: "none" }}
                     >
                       {cat.subCategory.map((sub, j) => (
                         <Box key={j} component="li" sx={{ mb: 0.5 }}>
-                          <Link href={sub?.link}>
+                          <AppLink href={sub?.link}>
                             <Box
                               sx={{
                                 textDecoration: "none",
@@ -418,7 +418,7 @@ export default function Navbar() {
                             >
                               {sub.subCategoryName}
                             </Box>
-                          </Link>
+                          </AppLink>
                         </Box>
                       ))}
                     </Box>
@@ -460,7 +460,9 @@ export default function Navbar() {
                     >
                       {megaMenuData[activeMenu]?.featured?.description}
                     </Typography>
-                    <Link href={megaMenuData[activeMenu]?.featured?.buttonLink}>
+                    <Link
+                      href={megaMenuData[activeMenu]?.featured?.buttonLink}
+                    >
                       <Button
                         className="btn-primary"
                         variant="contained"
@@ -564,7 +566,7 @@ export default function Navbar() {
                         >
                           {cat.subCategory.map((sub, j) => (
                             <Box key={j} component="li" mb={0.5}>
-                              <Link href={sub?.link}>
+                              <AppLink href={sub?.link}>
                                 <Box
                                   sx={{
                                     color: "text.primary",
@@ -577,7 +579,7 @@ export default function Navbar() {
                                 >
                                   {sub?.subCategoryName}
                                 </Box>
-                              </Link>
+                              </AppLink>
                             </Box>
                           ))}
                         </Box>
