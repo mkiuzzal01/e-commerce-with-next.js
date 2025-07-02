@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ChevronDown,
   Search,
@@ -15,20 +13,35 @@ import {
   Truck,
   Headphones,
 } from "lucide-react";
-import { megaMenuData } from "./NavLinks";
-import logo from "../../../public/assets/logo/logo1.png";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "../../../public/assets/logo/logo1.png";
+import { megaMenuData } from "./NavLinks";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  IconButton,
+  Divider,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  InputBase,
+  Button,
+  Box,
+  Stack,
+  useTheme,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function Navbar() {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [mobileExpandedCategories, setMobileExpandedCategories] = useState<
-    number[]
-  >([]);
   const [isScrolled, setIsScrolled] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const theme = useTheme();
 
   const handleMouseEnter = (index: number) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -39,17 +52,8 @@ export default function Navbar() {
     timeoutRef.current = setTimeout(() => setActiveMenu(null), 200);
   };
 
-  const handleMobileCategoryToggle = (index: number) => {
-    setMobileExpandedCategories((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
-    );
-  };
-
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -57,342 +61,562 @@ export default function Navbar() {
     };
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow =
+      isMobileMenuOpen || isSearchOpen ? "hidden" : "auto";
+  }, [isMobileMenuOpen, isSearchOpen]);
+
+  const [expandedAccordion, setExpandedAccordion] = useState<number | false>(
+    false
+  );
+
   return (
-    <div className="relative">
-      <header
-        className={`transition-all duration-300 ${
-          isScrolled ? "shadow-lg" : "shadow-sm"
-        } border-b sticky top-0 z-50 bg-white`}
+    <Box position="relative">
+      <Box
+        component="header"
+        className={` sticky top-0 z-50 transition-shadow ${
+          isScrolled ? "shadow-md" : "shadow-sm"
+        }`}
+        sx={{ boxShadow: isScrolled ? theme.shadows[4] : theme.shadows[1] }}
       >
         {/* Top Bar */}
-        <section className="bg-[#210F37] text-white">
-          <div className="container mx-auto px-4">
-            <div className="hidden lg:flex justify-between items-center py-3 text-sm">
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center gap-2">
-                  <Truck className="w-4 h-4 text-emerald-400" />
-                  <span>Free shipping on orders over $50</span>
-                </div>
-                <div className="w-px h-4 bg-slate-600" />
-                <div className="flex items-center gap-2">
-                  <Headphones className="w-4 h-4 text-blue-400" />
-                  <span>24/7 Customer Support</span>
-                </div>
-              </div>
-              <div className="flex items-center space-x-6">
-                <Link
-                  href="/help"
-                  className="hover:text-emerald-400 transition-colors flex items-center gap-1"
-                >
-                  <Phone className="w-3 h-3" />
-                  Help Center
-                </Link>
-                <Link
-                  href="/track"
-                  className="hover:text-blue-400 transition-colors"
-                >
-                  Track Order
-                </Link>
-                <Link
-                  href="/stores"
-                  className="hover:text-orange-400 transition-colors flex items-center gap-1"
-                >
-                  <MapPin className="w-3 h-3" />
-                  Store Locator
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Main Navigation */}
-        <section
-          className={`bg-white transition-all duration-300 ${
-            isScrolled ? "py-2" : "py-4"
-          }`}
+        <Box
+          className="bg-[var(--color-brand-background)] text-white hidden lg:block"
+          sx={{ bgcolor: "var(--color-brand-background)", color: "#fff" }}
         >
-          <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between">
-              {/* Mobile Menu Button */}
-              <button
-                className="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
-                onClick={() => setIsMobileMenuOpen(true)}
-                aria-label="Open mobile menu"
+          <Box
+            className="container mx-auto py-3"
+            display="flex"
+            justifyContent="space-between"
+            fontSize="0.875rem"
+            alignItems="center"
+          >
+            <Stack direction="row" spacing={6} alignItems="center">
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Truck size={16} color="#10b981" />
+                <Typography>Free shipping on orders over $50</Typography>
+              </Stack>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Headphones size={16} color="#3b82f6" />
+                <Typography>24/7 Customer Support</Typography>
+              </Stack>
+            </Stack>
+
+            <Stack direction="row" spacing={5} alignItems="center">
+              <Box
+                component="a"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  color: "inherit",
+                  textDecoration: "none",
+                  "&:hover": { color: "emerald.main" },
+                  cursor: "pointer",
+                  fontSize: "0.875rem",
+                }}
               >
-                <Menu className="w-6 h-6 text-slate-700" />
-              </button>
+                <Phone size={16} />
+              </Box>
+              <Box
+                component="a"
+                sx={{
+                  color: "inherit",
+                  fontSize: "0.875rem",
+                  cursor: "pointer",
+                  "&:hover": { color: "blue.main" },
+                  textDecoration: "none",
+                }}
+              >
+                Track Order
+              </Box>
 
-              {/* Logo */}
-              <div className="hidden lg:block">
-                <Link href="/" className="flex-shrink-0">
-                  <Image
-                    src={logo}
-                    alt="Company Logo"
-                    width={isScrolled ? 60 : 80}
-                    height={isScrolled ? 40 : 50}
-                    className="transition-all duration-300"
-                    priority
-                  />
-                </Link>
-              </div>
+              <Box
+                component="a"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  color: "inherit",
+                  fontSize: "0.875rem",
+                  cursor: "pointer",
+                  "&:hover": { color: "orange.main" },
+                  textDecoration: "none",
+                }}
+              >
+                <MapPin size={16} />
+                Store Locator
+              </Box>
+            </Stack>
+          </Box>
+        </Box>
 
-              {/* Desktop Navigation */}
-              <nav className="hidden lg:flex items-center space-x-2">
-                {megaMenuData.map((item, index) => (
-                  <div
-                    key={index}
-                    className="relative group"
-                    onMouseEnter={() => handleMouseEnter(index)}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    <button className="flex items-center space-x-1 px-4 py-3 text-slate-700 hover:text-blue-600 font-medium rounded-lg hover:bg-slate-50 transition-all duration-200 group">
-                      <span className="whitespace-nowrap">
-                        {item.MainCategoryName}
-                      </span>
-                      <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
-                    </button>
-                  </div>
-                ))}
-              </nav>
+        {/* Main Nav */}
+        <Box
+          className={`bg-white transition-all ${isScrolled ? "py-2" : "py-4"}`}
+          sx={{ py: isScrolled ? 1 : 2 }}
+        >
+          <Box
+            className="container mx-auto"
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            {/* Logo */}
+            <Link href="/">
+              <Box>
+                <Image
+                  src={logo}
+                  alt="Company Logo"
+                  width={isScrolled ? 60 : 80}
+                  height={isScrolled ? 40 : 50}
+                  className="transition-all duration-300"
+                  priority
+                />
+              </Box>
+            </Link>
 
-              {/* Right Side Actions */}
-              <div className="flex items-center space-x-2">
-                {/* Search */}
-                <div className="relative hidden md:block">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
-                    <input
-                      type="text"
-                      placeholder="Search products..."
-                      className="w-64 pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50 hover:bg-white transition-colors"
-                    />
-                  </div>
-                </div>
-
-                {/* Mobile Search Button */}
-                <button
-                  className="md:hidden p-2.5 rounded-lg hover:bg-slate-100 transition-colors"
-                  onClick={() => setIsSearchOpen(true)}
-                  aria-label="Open search"
+            {/* Desktop Nav */}
+            <Box
+              component="nav"
+              sx={{
+                display: { xs: "none", lg: "flex" },
+                gap: 2,
+                alignItems: "center",
+              }}
+            >
+              {megaMenuData.map((item, idx) => (
+                <Box
+                  key={idx}
+                  onMouseEnter={() => handleMouseEnter(idx)}
+                  onMouseLeave={handleMouseLeave}
+                  sx={{ position: "relative" }}
                 >
-                  <Search className="w-5 h-5 text-slate-700" />
-                </button>
-
-                {/* Action Buttons */}
-                <div className="flex items-center space-x-1">
-                  <button
-                    className="p-2.5 rounded-lg hover:bg-slate-100 transition-colors relative"
-                    aria-label="User account"
+                  <Button
+                    endIcon={
+                      <ChevronDown
+                        size={16}
+                        className={`transition-transform ${
+                          activeMenu === idx ? "rotate-180" : ""
+                        }`}
+                      />
+                    }
+                    sx={{
+                      textTransform: "none",
+                      color: "text.secondary",
+                      fontWeight: "medium",
+                      px: 2,
+                      py: 1,
+                      "&:hover": {
+                        color: "#fe6731",
+                        backgroundColor: "transparent",
+                      },
+                    }}
                   >
-                    <User className="w-5 h-5 text-slate-700" />
-                  </button>
+                    {item?.MainCategoryName}
+                  </Button>
+                </Box>
+              ))}
+            </Box>
 
-                  <button
-                    className="p-2.5 rounded-lg hover:bg-slate-100 transition-colors relative"
-                    aria-label="Wishlist"
-                  >
-                    <Heart className="w-5 h-5 text-slate-700" />
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
-                      2
-                    </span>
-                  </button>
+            {/* Action Buttons */}
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              {/* Desktop Search */}
+              <Box
+                sx={{
+                  position: "relative",
+                  display: { xs: "none", md: "block" },
+                  width: 256,
+                }}
+              >
+                <Search
+                  size={16}
+                  style={{
+                    position: "absolute",
+                    left: 12,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    color: "#94a3b8",
+                  }}
+                />
+                <InputBase
+                  placeholder="Search products..."
+                  sx={{
+                    pl: "36px",
+                    pr: 2,
+                    py: 1,
+                    borderRadius: 1,
+                    bgcolor: "grey.50",
+                    border: "1px solid",
+                    borderColor: "grey.300",
+                    width: "100%",
+                    fontSize: "0.875rem",
+                    "&:focus": {
+                      outline: "none",
+                      borderColor: "primary.main",
+                      boxShadow: `0 0 0 2px ${theme.palette.primary.light}`,
+                    },
+                  }}
+                  inputProps={{ "aria-label": "search products" }}
+                />
+              </Box>
 
-                  <button
-                    className="p-2.5 rounded-lg hover:bg-slate-100 transition-colors relative"
-                    aria-label="Shopping cart"
-                  >
-                    <ShoppingCart className="w-5 h-5 text-slate-700" />
-                    <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
-                      3
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+              {/* Mobile Search Toggle */}
+              <IconButton
+                onClick={() => setIsSearchOpen(true)}
+                sx={{ display: { xs: "inline-flex", md: "none" } }}
+                aria-label="Open search"
+                size="large"
+              >
+                <Search size={20} />
+              </IconButton>
 
-        {/* Mega Menu */}
+              {/* User / Wishlist / Cart Buttons */}
+              <IconButton aria-label="User" size="large">
+                <User size={20} />
+              </IconButton>
+
+              <IconButton
+                aria-label="Wishlist"
+                size="large"
+                sx={{ position: "relative" }}
+              >
+                <Heart size={20} />
+                <Box
+                  component="span"
+                  sx={{
+                    position: "absolute",
+                    top: -4,
+                    right: -4,
+                    bgcolor: "error.main",
+                    color: "common.white",
+                    fontSize: "0.625rem",
+                    width: 20,
+                    height: 20,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  2
+                </Box>
+              </IconButton>
+
+              <IconButton
+                aria-label="Cart"
+                size="large"
+                sx={{ position: "relative" }}
+              >
+                <ShoppingCart size={20} />
+                <Box
+                  component="span"
+                  sx={{
+                    position: "absolute",
+                    top: -4,
+                    right: -4,
+                    bgcolor: "primary.main",
+                    color: "common.white",
+                    fontSize: "0.625rem",
+                    width: 20,
+                    height: 20,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  3
+                </Box>
+              </IconButton>
+
+              {/* Mobile Menu Toggle */}
+              <IconButton
+                onClick={() => setIsMobileMenuOpen(true)}
+                sx={{ display: { lg: "none" } }}
+                aria-label="Open mobile menu"
+                size="large"
+              >
+                <Menu size={24} />
+              </IconButton>
+            </Stack>
+          </Box>
+        </Box>
+
+        {/* Mega Menu (Desktop only) */}
         {activeMenu !== null && (
-          <div
-            className="absolute top-full left-0 w-full bg-white shadow-2xl border-t border-slate-200 z-40 opacity-0 animate-fadeIn"
+          <Box
+            component="nav"
             onMouseEnter={() => handleMouseEnter(activeMenu)}
             onMouseLeave={handleMouseLeave}
-            style={{
-              animation: "fadeIn 0.2s ease-out forwards",
+            sx={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              width: "100vw",
+              bgcolor: "background.paper",
+              boxShadow: theme.shadows[5],
+              zIndex: 40,
+              borderTop: 1,
+              borderColor: "divider",
+              display: { xs: "none", lg: "block" },
             }}
           >
-            <div className="container mx-auto px-4 py-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {megaMenuData[activeMenu].Category.map((category, index) => (
-                  <div key={index} className="space-y-4">
-                    <h3 className="font-semibold text-slate-900 text-lg border-b border-slate-200 pb-3">
-                      <Link
-                        href={category.link}
-                        className="hover:text-blue-600 transition-colors"
-                      >
-                        {category.categoryName}
-                      </Link>
-                    </h3>
-                    <ul className="space-y-3">
-                      {category.subCategory.map((sub, subIndex) => (
-                        <li key={subIndex}>
-                          <Link
-                            href={sub.link}
-                            className="text-slate-600 hover:text-blue-600 block py-1 transition-colors hover:translate-x-1 duration-200"
-                          >
-                            {sub.subCategoryName}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-
-                {/* Featured Section */}
-                {megaMenuData[activeMenu].featured && (
-                  <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 flex flex-col items-center text-center border border-slate-200">
-                    <div className="relative mb-4 group">
-                      <Image
-                        src={megaMenuData[activeMenu].featured.image}
-                        alt="Featured product"
-                        className="rounded-lg transition-transform duration-300 group-hover:scale-105"
-                        width={200}
-                        height={200}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                    <h3 className="font-semibold text-slate-900 mb-2 text-lg">
-                      {megaMenuData[activeMenu].featured.title}
-                    </h3>
-                    <p className="text-sm text-slate-600 mb-4 leading-relaxed">
-                      {megaMenuData[activeMenu].featured.description}
-                    </p>
-                    <button className="btn-primary">
-                      <Link href={megaMenuData[activeMenu].featured.buttonLink}>
-                        {megaMenuData[activeMenu].featured.buttonText}
-                      </Link>
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-      </header>
-
-      {/* Mobile Search Overlay */}
-      {isSearchOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsSearchOpen(false)}
-          />
-          <div className="fixed top-0 left-0 right-0 bg-white p-4 shadow-xl">
-            <div className="flex items-center gap-3">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50"
-                  autoFocus
-                />
-              </div>
-              <button
-                onClick={() => setIsSearchOpen(false)}
-                className="p-2 rounded-lg hover:bg-slate-100"
-              >
-                <X className="w-6 h-6 text-slate-600" />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-          <div className="fixed top-0 left-0 w-80 max-w-[90vw] h-full bg-white shadow-2xl transform transition-transform duration-300">
-            {/* Mobile Menu Header */}
-            <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
-              <Image src={logo} alt="Logo" width={70} height={45} />
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 rounded-lg hover:bg-slate-200 transition-colors"
-                aria-label="Close mobile menu"
-              >
-                <X className="w-6 h-6 text-slate-600" />
-              </button>
-            </div>
-
-            {/* Mobile Search */}
-            <div className="p-4 bg-slate-50 border-b border-slate-200">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                />
-              </div>
-            </div>
-
-            {/* Mobile Navigation */}
-            <div className="overflow-y-auto h-full pb-20">
-              {megaMenuData.map((main, index) => (
-                <div key={index} className="border-b border-slate-100">
-                  <button
-                    className="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors"
-                    onClick={() => handleMobileCategoryToggle(index)}
+            <Box
+              className="container mx-auto px-4"
+              sx={{
+                display: "flex",
+                py: 6,
+                maxWidth: "1280px",
+                mx: "auto",
+                gap: 4,
+              }}
+            >
+              <Box sx={{ width: "75%", display: "flex", flexWrap: "wrap" }}>
+                {megaMenuData[activeMenu].Category.map((cat, i) => (
+                  <Box
+                    key={i}
+                    sx={{
+                      width: { xs: "100%", sm: "50%", md: "33.3333%" },
+                      pr: 2,
+                      mb: 4,
+                    }}
                   >
-                    <span className="font-medium text-slate-900">
-                      {main.MainCategoryName}
-                    </span>
-                    <ChevronDown
-                      className={`w-5 h-5 text-slate-600 transition-transform duration-200 ${
-                        mobileExpandedCategories.includes(index)
-                          ? "rotate-180"
-                          : ""
-                      }`}
-                    />
-                  </button>
-
-                  {mobileExpandedCategories.includes(index) && (
-                    <div className="bg-slate-50 border-t border-slate-100">
-                      {main.Category.map((cat, catIdx) => (
-                        <div key={catIdx}>
-                          <Link
-                            href={cat.link}
-                            className="block px-6 py-3 font-medium text-slate-700 hover:text-blue-600 hover:bg-white transition-colors border-b border-slate-200"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                          >
-                            {cat.categoryName}
-                          </Link>
-                          {cat.subCategory.map((sub, subIdx) => (
-                            <Link
-                              key={subIdx}
-                              href={sub.link}
-                              className="block px-8 py-2.5 text-sm text-slate-600 hover:text-blue-600 hover:bg-white transition-colors border-b border-slate-100 last:border-b-0"
-                              onClick={() => setIsMobileMenuOpen(false)}
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="600"
+                      mb={1.5}
+                      sx={{
+                        color: "#fe6731",
+                        textDecoration: "none",
+                        "&:hover": { color: "primary.main" },
+                        display: "inline-block",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {cat.categoryName}
+                    </Typography>
+                    <Box
+                      component="ul"
+                      sx={{ pl: 2, mt: 0, listStyle: "none" }}
+                    >
+                      {cat.subCategory.map((sub, j) => (
+                        <Box key={j} component="li" sx={{ mb: 0.5 }}>
+                          <Link href={sub.link}>
+                            <Box
+                              sx={{
+                                textDecoration: "none",
+                                "&:hover": { color: "primary.main" },
+                                display: "inline-block",
+                                cursor: "pointer",
+                              }}
                             >
                               {sub.subCategoryName}
-                            </Link>
-                          ))}
-                        </div>
+                            </Box>
+                          </Link>
+                        </Box>
                       ))}
-                    </div>
-                  )}
-                </div>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+              <Box sx={{ width: "25%" }}>
+                {megaMenuData[activeMenu].featured && (
+                  <Box
+                    sx={{
+                      borderRadius: 2,
+                      p: 3,
+                      textAlign: "center",
+                      border: 1,
+                      borderColor: "divider",
+                      bgcolor: "grey.100",
+                      background:
+                        "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)",
+                    }}
+                  >
+                    <Box className="w-3/5 m-auto">
+                      <Box className="relative aspect-[3/4] w-full mb-2">
+                        <Image
+                          src={megaMenuData[activeMenu]?.featured?.image}
+                          alt="Featured"
+                          objectFit="cover"
+                          fill
+                        />
+                      </Box>
+                    </Box>
+                    <Typography variant="h6" fontWeight="600" mb={1}>
+                      {megaMenuData[activeMenu]?.featured.title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      mb={2}
+                      sx={{ maxWidth: 280, mx: "auto" }}
+                    >
+                      {megaMenuData[activeMenu]?.featured?.description}
+                    </Typography>
+                    <Link href={megaMenuData[activeMenu]?.featured?.buttonLink}>
+                      <Button
+                        className="btn-primary"
+                        variant="contained"
+                        size="medium"
+                        component="a"
+                      >
+                        {megaMenuData[activeMenu]?.featured?.buttonText}
+                      </Button>
+                    </Link>
+                  </Box>
+                )}
+              </Box>
+            </Box>
+          </Box>
+        )}
+      </Box>
+
+      {/* Mobile Menu Drawer with MUI Accordion */}
+      {isMobileMenuOpen && (
+        <>
+          {/* Overlay */}
+          <Box
+            onClick={() => setIsMobileMenuOpen(false)}
+            sx={{
+              position: "fixed",
+              inset: 0,
+              bgcolor: "rgba(0,0,0,0.5)",
+              zIndex: 40,
+            }}
+          />
+
+          {/* Drawer */}
+          <Box
+            sx={{
+              position: "fixed",
+              top: 0,
+              right: 0,
+              width: "70%",
+              height: "100%",
+              bgcolor: "background.paper",
+              zIndex: 50,
+              boxShadow: 5,
+              p: 2,
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              mb={2}
+            >
+              <Image src={logo} alt="Logo" width={60} height={40} />
+              <IconButton
+                aria-label="Close mobile menu"
+                onClick={() => setIsMobileMenuOpen(false)}
+                size="large"
+              >
+                <X size={24} />
+              </IconButton>
+            </Box>
+            <Divider />
+
+            {/* Accordion Menu */}
+            <Box mt={2}>
+              {megaMenuData.map((mainCat, idx) => (
+                <Accordion
+                  key={idx}
+                  disableGutters
+                  elevation={0}
+                  square
+                  expanded={expandedAccordion === idx}
+                  onChange={() =>
+                    setExpandedAccordion((prev) => (prev === idx ? false : idx))
+                  }
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={`panel-content-${idx}`}
+                    id={`panel-header-${idx}`}
+                  >
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      {mainCat.MainCategoryName}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ pl: 2 }}>
+                    {mainCat.Category.map((cat, i) => (
+                      <Box key={i} mb={2}>
+                        <Typography
+                          variant="subtitle2"
+                          fontWeight="bold"
+                          mb={0.5}
+                        >
+                          {cat?.categoryName}
+                        </Typography>
+                        <Box
+                          component="ul"
+                          sx={{ pl: 2, mt: 0, listStyle: "none" }}
+                        >
+                          {cat.subCategory.map((sub, j) => (
+                            <Box key={j} component="li" mb={0.5}>
+                              <Link href={sub?.link}>
+                                <Box
+                                  sx={{
+                                    color: "text.primary",
+                                    textDecoration: "none",
+                                    fontSize: "0.875rem",
+                                    "&:hover": { color: "primary.main" },
+                                    cursor: "pointer",
+                                    display: "block",
+                                  }}
+                                >
+                                  {sub?.subCategoryName}
+                                </Box>
+                              </Link>
+                            </Box>
+                          ))}
+                        </Box>
+                      </Box>
+                    ))}
+                  </AccordionDetails>
+                </Accordion>
               ))}
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </>
       )}
-    </div>
+
+      {/* Mobile Search Dialog */}
+      <Dialog
+        open={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogContent>
+          <Box
+            display="flex"
+            alignItems="center"
+            border={1}
+            borderColor="grey.300"
+            borderRadius={1}
+            px={2}
+            py={1}
+          >
+            <Search size={24} color="#94a3b8" />
+            <InputBase
+              placeholder="Search products..."
+              fullWidth
+              autoFocus
+              inputProps={{ "aria-label": "search products" }}
+              sx={{ ml: 1 }}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsSearchOpen(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 }

@@ -5,7 +5,6 @@ import { Box } from "@mui/material";
 export default function Map() {
   return (
     <Box
-      component="section"
       aria-label="Google Map Location"
       sx={{
         width: "100%",
