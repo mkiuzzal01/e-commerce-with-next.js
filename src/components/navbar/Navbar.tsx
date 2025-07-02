@@ -34,6 +34,7 @@ import {
   useTheme,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AppLink from "@/utils/AppLink";
 
 export default function Navbar() {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
@@ -192,29 +193,31 @@ export default function Navbar() {
                   onMouseLeave={handleMouseLeave}
                   sx={{ position: "relative" }}
                 >
-                  <Button
-                    endIcon={
-                      <ChevronDown
-                        size={16}
-                        className={`transition-transform ${
-                          activeMenu === idx ? "rotate-180" : ""
-                        }`}
-                      />
-                    }
-                    sx={{
-                      textTransform: "none",
-                      color: "text.secondary",
-                      fontWeight: "medium",
-                      px: 2,
-                      py: 1,
-                      "&:hover": {
-                        color: "#fe6731",
-                        backgroundColor: "transparent",
-                      },
-                    }}
-                  >
-                    {item?.MainCategoryName}
-                  </Button>
+                  <AppLink href={item?.link}>
+                    <Button
+                      endIcon={
+                        <ChevronDown
+                          size={16}
+                          className={`transition-transform ${
+                            activeMenu === idx ? "rotate-180" : ""
+                          }`}
+                        />
+                      }
+                      sx={{
+                        textTransform: "none",
+                        color: "inherit",
+                        fontWeight: "medium",
+                        px: 2,
+                        py: 1,
+                        "&:hover": {
+                          color: "#fe6731",
+                          backgroundColor: "transparent",
+                        },
+                      }}
+                    >
+                      {item.MainCategoryName}
+                    </Button>
+                  </AppLink>
                 </Box>
               ))}
             </Box>
@@ -382,27 +385,29 @@ export default function Navbar() {
                       mb: 4,
                     }}
                   >
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight="600"
-                      mb={1.5}
-                      sx={{
-                        color: "#fe6731",
-                        textDecoration: "none",
-                        "&:hover": { color: "primary.main" },
-                        display: "inline-block",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {cat.categoryName}
-                    </Typography>
+                    <Link href={cat?.link}>
+                      <Typography
+                        variant="subtitle1"
+                        fontWeight="600"
+                        mb={1.5}
+                        sx={{
+                          color: "#fe6731",
+                          textDecoration: "none",
+                          "&:hover": { color: "primary.main" },
+                          display: "inline-block",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {cat?.categoryName}
+                      </Typography>
+                    </Link>
                     <Box
                       component="ul"
                       sx={{ pl: 2, mt: 0, listStyle: "none" }}
                     >
                       {cat.subCategory.map((sub, j) => (
                         <Box key={j} component="li" sx={{ mb: 0.5 }}>
-                          <Link href={sub.link}>
+                          <Link href={sub?.link}>
                             <Box
                               sx={{
                                 textDecoration: "none",

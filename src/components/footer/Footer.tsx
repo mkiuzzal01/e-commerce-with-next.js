@@ -75,9 +75,9 @@ export default function Footer() {
                 key={idx}
                 color="inherit"
                 size="large"
-                sx={{ p: 0.5 }}
+                sx={{ p: 1 }}
               >
-                <Icon fontSize="small" />
+                <Icon fontSize="medium" />
               </IconButton>
             ))}
           </Box>
