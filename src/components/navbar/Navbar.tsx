@@ -215,7 +215,7 @@ export default function Navbar() {
                         },
                       }}
                     >
-                      {item.MainCategoryName}
+                      {item?.MainCategoryName}
                     </Button>
                   </AppLink>
                 </Box>

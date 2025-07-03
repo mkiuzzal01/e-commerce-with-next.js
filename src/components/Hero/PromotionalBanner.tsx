@@ -17,14 +17,8 @@ import SectionHeader from "../Shared/SectionHeader";
 
 export default function PromotionalBanners() {
   return (
-    <Box
-      component="section"
-      className="relative overflow-hidden py-6 bg-white"
-    >
-      {/* Decorative Dots */}
+    <Box component="section" className="relative overflow-hidden py-6 bg-white">
       <Box className="absolute inset-0 bg-[radial-gradient(circle,rgba(150,150,150,0.1)_1px,transparent_1px)] bg-[length:40px_40px] pointer-events-none" />
-
-      {/* Floating Orbs */}
       <Box
         className="absolute top-10 right-10 w-[300px] h-[300px] rounded-full pointer-events-none"
         sx={{
@@ -45,7 +39,6 @@ export default function PromotionalBanners() {
       />
 
       <Container maxWidth="xl" sx={{ position: "relative", zIndex: 1 }}>
-        {/* Section Header */}
         <Box mb={3}>
           <SectionHeader
             title="Exceptional Shopping Experience"
@@ -55,18 +48,16 @@ export default function PromotionalBanners() {
             alignment="center"
           />
         </Box>
-
-        {/* Carousel */}
         <Box mb={5}>
           <ReusableCarousel
             autoplay
+            pauseOnMouseEnter={true}
+            autoplayDelay={2000}
+            speed={500}
             loop
             effect="slide"
-            speed={800}
-            spaceBetween={24}
-            slidesPerView={1}
-            pagination={false}
-            navigation={false}
+            slidesPerView={3}
+            spaceBetween={20}
             breakpoints={{
               600: { slidesPerView: 2 },
               900: { slidesPerView: 3 },
@@ -76,7 +67,7 @@ export default function PromotionalBanners() {
             {PromotionalBannerData.map((promo, idx) => (
               <SwiperSlide key={idx}>
                 <Card
-                  className="transition-transform duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1"
+                  className="transition-transform duration-300 ease-in-out shadow-lg -translate-y-1"
                   sx={{
                     height: "100%",
                     display: "flex",

@@ -18,6 +18,7 @@ import {
 import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import { testimonialsData } from "./TestimonialsData";
 import { Zap } from "lucide-react";
+import CarouselArrows from "@/components/Shared/CarouselArrows";
 
 const Testimonials = () => {
   const carouselRef = useRef<CarouselRef>(null);
@@ -104,21 +105,11 @@ const Testimonials = () => {
             ))}
           </ReusableCarousel>
 
-          {/* Pagination Buttons */}
-          <Stack direction="row" spacing={2} justifyContent="center" mt={4}>
-            <IconButton
-              onClick={() => carouselRef.current?.slidePrev()}
-              sx={{ bgcolor: "grey.200", "&:hover": { bgcolor: "grey.300" } }}
-            >
-              <ArrowBackIosNew fontSize="small" />
-            </IconButton>
-            <IconButton
-              onClick={() => carouselRef.current?.slideNext()}
-              sx={{ bgcolor: "grey.200", "&:hover": { bgcolor: "grey.300" } }}
-            >
-              <ArrowForwardIos fontSize="small" />
-            </IconButton>
-          </Stack>
+          <CarouselArrows
+            justifyContent="center"
+            onPrev={() => carouselRef.current?.slidePrev()}
+            onNext={() => carouselRef.current?.slideNext()}
+          />
         </Box>
       </Box>
     </Box>

@@ -22,7 +22,7 @@ export type TMainCategory = {
   MainCategoryName: string;
   link: string;
   Category: TCategory[];
-  featured?: TFeatured; // optional to allow flexibility
+  featured?: TFeatured;
 };
 
 export type TNavLink = TMainCategory[];

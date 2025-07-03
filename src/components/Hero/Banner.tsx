@@ -14,10 +14,17 @@ export default function Banner() {
   return (
     <Box component="section" className="relative third-color overflow-hidden">
       <Box className="relative z-10">
-        <ReusableCarousel autoplay pagination effect="cube" speed={1000} loop>
+        <ReusableCarousel
+          autoplay
+          pagination
+          pauseOnMouseEnter={false}
+          autoplayDelay={2000}
+          speed={1000}
+          loop
+        >
           {bannerData.map((item, index) => (
             <SwiperSlide key={item.id}>
-              <Box className="min-h-[500px] md:min-h-[600px] lg:min-h-[700px] flex items-center">
+              <Box className="min-h-[500px] md:min-h-[600px] lg:min-h-[790px] flex items-center">
                 <Container className="py-12 lg:py-16">
                   <Grid
                     container

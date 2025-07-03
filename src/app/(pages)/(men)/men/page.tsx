@@ -1,6 +1,6 @@
 import React from "react";
 import { menData } from "./components/menData";
-import ProductCard from "@/utils/cards/ProductCard";
+import ProductCard from "@/utils/cards/ProductCard1";
 
 export default function page() {
   return (

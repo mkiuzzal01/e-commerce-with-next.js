@@ -1,4 +1,5 @@
 "use client";
+
 import React, {
   useRef,
   useImperativeHandle,
@@ -25,12 +26,14 @@ export interface CarouselRef {
   slidePrev: () => void;
 }
 
-interface CarouselProps {
+export interface CarouselProps {
   children: ReactNode;
   autoplay?: boolean;
+  autoplayDelay?: number;
+  pauseOnMouseEnter?: boolean;
   navigation?: boolean;
   pagination?: boolean;
-  effect?: "slide" | "fade" | "cube" | "coverflow" | "flip";
+  effect?: "slide" | "fade" | "coverflow";
   speed?: number;
   spaceBetween?: number;
   loop?: boolean;
@@ -50,10 +53,12 @@ const ReusableCarousel = forwardRef<CarouselRef, CarouselProps>(
     {
       children,
       autoplay = true,
+      autoplayDelay = 2500,
+      pauseOnMouseEnter = true,
       navigation = false,
       pagination = false,
       effect = "slide",
-      speed = 600,
+      speed = 500,
       spaceBetween = 0,
       loop = true,
       className = "",
@@ -78,6 +83,23 @@ const ReusableCarousel = forwardRef<CarouselRef, CarouselProps>(
       <Swiper
         ref={swiperRef}
         modules={modules}
+        effect={effect}
+        speed={speed}
+        loop={loop}
+        spaceBetween={spaceBetween}
+        slidesPerView={slidesPerView}
+        centeredSlides={centeredSlides}
+        breakpoints={breakpoints}
+        autoplay={
+          autoplay
+            ? {
+                delay: autoplayDelay,
+                disableOnInteraction: false,
+                pauseOnMouseEnter,
+              }
+            : false
+        }
+        navigation={navigation}
         pagination={
           pagination
             ? {
@@ -86,23 +108,6 @@ const ReusableCarousel = forwardRef<CarouselRef, CarouselProps>(
               }
             : false
         }
-        navigation={navigation}
-        autoplay={
-          autoplay
-            ? {
-                delay: 4000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-              }
-            : false
-        }
-        effect={effect}
-        speed={speed}
-        spaceBetween={spaceBetween}
-        loop={loop}
-        breakpoints={breakpoints}
-        centeredSlides={centeredSlides}
-        slidesPerView={slidesPerView}
         coverflowEffect={
           effect === "coverflow"
             ? {

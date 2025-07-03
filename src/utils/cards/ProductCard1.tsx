@@ -18,17 +18,21 @@ type ProductCardProps = {
   product: TProduct;
 };
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard1: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <Card
       sx={{
         height: "100%",
-        boxShadow: 3,
-        borderRadius: 3,
+        borderRadius: 4,
         overflow: "hidden",
         position: "relative",
-        transition: "box-shadow 0.3s ease-in-out",
-        "&:hover": { boxShadow: 6 },
+        backgroundColor: "var(--color-brand-background)",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        "&:hover": {
+          transform: "translateY(-4px)",
+          boxShadow: "0 8px 20px rgba(0, 0, 0, 0.35)",
+        },
       }}
     >
       <Box className="relative aspect-[3/4] overflow-hidden">
@@ -39,27 +43,38 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           fill
           className="object-cover transition-transform duration-500 hover:scale-105"
         />
+
         {/* Overlay */}
         <Box
           sx={{
             position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            bgcolor: "rgba(0,0,0,0.6)",
-            color: "white",
-            p: 2,
+            inset: 0,
             display: "flex",
             flexDirection: "column",
-            gap: 1,
+            justifyContent: "flex-end",
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0))",
+            p: 2,
           }}
         >
-          <Typography variant="subtitle1" fontWeight="600" noWrap>
+          <Typography
+            variant="subtitle1"
+            fontWeight={700}
+            sx={{
+              color: "var(--color-brand-heading)",
+              lineHeight: 1.3,
+              mb: 0.5,
+            }}
+            noWrap
+          >
             {product.name}
           </Typography>
 
           <Stack direction="row" spacing={1} alignItems="center">
-            <Typography fontWeight="bold" sx={{ color: "white" }}>
+            <Typography
+              fontWeight="bold"
+              sx={{ color: "var(--color-brand-heading)" }}
+            >
               ৳{product.price.toLocaleString()}
             </Typography>
             <Typography
@@ -73,26 +88,35 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </Typography>
           </Stack>
 
-          <Stack direction="row" spacing={1} mt={1}>
+          <Stack direction="row" spacing={1} mt={2}>
             <Button
-              variant="outlined"
-              color="primary"
               fullWidth
+              variant="outlined"
               startIcon={<ShoppingCart size={18} />}
               sx={{
-                bgcolor: "rgba(255,255,255,0.15)",
                 color: "white",
-                borderColor: "white",
-                "&:hover": { bgcolor: "rgba(255,255,255,0.3)" },
+                borderColor: "rgba(255,255,255,0.5)",
+                backdropFilter: "blur(4px)",
+                fontWeight: 600,
+                "&:hover": {
+                  borderColor: "white",
+                  backgroundColor: "rgba(255,255,255,0.1)",
+                },
               }}
             >
               Add to Cart
             </Button>
             <Button
-              variant="contained"
-              color="primary"
               fullWidth
-              sx={{ whiteSpace: "nowrap" }}
+              variant="contained"
+              className="btn-primary"
+              sx={{
+                whiteSpace: "nowrap",
+                color: "white",
+                fontWeight: 600,
+                px: 3,
+                py: 1.5,
+              }}
             >
               Buy Now
             </Button>
@@ -103,4 +127,4 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   );
 };
 
-export default ProductCard;
+export default ProductCard1;

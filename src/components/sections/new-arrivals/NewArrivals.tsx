@@ -1,30 +1,16 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Card,
-  Stack,
-  Tabs,
-  Tab,
-  IconButton,
-} from "@mui/material";
-import {
-  Heart,
-  ShoppingCart,
-  Sparkles,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import Image from "next/image";
+import { Box, Tabs, Tab } from "@mui/material";
+import { Sparkles } from "lucide-react";
 import { productData } from "./NewArrivalsData";
 import SectionHeader from "@/components/Shared/SectionHeader";
 import ReusableCarousel, {
   CarouselRef,
 } from "@/components/Shared/ReusableCarousel";
 import { SwiperSlide } from "swiper/react";
+import CarouselArrows from "@/components/Shared/CarouselArrows";
+import ProductCard2 from "@/utils/cards/ProductCard2";
 
 const categories = ["All", "Women", "Men", "Kids", "Unisex"];
 
@@ -38,11 +24,11 @@ export default function NewArrivals() {
       : productData.filter((p) => p.category === selected);
 
   return (
-    <section className="py-6 bg-gradient-to-br from-orange-50 via-white to-red-50">
-      <div className="container mx-auto px-4">
+    <Box className="py-6 bg-gradient-to-br from-orange-50 via-white to-red-50">
+      <Box className="container mx-auto px-4">
         <SectionHeader
           title="New Arrivals"
-          subTitle="🆕 Latest Trends"
+          subTitle="Latest Trends"
           description="Discover the newest additions to our store"
           icon={<Sparkles className="w-5 h-5 text-white" />}
           alignment="center"
@@ -55,7 +41,6 @@ export default function NewArrivals() {
             alignItems: "center",
           }}
         >
-          {/* Tabs */}
           <Box display="flex" justifyContent="center" mb={6}>
             <Tabs
               value={selected}
@@ -86,32 +71,12 @@ export default function NewArrivals() {
             </Tabs>
           </Box>
 
-          {/* Pagination Controls */}
-          <Box display="flex" justifyContent="flex-end" mb={3} gap={1}>
-            <IconButton
-              onClick={() => carouselRef.current?.slidePrev()}
-              sx={{
-                bgcolor: "#fff",
-                boxShadow: 2,
-                "&:hover": { bgcolor: "primary.light", color: "white" },
-              }}
-            >
-              <ChevronLeft />
-            </IconButton>
-            <IconButton
-              onClick={() => carouselRef.current?.slideNext()}
-              sx={{
-                bgcolor: "#fff",
-                boxShadow: 2,
-                "&:hover": { bgcolor: "primary.light", color: "white" },
-              }}
-            >
-              <ChevronRight />
-            </IconButton>
-          </Box>
+          <CarouselArrows
+            onPrev={() => carouselRef.current?.slidePrev()}
+            onNext={() => carouselRef.current?.slideNext()}
+          />
         </Box>
 
-        {/* Carousel */}
         <ReusableCarousel
           ref={carouselRef}
           autoplay={false}
@@ -128,88 +93,18 @@ export default function NewArrivals() {
         >
           {filtered.map((product) => (
             <SwiperSlide key={product.id}>
-              <Card>
-                <Box className="relative aspect-[3/4] overflow-hidden">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-cover transition-transform duration-700 hover:scale-110"
-                  />
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      bgcolor: "rgba(255,255,255,0.15)",
-                      backdropFilter: "blur(10px)",
-                      color: "#222",
-                      p: 2.5,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 1,
-                      borderTopLeftRadius: 16,
-                      borderTopRightRadius: 16,
-                    }}
-                  >
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight="bold"
-                      noWrap
-                      sx={{ textShadow: "0 1px 4px rgba(255, 255, 255, 0.6)" }}
-                    >
-                      {product.name}
-                    </Typography>
-                    <Typography
-                      fontWeight="bold"
-                      color="primary"
-                      sx={{ textShadow: "0 1px 4px rgba(255, 255, 255, 0.7)" }}
-                    >
-                      ৳{product.price.toLocaleString()}
-                    </Typography>
-
-                    <Stack direction="row" spacing={1} mt={1}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        fullWidth
-                        startIcon={<ShoppingCart size={18} />}
-                        sx={{
-                          textTransform: "none",
-                          fontWeight: 600,
-                          boxShadow: "0 2px 12px rgb(255 107 107 / 0.4)",
-                          "&:hover": {
-                            bgcolor: "primary.dark",
-                            boxShadow: "0 4px 20px rgb(255 107 107 / 0.7)",
-                          },
-                        }}
-                      >
-                        Add to Cart
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="error"
-                        sx={{
-                          minWidth: 40,
-                          p: 1,
-                          borderWidth: 2,
-                          "&:hover": {
-                            bgcolor: "error.main",
-                            color: "#fff",
-                          },
-                        }}
-                      >
-                        <Heart size={20} />
-                      </Button>
-                    </Stack>
-                  </Box>
-                </Box>
-              </Card>
+              <ProductCard2
+                product={{
+                  id: String(product?.id),
+                  name: product?.name,
+                  image: product?.image,
+                  price: product?.price,
+                }}
+              />
             </SwiperSlide>
           ))}
         </ReusableCarousel>
-      </div>
-    </section>
+      </Box>
+    </Box>
   );
 }
