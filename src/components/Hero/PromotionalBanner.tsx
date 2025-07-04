@@ -59,8 +59,8 @@ export default function PromotionalBanners() {
             slidesPerView={3}
             spaceBetween={20}
             breakpoints={{
-              600: { slidesPerView: 2 },
-              900: { slidesPerView: 3 },
+              600: { slidesPerView: 1 },
+              900: { slidesPerView: 2 },
               1200: { slidesPerView: 4 },
             }}
           >
@@ -150,7 +150,7 @@ export default function PromotionalBanners() {
             ))}
           </ReusableCarousel>
         </Box>
-
+        {/* buttons */}
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={3}

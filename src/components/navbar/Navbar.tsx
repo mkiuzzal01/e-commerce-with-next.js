@@ -50,11 +50,13 @@ export default function Navbar() {
   };
 
   const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => setActiveMenu(null), 200);
+    console.log(activeMenu);
+    console.log(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setActiveMenu(null), 100);
   };
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    const handleScroll = () => setIsScrolled(window.scrollY > 0);
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -164,8 +166,8 @@ export default function Navbar() {
             justifyContent="space-between"
           >
             {/* Logo */}
-            <Link href="/">
-              <Box>
+            <Box onClick={() => setActiveMenu(null)}>
+              <Link href="/">
                 <Image
                   src={logo}
                   alt="Company Logo"
@@ -174,8 +176,8 @@ export default function Navbar() {
                   className="transition-all duration-300"
                   priority
                 />
-              </Box>
-            </Link>
+              </Link>
+            </Box>
 
             {/* Desktop Nav */}
             <Box
@@ -189,6 +191,7 @@ export default function Navbar() {
               {megaMenuData.map((item, idx) => (
                 <Box
                   key={idx}
+                  onClick={() => setActiveMenu(null)}
                   onMouseEnter={() => handleMouseEnter(idx)}
                   onMouseLeave={handleMouseLeave}
                   sx={{ position: "relative" }}
@@ -275,9 +278,11 @@ export default function Navbar() {
               </IconButton>
 
               {/* User / Wishlist / Cart Buttons */}
-              <IconButton aria-label="User" size="large">
-                <User size={20} />
-              </IconButton>
+              <Link href={"/login"}>
+                <IconButton aria-label="User" size="large">
+                  <User size={20} />
+                </IconButton>
+              </Link>
 
               <IconButton
                 aria-label="Wishlist"
@@ -378,6 +383,7 @@ export default function Navbar() {
               <Box sx={{ width: "75%", display: "flex", flexWrap: "wrap" }}>
                 {megaMenuData[activeMenu].Category.map((cat, i) => (
                   <Box
+                    onClick={() => setActiveMenu(null)}
                     key={i}
                     sx={{
                       width: { xs: "100%", sm: "50%", md: "33.3333%" },
@@ -406,7 +412,12 @@ export default function Navbar() {
                       sx={{ pl: 2, mt: 0, listStyle: "none" }}
                     >
                       {cat.subCategory.map((sub, j) => (
-                        <Box key={j} component="li" sx={{ mb: 0.5 }}>
+                        <Box
+                          onClick={() => setActiveMenu(null)}
+                          key={j}
+                          component="li"
+                          sx={{ mb: 0.5 }}
+                        >
                           <AppLink href={sub?.link}>
                             <Box
                               sx={{
@@ -416,7 +427,7 @@ export default function Navbar() {
                                 cursor: "pointer",
                               }}
                             >
-                              {sub.subCategoryName}
+                              {sub?.subCategoryName}
                             </Box>
                           </AppLink>
                         </Box>
@@ -426,7 +437,7 @@ export default function Navbar() {
                 ))}
               </Box>
               <Box sx={{ width: "25%" }}>
-                {megaMenuData[activeMenu].featured && (
+                {megaMenuData[activeMenu]?.featured && (
                   <Box
                     sx={{
                       borderRadius: 2,
@@ -460,18 +471,20 @@ export default function Navbar() {
                     >
                       {megaMenuData[activeMenu]?.featured?.description}
                     </Typography>
-                    <Link
-                      href={megaMenuData[activeMenu]?.featured?.buttonLink}
-                    >
-                      <Button
-                        className="btn-primary"
-                        variant="contained"
-                        size="medium"
-                        component="a"
+                    <Box onClick={() => setActiveMenu(null)}>
+                      <Link
+                        href={megaMenuData[activeMenu]?.featured?.buttonLink}
                       >
-                        {megaMenuData[activeMenu]?.featured?.buttonText}
-                      </Button>
-                    </Link>
+                        <Button
+                          className="btn-primary"
+                          variant="contained"
+                          size="medium"
+                          component="a"
+                        >
+                          {megaMenuData[activeMenu]?.featured?.buttonText}
+                        </Button>
+                      </Link>
+                    </Box>
                   </Box>
                 )}
               </Box>
@@ -480,7 +493,7 @@ export default function Navbar() {
         )}
       </Box>
 
-      {/* Mobile Menu Drawer with MUI Accordion */}
+      {/* Mobile Menu Drawer */}
       {isMobileMenuOpen && (
         <>
           {/* Overlay */}
@@ -546,37 +559,44 @@ export default function Navbar() {
                     aria-controls={`panel-content-${idx}`}
                     id={`panel-header-${idx}`}
                   >
-                    <Typography variant="subtitle1" fontWeight="medium">
-                      {mainCat.MainCategoryName}
-                    </Typography>
+                    <Box onClick={() => setIsMobileMenuOpen(false)}>
+                      <AppLink href={mainCat?.link}>
+                        <Typography variant="subtitle1" fontWeight="medium">
+                          {mainCat?.MainCategoryName}
+                        </Typography>
+                      </AppLink>
+                    </Box>
+                    <Link href={mainCat?.link}></Link>
                   </AccordionSummary>
                   <AccordionDetails sx={{ pl: 2 }}>
-                    {mainCat.Category.map((cat, i) => (
-                      <Box key={i} mb={2}>
-                        <Typography
-                          variant="subtitle2"
-                          fontWeight="bold"
-                          mb={0.5}
-                        >
-                          {cat?.categoryName}
-                        </Typography>
+                    {mainCat?.Category?.map((cat, i) => (
+                      <Box
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        key={i}
+                        mb={2}
+                      >
+                        <AppLink href={cat?.link}>
+                          <Typography
+                            variant="subtitle2"
+                            fontWeight="bold"
+                            mb={0.5}
+                          >
+                            {cat?.categoryName}
+                          </Typography>
+                        </AppLink>
                         <Box
                           component="ul"
                           sx={{ pl: 2, mt: 0, listStyle: "none" }}
                         >
-                          {cat.subCategory.map((sub, j) => (
-                            <Box key={j} component="li" mb={0.5}>
+                          {cat?.subCategory?.map((sub, j) => (
+                            <Box
+                              onClick={() => setIsMobileMenuOpen(false)}
+                              key={j}
+                              component="li"
+                              mb={0.5}
+                            >
                               <AppLink href={sub?.link}>
-                                <Box
-                                  sx={{
-                                    color: "text.primary",
-                                    textDecoration: "none",
-                                    fontSize: "0.875rem",
-                                    "&:hover": { color: "primary.main" },
-                                    cursor: "pointer",
-                                    display: "block",
-                                  }}
-                                >
+                                <Box onClick={() => setIsMobileMenuOpen(false)}>
                                   {sub?.subCategoryName}
                                 </Box>
                               </AppLink>

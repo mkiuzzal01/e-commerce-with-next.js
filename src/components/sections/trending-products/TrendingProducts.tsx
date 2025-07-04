@@ -10,7 +10,7 @@ import ReusableCarousel, {
 import SectionHeader from "@/components/Shared/SectionHeader";
 import { SwiperSlide } from "swiper/react";
 import ProductCard from "@/utils/cards/ProductCard1";
-import SectionButton from "@/utils/buttions/sectionButton";
+import SectionButton from "@/utils/buttons/sectionButton";
 import CarouselArrows from "@/components/Shared/CarouselArrows";
 
 export default function TrendingProducts() {
