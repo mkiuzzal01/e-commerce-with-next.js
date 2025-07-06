@@ -5,6 +5,7 @@ import React, {
   useImperativeHandle,
   forwardRef,
   type ReactNode,
+  useState,
 } from "react";
 import { Swiper, type SwiperRef } from "swiper/react";
 import {
@@ -69,18 +70,22 @@ const ReusableCarousel = forwardRef<CarouselRef, CarouselProps>(
     ref
   ) => {
     const swiperRef = useRef<SwiperRef>(null);
+    const [isReady, setIsReady] = useState(false);
 
+    // Expose next/prev methods
     useImperativeHandle(ref, () => ({
       slideNext: () => swiperRef.current?.swiper?.slideNext(),
       slidePrev: () => swiperRef.current?.swiper?.slidePrev(),
     }));
 
+    // Dynamically add effect modules
     const modules = [Pagination, Navigation, Autoplay];
     if (effect === "fade") modules.push(EffectFade);
     if (effect === "coverflow") modules.push(EffectCoverflow);
 
     return (
       <Swiper
+        onSwiper={() => setIsReady(true)}
         ref={swiperRef}
         modules={modules}
         effect={effect}
@@ -121,7 +126,7 @@ const ReusableCarousel = forwardRef<CarouselRef, CarouselProps>(
         }
         className={`mySwiper ${className}`}
       >
-        {children}
+        {isReady && children}
       </Swiper>
     );
   }

@@ -1,10 +1,25 @@
 import React from "react";
+import ProductCard from "@/utils/cards/ProductCard1";
+import { menData } from "../components/menData";
 
 export default function page() {
   return (
     <div>
       <div className="container m-auto p-4">
-        <div>dynamic page</div>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          {menData?.map((item, idx) => (
+            <ProductCard
+              key={idx}
+              product={{
+                id: item?.id?.toString(),
+                name: item?.name,
+                image: item?.image,
+                price: item?.price,
+                originalPrice: item?.originalPrice,
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
