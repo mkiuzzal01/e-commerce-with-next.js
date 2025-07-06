@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
 import React from "react";
 import { Box, Button, Container, Typography, Paper, Grid } from "@mui/material";
 import ReusableForm from "@/components/Shared/ReusableTable"; // your form wrapper
@@ -90,7 +88,7 @@ export default function Login() {
             mt={2}
             color="text.secondary"
           >
-            Don't have an account?{" "}
+            Do not have an account?{" "}
             <Button href="/register" size="small">
               Register
             </Button>

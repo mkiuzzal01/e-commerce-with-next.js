@@ -13,9 +13,7 @@ import {
   CardContent,
   Avatar,
   Stack,
-  IconButton,
 } from "@mui/material";
-import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import { testimonialsData } from "./TestimonialsData";
 import { Zap } from "lucide-react";
 import CarouselArrows from "@/components/Shared/CarouselArrows";

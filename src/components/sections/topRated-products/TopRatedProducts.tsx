@@ -1,7 +1,6 @@
 "use client";
 
-import { Box, Rating, Typography, Button } from "@mui/material";
-import Image from "next/image";
+import { Box } from "@mui/material";
 import SectionHeader from "@/components/Shared/SectionHeader";
 import { topRatedProducts } from "./TopRatedProductsData";
 import { SwiperSlide } from "swiper/react";

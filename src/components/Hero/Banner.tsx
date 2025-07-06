@@ -1,15 +1,15 @@
 "use client";
 import Image from "next/image";
-import { useCallback } from "react";
+// import { useCallback } from "react";
 import { SwiperSlide } from "swiper/react";
 import ReusableCarousel from "../Shared/ReusableCarousel";
-import { bannerData, type BannerItem } from "./BannerData";
+import { bannerData,  } from "./BannerData";
 import { Box, Container, Grid, Typography } from "@mui/material";
 
 export default function Banner() {
-  const handleButtonClick = useCallback((item: BannerItem) => {
-    console.log(`Button clicked for: ${item.title}`);
-  }, []);
+  // const handleButtonClick = useCallback((item: BannerItem) => {
+  //   console.log(`Button clicked for: ${item.title}`);
+  // }, []);
 
   return (
     <Box component="section" className="relative third-color overflow-hidden">
@@ -22,7 +22,7 @@ export default function Banner() {
           speed={1000}
           loop
         >
-          {bannerData.map((item, index) => (
+          {bannerData?.map((item, index) => (
             <SwiperSlide key={item.id}>
               <Box className="min-h-[500px] md:min-h-[600px] lg:min-h-[790px] flex items-center">
                 <Container className="py-12 lg:py-16">
@@ -72,7 +72,7 @@ export default function Banner() {
 
                         <Box className="pt-4">
                           <button
-                            onClick={() => handleButtonClick(item)}
+                            // onClick={() => handleButtonClick(item)}
                             className="btn-primary group relative inline-flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/25 focus:outline-none focus:ring-4 focus:ring-amber-500/50"
                           >
                             <span className="text-base sm:text-lg">
@@ -105,7 +105,7 @@ export default function Banner() {
                           <Box className="relative h-full rounded-3xl overflow-hidden">
                             <Image
                               src={item.image}
-                              alt={item.imageAlt || item.title}
+                              alt={item.title}
                               priority={index === 0}
                               fill
                               className="object-contain p-4 transition-transform duration-500 hover:scale-110"
