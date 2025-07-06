@@ -12,6 +12,7 @@ import {
   MapPin,
   Truck,
   Headphones,
+  HomeIcon,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -178,6 +179,7 @@ export default function Navbar() {
                 />
               </Link>
             </Box>
+        
 
             {/* Desktop Nav */}
             <Box
@@ -188,6 +190,13 @@ export default function Navbar() {
                 alignItems: "center",
               }}
             >
+              <Box>
+                <Button>
+                  <AppLink href={"/"}>
+                    <HomeIcon color={`${activeMenu ? "orange" : "Black"}`} />
+                  </AppLink>
+                </Button>
+              </Box>
               {megaMenuData.map((item, idx) => (
                 <Box
                   key={idx}
@@ -260,7 +269,7 @@ export default function Navbar() {
                     "&:focus": {
                       outline: "none",
                       borderColor: "primary.main",
-                      boxShadow: `0 0 0 2px ${theme.palette.primary.light}`,
+                      boxShadow: `0 0 0 2px ${theme?.palette?.primary?.light}`,
                     },
                   }}
                   inputProps={{ "aria-label": "search products" }}
@@ -274,7 +283,7 @@ export default function Navbar() {
                 aria-label="Open search"
                 size="large"
               >
-                <Search size={20} />
+                <Search size={20} width={"100%"} />
               </IconButton>
 
               {/* User / Wishlist / Cart Buttons */}
