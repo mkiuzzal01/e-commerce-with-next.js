@@ -1,12 +1,22 @@
-import React from "react";
 import ProductCard from "@/utils/cards/ProductCard1";
+import { Box } from "@mui/material";
+import ReusablePagination from "@/components/Shared/ReusablePagination";
+import MenForm from "../components/MenForm";
 import { menData } from "../components/menData";
 
 export default function page() {
   return (
-    <div>
-      <div className="container m-auto p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+    <Box
+      sx={{
+        background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
+      }}
+    >
+      <Box className="container m-auto p-4">
+        {/* this is form */}
+        <Box>
+          <MenForm />
+        </Box>
+        <Box className="grid grid-cols-1 lg:grid-cols-4 gap-4 pt-4">
           {menData?.map((item, idx) => (
             <ProductCard
               key={idx}
@@ -19,8 +29,9 @@ export default function page() {
               }}
             />
           ))}
-        </div>
-      </div>
-    </div>
+        </Box>
+        <ReusablePagination />
+      </Box>
+    </Box>
   );
 }

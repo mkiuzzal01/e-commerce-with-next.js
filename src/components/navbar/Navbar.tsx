@@ -194,11 +194,8 @@ export default function Navbar() {
                   <AppLink
                     href="/"
                     render={(isActive) => (
-                      <IconButton>
-                        <HomeIcon
-                          color={isActive ? "#fe6731" : "black"}
-                          strokeWidth={isActive ? 2.5 : 1.5}
-                        />
+                      <IconButton title="Home">
+                        <HomeIcon color={isActive ? "#fe6731" : "black"} />
                       </IconButton>
                     )}
                   />
