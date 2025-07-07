@@ -1,18 +1,13 @@
 "use client";
 import Image from "next/image";
-// import { useCallback } from "react";
 import { SwiperSlide } from "swiper/react";
 import ReusableCarousel from "../Shared/ReusableCarousel";
-import { bannerData,  } from "./BannerData";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { bannerData } from "./BannerData";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 
 export default function Banner() {
-  // const handleButtonClick = useCallback((item: BannerItem) => {
-  //   console.log(`Button clicked for: ${item.title}`);
-  // }, []);
-
   return (
-    <Box component="section" className="relative third-color overflow-hidden">
+    <Box className="relative third-color overflow-hidden">
       <Box className="relative z-10">
         <ReusableCarousel
           autoplay
@@ -41,7 +36,7 @@ export default function Banner() {
                       sx={{ textAlign: { xs: "center", md: "left" } }}
                     >
                       <Box className="flex flex-col gap-6">
-                        {item.offer && (
+                        {item?.offer && (
                           <Box className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 backdrop-blur-sm border border-amber-500/30 rounded-full px-6 py-3 text-sm font-semibold text-amber-400 shadow-lg">
                             <span className="relative flex h-2.5 w-2.5">
                               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
@@ -51,34 +46,31 @@ export default function Banner() {
                           </Box>
                         )}
 
-                        {item.subtitle && (
+                        {item?.subtitle && (
                           <Typography
                             className="text-xs sm:text-sm font-bold tracking-[0.2em] text-amber-400 uppercase opacity-90"
                             component="div"
                           >
-                            {item.subtitle}
+                            {item?.subtitle}
                           </Typography>
                         )}
 
-                        <h1 className="heading">
+                        <Typography variant="h3">
                           <span className="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
-                            {item.title}
+                            {item?.title}
                           </span>
-                        </h1>
+                        </Typography>
 
-                        <p className="paragraph max-w-2xl mx-auto md:mx-0 opacity-90">
-                          {item.description}
-                        </p>
+                        <Typography className="paragraph max-w-2xl mx-auto md:mx-0 opacity-90">
+                          {item?.description}
+                        </Typography>
 
                         <Box className="pt-4">
-                          <button
-                            // onClick={() => handleButtonClick(item)}
-                            className="btn-primary group relative inline-flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/25 focus:outline-none focus:ring-4 focus:ring-amber-500/50"
-                          >
+                          <Button size="large"  variant="contained"  className="btn-primary group relative inline-flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/25 focus:outline-none focus:ring-4 focus:ring-amber-500/50">
                             <span className="text-base sm:text-lg">
-                              {item.buttonLabel}
+                              {item?.buttonLabel}
                             </span>
-                          </button>
+                          </Button>
                         </Box>
                       </Box>
                     </Grid>

@@ -179,7 +179,6 @@ export default function Navbar() {
                 />
               </Link>
             </Box>
-        
 
             {/* Desktop Nav */}
             <Box
@@ -192,9 +191,17 @@ export default function Navbar() {
             >
               <Box>
                 <Button>
-                  <AppLink href={"/"}>
-                    <HomeIcon color={`${activeMenu ? "orange" : "Black"}`} />
-                  </AppLink>
+                  <AppLink
+                    href="/"
+                    render={(isActive) => (
+                      <IconButton>
+                        <HomeIcon
+                          color={isActive ? "#fe6731" : "black"}
+                          strokeWidth={isActive ? 2.5 : 1.5}
+                        />
+                      </IconButton>
+                    )}
+                  />
                 </Button>
               </Box>
               {megaMenuData.map((item, idx) => (

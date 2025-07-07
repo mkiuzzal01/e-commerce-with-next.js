@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -7,33 +5,33 @@ import { Box } from "@mui/material";
 
 type AppLinkProps = {
   href: string;
-  children: React.ReactNode;
   className?: string;
   underline?: boolean;
   color?: string;
   activeColor?: string;
   target?: "_blank" | "_self";
   sx?: object;
+  render?: (isActive: boolean) => React.ReactNode;
+  children?: React.ReactNode;
 };
 
 const AppLink: React.FC<AppLinkProps> = ({
   href,
-  children,
   className = "",
   underline = false,
   color = "inherit",
-  activeColor = "#fe6731", 
+  activeColor = "#fe6731",
   target = "_self",
   sx = {},
+  render,
+  children,
 }) => {
   const pathname = usePathname();
   const isActive = pathname === href;
 
   return (
-    <Link href={href} >
+    <Link href={href} target={target}>
       <Box
-        component="a"
-        target={target}
         rel={target === "_blank" ? "noopener noreferrer" : undefined}
         className={className}
         sx={{
@@ -41,10 +39,12 @@ const AppLink: React.FC<AppLinkProps> = ({
           color: isActive ? activeColor : color,
           fontWeight: isActive ? 600 : "normal",
           cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
           ...sx,
         }}
       >
-        {children}
+        {render ? render(isActive) : children}
       </Box>
     </Link>
   );

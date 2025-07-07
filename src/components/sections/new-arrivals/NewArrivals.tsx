@@ -34,14 +34,8 @@ export default function NewArrivals() {
           alignment="center"
         />
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Box display="flex" justifyContent="center" mb={6}>
+        <Box className="flex flex-col md:flex-row items-center justify-between ">
+          <Box display="flex" justifyContent="center">
             <Tabs
               value={selected}
               onChange={(_, newVal) => setSelected(newVal)}
@@ -72,8 +66,8 @@ export default function NewArrivals() {
           </Box>
 
           <CarouselArrows
-            onPrev={() => carouselRef.current?.slidePrev()}
-            onNext={() => carouselRef.current?.slideNext()}
+            onPrev={() => carouselRef?.current?.slidePrev()}
+            onNext={() => carouselRef?.current?.slideNext()}
           />
         </Box>
 

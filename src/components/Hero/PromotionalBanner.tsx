@@ -59,9 +59,10 @@ export default function PromotionalBanners() {
             slidesPerView={3}
             spaceBetween={20}
             breakpoints={{
-              600: { slidesPerView: 1 },
-              900: { slidesPerView: 2 },
-              1200: { slidesPerView: 4 },
+              320: { slidesPerView: 1 },
+              640: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+              1280: { slidesPerView: 4 },
             }}
           >
             {PromotionalBannerData.map((promo, idx) => (
