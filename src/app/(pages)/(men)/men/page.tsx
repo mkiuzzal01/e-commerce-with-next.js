@@ -1,10 +1,13 @@
+"use client";
 import { menData } from "./components/menData";
 import ProductCard from "@/utils/cards/ProductCard1";
 import { Box } from "@mui/material";
-import MenForm from "./components/MenForm";
+import MenForm from "./components/MenProductFilterFrom";
 import ReusablePagination from "@/components/Shared/ReusablePagination";
+import { useState } from "react";
 
 export default function page() {
+  const [page, setPage] = useState<number>(1);
   return (
     <Box
       sx={{
@@ -30,7 +33,13 @@ export default function page() {
             />
           ))}
         </Box>
-        <ReusablePagination />
+        <Box textAlign="center" py={4}>
+          <ReusablePagination
+            currentPage={page}
+            totalPages={10}
+            onPageChange={setPage}
+          />
+        </Box>
       </Box>
     </Box>
   );

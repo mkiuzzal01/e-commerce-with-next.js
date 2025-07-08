@@ -1,13 +1,18 @@
 import React from "react";
 import ProductCard from "@/utils/cards/ProductCard1";
 import { womenData } from "./components/womansData";
-
+import { Box } from "@mui/material";
+import WomenProductFilterFrom from "./components/WomenProductFilterFrom";
+import ReusablePagination from "@/components/Shared/ReusablePagination";
 
 export default function Page() {
   return (
-    <div>
-      <div className="container m-auto p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+    <Box>
+      <Box className="container m-auto p-4">
+        <Box>
+          <WomenProductFilterFrom />
+        </Box>
+        <Box className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {womenData?.map((item, idx) => (
             <ProductCard
               key={idx}
@@ -20,8 +25,11 @@ export default function Page() {
               }}
             />
           ))}
-        </div>
-      </div>
-    </div>
+        </Box>
+        <Box textAlign="center" py={4}>
+          <ReusablePagination currentPage={1} totalPages={10} />
+        </Box>
+      </Box>
+    </Box>
   );
 }

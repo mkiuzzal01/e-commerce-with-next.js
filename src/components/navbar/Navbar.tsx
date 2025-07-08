@@ -122,18 +122,19 @@ export default function Navbar() {
               >
                 <Phone size={16} />
               </Box>
-              <Box
-                component="a"
-                sx={{
-                  color: "inherit",
-                  fontSize: "0.875rem",
-                  cursor: "pointer",
-                  "&:hover": { color: "blue.main" },
-                  textDecoration: "none",
-                }}
-              >
-                Track Order
-              </Box>
+              <AppLink href="/track-order">
+                <Box
+                  sx={{
+                    color: "inherit",
+                    fontSize: "0.875rem",
+                    cursor: "pointer",
+                    "&:hover": { color: "blue.main" },
+                    textDecoration: "none",
+                  }}
+                >
+                  Track Order
+                </Box>
+              </AppLink>
 
               <Box
                 component="a"
@@ -297,59 +298,63 @@ export default function Navbar() {
                 </IconButton>
               </Link>
 
-              <IconButton
-                aria-label="Wishlist"
-                size="large"
-                sx={{ position: "relative" }}
-              >
-                <Heart size={20} />
-                <Box
-                  component="span"
-                  sx={{
-                    position: "absolute",
-                    top: -4,
-                    right: -4,
-                    bgcolor: "error.main",
-                    color: "common.white",
-                    fontSize: "0.625rem",
-                    width: 20,
-                    height: 20,
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
+              <AppLink href="/cart">
+                <IconButton
+                  aria-label="Wishlist"
+                  size="large"
+                  sx={{ position: "relative" }}
                 >
-                  2
-                </Box>
-              </IconButton>
+                  <Heart size={20} />
+                  <Box
+                    component="span"
+                    sx={{
+                      position: "absolute",
+                      top: -4,
+                      right: -4,
+                      bgcolor: "error.main",
+                      color: "common.white",
+                      fontSize: "0.625rem",
+                      width: 20,
+                      height: 20,
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    2
+                  </Box>
+                </IconButton>
+              </AppLink>
 
-              <IconButton
-                aria-label="Cart"
-                size="large"
-                sx={{ position: "relative" }}
-              >
-                <ShoppingCart size={20} />
-                <Box
-                  component="span"
-                  sx={{
-                    position: "absolute",
-                    top: -4,
-                    right: -4,
-                    bgcolor: "primary.main",
-                    color: "common.white",
-                    fontSize: "0.625rem",
-                    width: 20,
-                    height: 20,
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
+              <AppLink href="/wishlist">
+                <IconButton
+                  aria-label="Cart"
+                  size="large"
+                  sx={{ position: "relative" }}
                 >
-                  3
-                </Box>
-              </IconButton>
+                  <ShoppingCart size={20} />
+                  <Box
+                    component="span"
+                    sx={{
+                      position: "absolute",
+                      top: -4,
+                      right: -4,
+                      bgcolor: "primary.main",
+                      color: "common.white",
+                      fontSize: "0.625rem",
+                      width: 20,
+                      height: 20,
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    3
+                  </Box>
+                </IconButton>
+              </AppLink>
 
               {/* Mobile Menu Toggle */}
               <IconButton

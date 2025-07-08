@@ -11,7 +11,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "E-commerce",
+  title: "Export Corner",
   description: "This is e-commerce application",
 };
 
