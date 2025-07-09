@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Box, Button, Grid, TextField, Typography, Paper } from "@mui/material";
+import { Box, Grid, TextField, Paper } from "@mui/material";
 import Map from "@/components/sections/map/Map";
 import SectionHeader from "@/components/Shared/SectionHeader";
 import { Contact } from "lucide-react";
@@ -8,7 +8,12 @@ import SectionButton from "@/utils/buttons/sectionButton";
 
 export default function ContactUsPage() {
   return (
-    <Box className="container m-auto p-4">
+    <Box
+      className="container m-auto p-4"
+      sx={{
+        background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
+      }}
+    >
       <Box className="py-4">
         <SectionHeader
           title={"  Contact Us"}

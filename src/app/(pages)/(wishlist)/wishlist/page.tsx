@@ -80,7 +80,12 @@ export default function WishlistPage() {
   };
 
   return (
-    <Box className="container mx-auto px-4">
+    <Box
+      className="container mx-auto px-4"
+      sx={{
+        background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
+      }}
+    >
       <Box className="py-8">
         <SectionHeader
           icon={<List />}

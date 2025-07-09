@@ -1,6 +1,6 @@
 import AppLink from "@/utils/AppLink";
 import { Box, Stack, Typography } from "@mui/material";
-import { Contact, Headphones, Phone, Store, Truck } from "lucide-react";
+import { Contact, Headphones, Store, Truck } from "lucide-react";
 import React from "react";
 
 export default function TopBar() {
@@ -41,7 +41,7 @@ export default function TopBar() {
               fontSize: "0.875rem",
             }}
           >
-            <Phone size={16} />
+            <Truck size={16} />
             <AppLink href="/track-order">
               <Box
                 sx={{

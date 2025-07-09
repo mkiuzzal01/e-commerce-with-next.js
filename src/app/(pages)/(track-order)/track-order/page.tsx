@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Card,
@@ -12,7 +12,12 @@ import {
   Step,
   StepLabel,
   Container,
+  Tabs,
+  Tab,
 } from "@mui/material";
+import SectionHeader from "@/components/Shared/SectionHeader";
+import { Truck } from "lucide-react";
+import ReusablePagination from "@/components/Shared/ReusablePagination";
 
 const statusSteps = ["Processing", "Shipped", "Out for Delivery", "Delivered"];
 
@@ -82,7 +87,16 @@ const orders = [
   },
 ];
 
+const upcomingStatuses = ["Processing", "Shipped", "Out for Delivery"];
+
 export default function TrackOrdersPage() {
+  const [tabIndex, setTabIndex] = useState(0);
+
+  const filteredOrders =
+    tabIndex === 0
+      ? orders.filter((o) => upcomingStatuses.includes(o.status))
+      : orders.filter((o) => o.status === "Delivered");
+
   return (
     <Box
       sx={{
@@ -91,36 +105,37 @@ export default function TrackOrdersPage() {
       }}
     >
       <Box className="container m-auto px-4">
-        <Typography
-          variant="h4"
-          fontWeight="bold"
-          gutterBottom
-          align="center"
-          color="primary"
+        <Box className="py-4">
+          <SectionHeader
+            icon={<Truck />}
+            title="Track Your Orders"
+            description="Track your orders and know when they are delivered"
+          />
+        </Box>
+
+        {/* Tabs */}
+        <Tabs
+          value={tabIndex}
+          onChange={(_, newValue) => setTabIndex(newValue)}
+          textColor="primary"
+          indicatorColor="primary"
+          variant="fullWidth"
+          sx={{ mb: 4 }}
         >
-          Track Your Orders
-        </Typography>
+          <Tab label="Upcoming Orders" />
+          <Tab label="Delivered Orders" />
+        </Tabs>
 
         <Grid container spacing={4}>
-          {orders.map((order, idx) => {
+          {filteredOrders.map((order, idx) => {
             const activeStep = statusSteps.indexOf(order.status);
             return (
-              <Grid
-                size={{
-                  xs: 12,
-                }}
-                key={idx}
-              >
+              <Grid size={{ xs: 12 }} key={idx}>
                 <Card elevation={3}>
                   <CardContent>
                     {/* Order Summary */}
                     <Grid container spacing={2}>
-                      <Grid
-                        size={{
-                          xs: 12,
-                          md: 6,
-                        }}
-                      >
+                      <Grid size={{ xs: 12 }}>
                         <Typography variant="h6" fontWeight="bold">
                           Order #{order.orderId}
                         </Typography>
@@ -129,10 +144,7 @@ export default function TrackOrdersPage() {
                         <Typography>Status: {order.status}</Typography>
                       </Grid>
                       <Grid
-                        size={{
-                          xs: 12,
-                          md: 6,
-                        }}
+                        size={{ xs: 12 }}
                         textAlign={{ xs: "left", md: "right" }}
                       >
                         <Typography variant="h6" fontWeight="bold">
@@ -153,13 +165,7 @@ export default function TrackOrdersPage() {
                     </Typography>
                     <Grid container spacing={2}>
                       {order.items.map((item, index) => (
-                        <Grid
-                          size={{
-                            xs: 12,
-                            md: 6,
-                          }}
-                          key={index}
-                        >
+                        <Grid size={{ xs: 12, md: 6 }} key={index}>
                           <Box
                             display="flex"
                             alignItems="center"
@@ -196,7 +202,7 @@ export default function TrackOrdersPage() {
 
                     <Divider sx={{ my: 3 }} />
 
-                    {/* Stepper Progress */}
+                    {/* Stepper */}
                     <Typography
                       variant="subtitle1"
                       fontWeight="bold"
@@ -217,6 +223,9 @@ export default function TrackOrdersPage() {
             );
           })}
         </Grid>
+      </Box>
+      <Box textAlign="center" py={4}>
+        <ReusablePagination currentPage={1} totalPages={10} />
       </Box>
     </Box>
   );

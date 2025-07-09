@@ -18,16 +18,13 @@ import {
   useTheme,
   useMediaQuery,
   Fade,
-  Backdrop,
 } from "@mui/material";
 import {
   Add,
   Remove,
   Delete,
-  ShoppingCart,
   LocalShipping,
   Security,
-  ShoppingBag,
 } from "@mui/icons-material";
 
 type CartItem = {
@@ -76,7 +73,7 @@ const initialCartItems: CartItem[] = [
   },
 ];
 
-export default function ProfessionalMUICart() {
+export default function page() {
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
   const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
@@ -128,7 +125,7 @@ export default function ProfessionalMUICart() {
         py: 4,
       }}
     >
-      <Container maxWidth="xl">
+      <Box className="container m-auto px-4">
         <Grid container spacing={4}>
           {/* Cart Items */}
           <Grid
@@ -359,7 +356,7 @@ export default function ProfessionalMUICart() {
                 p: 3,
                 borderRadius: 3,
                 position: "sticky",
-                top: 24,
+                top: 30,
                 background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
               }}
             >
@@ -449,53 +446,10 @@ export default function ProfessionalMUICart() {
                   "Proceed to Checkout"
                 )}
               </Button>
-
-              <Button
-                variant="text"
-                fullWidth
-                sx={{
-                  textTransform: "none",
-                  fontWeight: "medium",
-                  mb: 3,
-                }}
-              >
-                Continue Shopping
-              </Button>
-
-              {/* Security Badge */}
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 1,
-                  p: 2,
-                  backgroundColor: "grey.50",
-                  borderRadius: 2,
-                }}
-              >
-                <Security color="primary" />
-                <Typography variant="body2" color="text.secondary">
-                  Secure checkout guaranteed
-                </Typography>
-              </Box>
             </Paper>
           </Grid>
         </Grid>
-      </Container>
-
-      {/* Loading Backdrop */}
-      <Backdrop
-        sx={{ color: "#fff", zIndex: theme.zIndex.drawer + 1 }}
-        open={isLoading}
-      >
-        <Box sx={{ textAlign: "center" }}>
-          <CircularProgress color="inherit" size={60} />
-          <Typography variant="h6" sx={{ mt: 2 }}>
-            Processing your order...
-          </Typography>
-        </Box>
-      </Backdrop>
+      </Box>
     </Box>
   );
 }

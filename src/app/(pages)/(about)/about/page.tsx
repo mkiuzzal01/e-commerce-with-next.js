@@ -11,7 +11,12 @@ import CoreValues from "./components/CoreValues";
 
 const AboutPage = () => {
   return (
-    <Box className="container m-auto px-4">
+    <Box
+      className="container m-auto px-4"
+      sx={{
+        background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
+      }}
+    >
       <Box className="py-4">
         <SectionHeader
           title={"About Us"}

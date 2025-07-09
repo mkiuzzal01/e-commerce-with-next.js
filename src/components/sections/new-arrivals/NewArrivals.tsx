@@ -12,7 +12,7 @@ import { SwiperSlide } from "swiper/react";
 import CarouselArrows from "@/components/Shared/CarouselArrows";
 import ProductCard2 from "@/utils/cards/ProductCard2";
 
-const categories = ["All", "Women", "Men", "Kids", "Unisex"];
+const categories = ["All", "Women", "Men", "Kids"];
 
 export default function NewArrivals() {
   const [selected, setSelected] = useState("All");
