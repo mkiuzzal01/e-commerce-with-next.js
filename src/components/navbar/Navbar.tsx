@@ -8,10 +8,6 @@ import {
   User,
   Menu,
   X,
-  Phone,
-  MapPin,
-  Truck,
-  Headphones,
   HomeIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -36,10 +32,12 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AppLink from "@/utils/AppLink";
+import TopBar from "./TopBar";
 
 export default function Navbar() {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isClosingMenu, setIsClosingMenu] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -51,12 +49,25 @@ export default function Navbar() {
   };
 
   const handleMouseLeave = () => {
-    console.log(activeMenu);
-    console.log(timeoutRef.current);
     timeoutRef.current = setTimeout(() => setActiveMenu(null), 100);
   };
 
+  const handleOpenMobileMenu = () => {
+    setIsClosingMenu(false);
+    setIsMobileMenuOpen(true);
+  };
+
+  const handleCloseMobileMenu = () => {
+    setIsClosingMenu(true);
+    setTimeout(() => {
+      setIsMobileMenuOpen(false);
+      setIsClosingMenu(false);
+    }, 400);
+  };
+
   useEffect(() => {
+    setIsScrolled(window.scrollY > 0);
+
     const handleScroll = () => setIsScrolled(window.scrollY > 0);
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -75,91 +86,26 @@ export default function Navbar() {
   );
 
   return (
-    <Box position="relative">
+    <Box className="relative">
       <Box
         component="header"
-        className={` sticky top-0 z-50 transition-shadow ${
+        className={`sticky top-0 z-50 transition-shadow duration-300 ${
           isScrolled ? "shadow-md" : "shadow-sm"
         }`}
-        sx={{ boxShadow: isScrolled ? theme.shadows[4] : theme.shadows[1] }}
+        sx={{
+          boxShadow: isScrolled ? theme.shadows[4] : theme.shadows[1],
+          background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
+        }}
       >
         {/* Top Bar */}
-        <Box
-          className="bg-[var(--color-brand-background)] text-white hidden lg:block"
-          sx={{ bgcolor: "var(--color-brand-background)", color: "#fff" }}
-        >
-          <Box
-            className="container mx-auto py-3"
-            display="flex"
-            justifyContent="space-between"
-            fontSize="0.875rem"
-            alignItems="center"
-          >
-            <Stack direction="row" spacing={6} alignItems="center">
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Truck size={16} color="#10b981" />
-                <Typography>Free shipping on orders over $50</Typography>
-              </Stack>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Headphones size={16} color="#3b82f6" />
-                <Typography>24/7 Customer Support</Typography>
-              </Stack>
-            </Stack>
-
-            <Stack direction="row" spacing={5} alignItems="center">
-              <Box
-                component="a"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                  color: "inherit",
-                  textDecoration: "none",
-                  "&:hover": { color: "emerald.main" },
-                  cursor: "pointer",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <Phone size={16} />
-              </Box>
-              <AppLink href="/track-order">
-                <Box
-                  sx={{
-                    color: "inherit",
-                    fontSize: "0.875rem",
-                    cursor: "pointer",
-                    "&:hover": { color: "blue.main" },
-                    textDecoration: "none",
-                  }}
-                >
-                  Track Order
-                </Box>
-              </AppLink>
-
-              <Box
-                component="a"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                  color: "inherit",
-                  fontSize: "0.875rem",
-                  cursor: "pointer",
-                  "&:hover": { color: "orange.main" },
-                  textDecoration: "none",
-                }}
-              >
-                <MapPin size={16} />
-                Store Locator
-              </Box>
-            </Stack>
-          </Box>
-        </Box>
+        <TopBar />
 
         {/* Main Nav */}
         <Box
-          className={`bg-white transition-all ${isScrolled ? "py-2" : "py-4"}`}
-          sx={{ py: isScrolled ? 1 : 2 }}
+          sx={{
+            py: isScrolled ? 1 : 2,
+            transition: "padding 0.3s ease",
+          }}
         >
           <Box
             className="container mx-auto"
@@ -241,56 +187,6 @@ export default function Navbar() {
 
             {/* Action Buttons */}
             <Stack direction="row" spacing={1.5} alignItems="center">
-              {/* Desktop Search */}
-              <Box
-                sx={{
-                  position: "relative",
-                  display: { xs: "none", md: "block" },
-                  width: 256,
-                }}
-              >
-                <Search
-                  size={16}
-                  style={{
-                    position: "absolute",
-                    left: 12,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    color: "#94a3b8",
-                  }}
-                />
-                <InputBase
-                  placeholder="Search products..."
-                  sx={{
-                    pl: "36px",
-                    pr: 2,
-                    py: 1,
-                    borderRadius: 1,
-                    bgcolor: "grey.50",
-                    border: "1px solid",
-                    borderColor: "grey.300",
-                    width: "100%",
-                    fontSize: "0.875rem",
-                    "&:focus": {
-                      outline: "none",
-                      borderColor: "primary.main",
-                      boxShadow: `0 0 0 2px ${theme?.palette?.primary?.light}`,
-                    },
-                  }}
-                  inputProps={{ "aria-label": "search products" }}
-                />
-              </Box>
-
-              {/* Mobile Search Toggle */}
-              <IconButton
-                onClick={() => setIsSearchOpen(true)}
-                sx={{ display: { xs: "inline-flex", md: "none" } }}
-                aria-label="Open search"
-                size="large"
-              >
-                <Search size={20} width={"100%"} />
-              </IconButton>
-
               {/* User / Wishlist / Cart Buttons */}
               <Link href={"/login"}>
                 <IconButton aria-label="User" size="large">
@@ -358,7 +254,7 @@ export default function Navbar() {
 
               {/* Mobile Menu Toggle */}
               <IconButton
-                onClick={() => setIsMobileMenuOpen(true)}
+                onClick={handleOpenMobileMenu}
                 sx={{ display: { lg: "none" } }}
                 aria-label="Open mobile menu"
                 size="large"
@@ -512,16 +408,18 @@ export default function Navbar() {
       </Box>
 
       {/* Mobile Menu Drawer */}
-      {isMobileMenuOpen && (
+      {(isMobileMenuOpen || isClosingMenu) && (
         <>
           {/* Overlay */}
           <Box
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={handleCloseMobileMenu}
             sx={{
               position: "fixed",
               inset: 0,
               bgcolor: "rgba(0,0,0,0.5)",
               zIndex: 40,
+              opacity: isClosingMenu ? 0 : 1,
+              transition: "opacity 300ms ease",
             }}
           />
 
@@ -540,6 +438,8 @@ export default function Navbar() {
               overflowY: "auto",
               display: "flex",
               flexDirection: "column",
+              transform: isClosingMenu ? "translateX(100%)" : "translateX(0)",
+              transition: "transform 400ms ease",
             }}
           >
             <Box
@@ -551,7 +451,7 @@ export default function Navbar() {
               <Image src={logo} alt="Logo" width={60} height={40} />
               <IconButton
                 aria-label="Close mobile menu"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={handleCloseMobileMenu}
                 size="large"
               >
                 <X size={24} />
@@ -577,22 +477,17 @@ export default function Navbar() {
                     aria-controls={`panel-content-${idx}`}
                     id={`panel-header-${idx}`}
                   >
-                    <Box onClick={() => setIsMobileMenuOpen(false)}>
+                    <Box onClick={handleCloseMobileMenu}>
                       <AppLink href={mainCat?.link}>
                         <Typography variant="subtitle1" fontWeight="medium">
                           {mainCat?.MainCategoryName}
                         </Typography>
                       </AppLink>
                     </Box>
-                    <Link href={mainCat?.link}></Link>
                   </AccordionSummary>
                   <AccordionDetails sx={{ pl: 2 }}>
                     {mainCat?.Category?.map((cat, i) => (
-                      <Box
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        key={i}
-                        mb={2}
-                      >
+                      <Box onClick={handleCloseMobileMenu} key={i} mb={2}>
                         <AppLink href={cat?.link}>
                           <Typography
                             variant="subtitle2"
@@ -608,13 +503,13 @@ export default function Navbar() {
                         >
                           {cat?.subCategory?.map((sub, j) => (
                             <Box
-                              onClick={() => setIsMobileMenuOpen(false)}
+                              onClick={handleCloseMobileMenu}
                               key={j}
                               component="li"
                               mb={0.5}
                             >
                               <AppLink href={sub?.link}>
-                                <Box onClick={() => setIsMobileMenuOpen(false)}>
+                                <Box onClick={handleCloseMobileMenu}>
                                   {sub?.subCategoryName}
                                 </Box>
                               </AppLink>
@@ -636,7 +531,6 @@ export default function Navbar() {
         open={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         fullWidth
-        maxWidth="sm"
       >
         <DialogContent>
           <Box

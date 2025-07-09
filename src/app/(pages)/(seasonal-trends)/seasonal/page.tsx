@@ -7,7 +7,11 @@ import ReusablePagination from "@/components/Shared/ReusablePagination";
 
 export default function page() {
   return (
-    <Box>
+    <Box
+      sx={{
+        background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
+      }}
+    >
       <Box className="container m-auto p-4">
         <Box>
           <SeasonalProductFilterFrom />

@@ -1,13 +1,18 @@
 import React from "react";
 import ProductCard1 from "@/utils/cards/ProductCard1";
 import { kidsData } from "../../components/kidsData";
+import { Box } from "@mui/material";
 
 export default function page() {
   return (
-    <div>
-      <div className="container m-auto p-4">
-        <div className="container m-auto p-4">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+    <Box
+      sx={{
+        background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
+      }}
+    >
+      <Box className="container m-auto p-4">
+        <Box className="container m-auto p-4">
+          <Box className="grid grid-cols-1 lg:grid-cols-4 gap-4">
             {kidsData?.map((item, idx) => (
               <ProductCard1
                 key={idx}
@@ -20,9 +25,9 @@ export default function page() {
                 }}
               />
             ))}
-          </div>
-        </div>
-      </div>
-    </div>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 }

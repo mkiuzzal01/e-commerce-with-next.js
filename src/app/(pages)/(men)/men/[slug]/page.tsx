@@ -7,7 +7,7 @@ import { menData } from "../components/menData";
 export default function page() {
   return (
     <Box
-      sx={{
+    sx={{
         background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
       }}
     >
