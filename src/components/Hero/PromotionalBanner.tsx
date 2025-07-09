@@ -151,61 +151,6 @@ export default function PromotionalBanners() {
             ))}
           </ReusableCarousel>
         </Box>
-        {/* buttons */}
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={3}
-          justifyContent="center"
-          alignItems="center"
-          textAlign="center"
-        >
-          <Button
-            variant="contained"
-            size="large"
-            className="text-white font-semibold text-lg normal-case shadow-md transition-transform hover:-translate-y-0.5"
-            sx={{
-              px: 4,
-              py: 2,
-              borderRadius: 2,
-              background:
-                "linear-gradient(45deg, var(--color-brand-primary), var(--color-brand-secondary))",
-              boxShadow: "0 8px 24px rgba(254,103,49,0.25)",
-              "&:hover": {
-                boxShadow: "0 12px 32px rgba(254,103,49,0.35)",
-                background: "linear-gradient(45deg, #cc5226, #9c1f24)", // fallback hover
-              },
-            }}
-          >
-            Start Shopping
-          </Button>
-
-          <Typography
-            variant="body2"
-            className="text-sm text-[var(--color-brand-paragraph)] hidden sm:block"
-          >
-            or
-          </Typography>
-
-          <Button
-            variant="outlined"
-            size="large"
-            className="text-lg font-semibold normal-case transition-transform hover:-translate-y-0.5"
-            sx={{
-              px: 4,
-              py: 2,
-              borderRadius: 2,
-              borderColor: "var(--color-brand-secondary)",
-              color: "var(--color-brand-background)",
-              borderWidth: 2,
-              "&:hover": {
-                backgroundColor: "rgba(254,103,49,0.05)",
-                boxShadow: "0 8px 24px rgba(254,103,49,0.15)",
-              },
-            }}
-          >
-            Learn More
-          </Button>
-        </Stack>
       </Container>
     </Box>
   );

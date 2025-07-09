@@ -17,11 +17,10 @@ import {
 } from "@mui/material";
 import { Search, Filter, X, ChevronDown, ShoppingBag } from "lucide-react";
 
-const categories = ["T-Shirts", "Shirts", "Jeans", "Shoes", "Accessories"];
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const colors = ["Black", "White", "Blue", "Red", "Gray"];
 
-export default function SeasonalProductFilterFrom() {
+export default function FilteringFrom() {
   const [formData, setFormData] = useState({
     category: "",
     brand: "",
@@ -50,12 +49,6 @@ export default function SeasonalProductFilterFrom() {
   };
 
   const filterFields = [
-    {
-      label: "Category",
-      value: formData.category,
-      options: categories,
-      field: "category",
-    },
     { label: "Size", value: formData.size, options: sizes, field: "size" },
     { label: "Color", value: formData.color, options: colors, field: "color" },
   ];
@@ -138,7 +131,7 @@ export default function SeasonalProductFilterFrom() {
           {/* Dropdown Filters */}
           <Grid container spacing={3} mb={4}>
             {filterFields.map(({ label, value, options, field }) => (
-              <Grid size={{ xs: 12, md: 4 }} key={field}>
+              <Grid size={{ xs: 12, md: 6 }} key={field}>
                 <Typography
                   variant="body2"
                   fontWeight={600}

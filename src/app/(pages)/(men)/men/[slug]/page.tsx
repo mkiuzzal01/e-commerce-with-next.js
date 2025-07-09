@@ -30,7 +30,7 @@ export default function page() {
             />
           ))}
         </Box>
-        <ReusablePagination />
+        <ReusablePagination currentPage={1} totalPages={10}  />
       </Box>
     </Box>
   );

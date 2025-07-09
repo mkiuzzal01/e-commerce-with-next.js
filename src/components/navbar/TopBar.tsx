@@ -1,6 +1,6 @@
 import AppLink from "@/utils/AppLink";
 import { Box, Stack, Typography } from "@mui/material";
-import { Headphones, MapPin, Phone, Truck } from "lucide-react";
+import { Contact, Headphones, MapPin, Phone, Store, Truck } from "lucide-react";
 import React from "react";
 
 export default function TopBar() {
@@ -19,11 +19,11 @@ export default function TopBar() {
         <Stack direction="row" spacing={6} alignItems="center">
           <Stack direction="row" spacing={1} alignItems="center">
             <Truck size={16} color="#10b981" />
-            <Typography>Free shipping on orders over $50</Typography>
+            <Typography>First delivery with your trusted partner</Typography>
           </Stack>
           <Stack direction="row" spacing={1} alignItems="center">
             <Headphones size={16} color="#3b82f6" />
-            <Typography>24/7 Customer Support</Typography>
+            <Typography>24/7 You can buy product</Typography>
           </Stack>
         </Stack>
 
@@ -56,6 +56,23 @@ export default function TopBar() {
               </Box>
             </AppLink>
           </Box>
+          <AppLink href="/about">
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+                color: "inherit",
+                fontSize: "0.875rem",
+                cursor: "pointer",
+                "&:hover": { color: "orange.main" },
+                textDecoration: "none",
+              }}
+            >
+              <Store size={16} />
+              About us
+            </Box>
+          </AppLink>
           <AppLink href="/contact">
             <Box
               sx={{
@@ -69,8 +86,8 @@ export default function TopBar() {
                 textDecoration: "none",
               }}
             >
-              <MapPin size={16} />
-              Store Locator
+              <Contact size={16} />
+              Contact us
             </Box>
           </AppLink>
         </Stack>

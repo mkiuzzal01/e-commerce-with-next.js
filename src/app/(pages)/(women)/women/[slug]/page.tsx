@@ -2,6 +2,8 @@ import React from "react";
 import ProductCard from "@/utils/cards/ProductCard1";
 import { womenData } from "../components/womansData";
 import { Box } from "@mui/material";
+import ReusablePagination from "@/components/Shared/ReusablePagination";
+import WomenProductFilterFrom from "../components/WomenProductFilterFrom";
 
 export default function Page() {
   return (
@@ -10,6 +12,9 @@ export default function Page() {
         background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
       }}
     >
+      <Box>
+        <WomenProductFilterFrom/>
+      </Box>
       <Box className="container m-auto p-4">
         <Box className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {womenData?.map((item, idx) => (
@@ -24,6 +29,9 @@ export default function Page() {
               }}
             />
           ))}
+        </Box>
+        <Box textAlign="center" py={4}>
+          <ReusablePagination currentPage={1} totalPages={10} />
         </Box>
       </Box>
     </Box>

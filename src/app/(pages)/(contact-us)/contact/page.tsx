@@ -19,7 +19,10 @@ export default function ContactUsPage() {
         We'd love to hear from you! Please fill out the form below and we'll get
         back to you shortly.
       </Typography>
-      <Box className="grid grid-cols-2 gap-4">
+      <Box className="grid grid-cols-2 gap-4
+      
+      
+      \">
         <Paper>
           <Map />
         </Paper>

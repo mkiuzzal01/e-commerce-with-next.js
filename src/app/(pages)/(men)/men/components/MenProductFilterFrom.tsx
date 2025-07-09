@@ -79,9 +79,8 @@ export default function ProductFilterFrom() {
             alignItems="center"
             spacing={2}
           >
-            <ShoppingBag color="#f97316" size={40} />
             <Typography
-              variant="h5"
+              variant="h3"
               fontWeight="bold"
               sx={{
                 background: "linear-gradient(to right, #f97316, #ef4444)",
@@ -89,7 +88,7 @@ export default function ProductFilterFrom() {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              Shop Explorer
+              Export corner
             </Typography>
           </Stack>
           <Typography variant="h6" mt={2}>

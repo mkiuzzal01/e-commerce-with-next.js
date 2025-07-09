@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   ChevronDown,
-  Search,
   ShoppingCart,
   Heart,
   User,
@@ -21,10 +20,6 @@ import {
   Typography,
   IconButton,
   Divider,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  InputBase,
   Button,
   Box,
   Stack,
@@ -38,7 +33,6 @@ export default function Navbar() {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isClosingMenu, setIsClosingMenu] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const theme = useTheme();
@@ -77,9 +71,8 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow =
-      isMobileMenuOpen || isSearchOpen ? "hidden" : "auto";
-  }, [isMobileMenuOpen, isSearchOpen]);
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "auto";
+  }, [isMobileMenuOpen]);
 
   const [expandedAccordion, setExpandedAccordion] = useState<number | false>(
     false
@@ -194,7 +187,7 @@ export default function Navbar() {
                 </IconButton>
               </Link>
 
-              <AppLink href="/cart">
+              <AppLink href="/wishlist">
                 <IconButton
                   aria-label="Wishlist"
                   size="large"
@@ -223,7 +216,7 @@ export default function Navbar() {
                 </IconButton>
               </AppLink>
 
-              <AppLink href="/wishlist">
+              <AppLink href="/cart">
                 <IconButton
                   aria-label="Cart"
                   size="large"
@@ -525,37 +518,6 @@ export default function Navbar() {
           </Box>
         </>
       )}
-
-      {/* Mobile Search Dialog */}
-      <Dialog
-        open={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-        fullWidth
-      >
-        <DialogContent>
-          <Box
-            display="flex"
-            alignItems="center"
-            border={1}
-            borderColor="grey.300"
-            borderRadius={1}
-            px={2}
-            py={1}
-          >
-            <Search size={24} color="#94a3b8" />
-            <InputBase
-              placeholder="Search products..."
-              fullWidth
-              autoFocus
-              inputProps={{ "aria-label": "search products" }}
-              sx={{ ml: 1 }}
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsSearchOpen(false)}>Close</Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

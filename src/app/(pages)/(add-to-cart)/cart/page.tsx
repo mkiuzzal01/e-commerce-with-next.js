@@ -6,13 +6,29 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Chip,
+  CircularProgress,
   Container,
   Divider,
   Grid,
   IconButton,
+  Paper,
+  Stack,
   Typography,
+  useTheme,
+  useMediaQuery,
+  Fade,
+  Backdrop,
 } from "@mui/material";
-import { X, Minus, Plus } from "lucide-react";
+import {
+  Add,
+  Remove,
+  Delete,
+  ShoppingCart,
+  LocalShipping,
+  Security,
+  ShoppingBag,
+} from "@mui/icons-material";
 
 type CartItem = {
   id: string;
@@ -20,27 +36,51 @@ type CartItem = {
   price: number;
   quantity: number;
   image: string;
+  category: string;
+  size?: string;
+  color?: string;
 };
 
 const initialCartItems: CartItem[] = [
   {
     id: "1",
-    name: "Men's Premium T-Shirt",
+    name: "Men's Premium Cotton T-Shirt",
     price: 650,
     quantity: 2,
-    image: "/images/products/tshirt.jpg",
+    image:
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",
+    category: "Clothing",
+    size: "L",
+    color: "Navy Blue",
   },
   {
     id: "2",
     name: "Women's Denim Jacket",
     price: 1450,
     quantity: 1,
-    image: "/images/products/jacket.jpg",
+    image:
+      "https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=400&h=400&fit=crop",
+    category: "Outerwear",
+    size: "M",
+    color: "Light Blue",
+  },
+  {
+    id: "3",
+    name: "Leather Crossbody Bag",
+    price: 2250,
+    quantity: 1,
+    image:
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop",
+    category: "Accessories",
+    color: "Brown",
   },
 ];
 
-export default function CartPage() {
+export default function ProfessionalMUICart() {
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
+  const [isLoading, setIsLoading] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const increaseQty = (id: string) => {
     setCartItems((prev) =>
@@ -69,116 +109,393 @@ export default function CartPage() {
     0
   );
 
-  return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
-      <Typography
-        variant="h4"
-        fontWeight="bold"
-        mb={4}
-        textAlign="center"
-        color="primary"
-      >
-        Shopping Cart
-      </Typography>
+  const tax = subtotal * 0.08;
+  const shipping = subtotal > 2000 ? 0 : 100;
+  const total = subtotal + tax + shipping;
 
-      {cartItems.length === 0 ? (
-        <Typography align="center" color="text.secondary">
-          Your cart is empty.
-        </Typography>
-      ) : (
+  const handleCheckout = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      alert("Proceeding to checkout...");
+    }, 1500);
+  };
+
+  return (
+    <Box
+      sx={{
+        background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
+        py: 4,
+      }}
+    >
+      <Container maxWidth="xl">
         <Grid container spacing={4}>
+          {/* Cart Items */}
           <Grid
             size={{
               xs: 12,
               md: 8,
             }}
           >
-            {cartItems.map((item) => (
-              <Card
-                key={item.id}
-                sx={{ mb: 3, display: "flex", alignItems: "center", p: 2 }}
-                elevation={2}
-              >
-                <CardMedia
-                  component="img"
-                  image={item.image}
-                  alt={item.name}
-                  sx={{
-                    width: 100,
-                    height: 100,
-                    objectFit: "cover",
-                    borderRadius: 2,
-                  }}
-                />
-                <Box flex={1} ml={3}>
-                  <Typography variant="subtitle1" fontWeight="bold">
-                    {item.name}
-                  </Typography>
-                  <Typography color="text.secondary">
-                    ৳{item.price} x {item.quantity}
-                  </Typography>
+            <Stack spacing={3}>
+              {cartItems.map((item) => (
+                <Fade in key={item.id} timeout={500}>
+                  <Card
+                    elevation={4}
+                    sx={{
+                      borderRadius: 3,
+                      overflow: "visible",
+                      position: "relative",
+                      "&:hover": {
+                        transform: "translateY(-2px)",
+                        boxShadow: theme.shadows[8],
+                      },
+                      transition: "all 0.3s ease-in-out",
+                    }}
+                  >
+                    <CardContent sx={{ p: 3 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: isMobile ? "column" : "row",
+                          gap: 3,
+                        }}
+                      >
+                        {/* Product Image */}
+                        <Box sx={{ position: "relative" }}>
+                          <CardMedia
+                            component="img"
+                            image={item.image}
+                            alt={item.name}
+                            sx={{
+                              width: isMobile ? "100%" : 160,
+                              height: isMobile ? 200 : 160,
+                              borderRadius: 2,
+                              objectFit: "cover",
+                            }}
+                          />
+                          <IconButton
+                            onClick={() => removeItem(item.id)}
+                            sx={{
+                              position: "absolute",
+                              top: -8,
+                              right: -8,
+                              backgroundColor: "error.main",
+                              color: "white",
+                              "&:hover": {
+                                backgroundColor: "error.dark",
+                              },
+                              width: 32,
+                              height: 32,
+                            }}
+                          >
+                            <Delete fontSize="small" />
+                          </IconButton>
+                        </Box>
 
-                  <Box display="flex" alignItems="center" mt={1} gap={1}>
-                    <IconButton
-                      size="small"
-                      color="primary"
-                      onClick={() => decreaseQty(item.id)}
-                    >
-                      <Minus size={16} />
-                    </IconButton>
-                    <Typography>{item.quantity}</Typography>
-                    <IconButton
-                      size="small"
-                      color="primary"
-                      onClick={() => increaseQty(item.id)}
-                    >
-                      <Plus size={16} />
-                    </IconButton>
-                  </Box>
-                </Box>
-                <Box display="flex" alignItems="center" gap={2}>
-                  <Typography fontWeight="bold">
-                    ৳{item.price * item.quantity}
-                  </Typography>
-                  <IconButton color="error" onClick={() => removeItem(item.id)}>
-                    <X />
-                  </IconButton>
-                </Box>
-              </Card>
-            ))}
+                        {/* Product Details */}
+                        <Box sx={{ flex: 1 }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: isMobile ? "column" : "row",
+                              justifyContent: "space-between",
+                              alignItems: isMobile
+                                ? "flex-start"
+                                : "flex-start",
+                              gap: 2,
+                              mb: 2,
+                            }}
+                          >
+                            <Box>
+                              <Typography
+                                variant="h6"
+                                fontWeight="bold"
+                                gutterBottom
+                              >
+                                {item.name}
+                              </Typography>
+                              <Chip
+                                label={item.category}
+                                size="small"
+                                color="primary"
+                                variant="outlined"
+                                sx={{ mb: 1 }}
+                              />
+                              <Stack
+                                direction="row"
+                                spacing={1}
+                                sx={{ flexWrap: "wrap" }}
+                              >
+                                {item.size && (
+                                  <Chip
+                                    label={`Size: ${item.size}`}
+                                    size="small"
+                                    variant="filled"
+                                    sx={{ backgroundColor: "grey.100" }}
+                                  />
+                                )}
+                                {item.color && (
+                                  <Chip
+                                    label={`Color: ${item.color}`}
+                                    size="small"
+                                    variant="filled"
+                                    sx={{ backgroundColor: "grey.100" }}
+                                  />
+                                )}
+                              </Stack>
+                            </Box>
+
+                            <Box
+                              sx={{ textAlign: isMobile ? "left" : "right" }}
+                            >
+                              <Typography
+                                variant="h5"
+                                fontWeight="bold"
+                                color="primary"
+                              >
+                                ৳{item.price}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                              >
+                                per item
+                              </Typography>
+                            </Box>
+                          </Box>
+
+                          {/* Quantity Controls */}
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              flexDirection: isMobile ? "column" : "row",
+                              gap: 2,
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                              }}
+                            >
+                              <IconButton
+                                onClick={() => decreaseQty(item.id)}
+                                disabled={item.quantity <= 1}
+                                color="primary"
+                                sx={{
+                                  backgroundColor: "primary.main",
+                                  color: "white",
+                                  "&:hover": {
+                                    backgroundColor: "primary.dark",
+                                  },
+                                  "&:disabled": { backgroundColor: "grey.300" },
+                                }}
+                              >
+                                <Remove />
+                              </IconButton>
+                              <Typography
+                                variant="h6"
+                                fontWeight="bold"
+                                sx={{ minWidth: 40, textAlign: "center" }}
+                              >
+                                {item.quantity}
+                              </Typography>
+                              <IconButton
+                                onClick={() => increaseQty(item.id)}
+                                color="primary"
+                                sx={{
+                                  backgroundColor: "primary.main",
+                                  color: "white",
+                                  "&:hover": {
+                                    backgroundColor: "primary.dark",
+                                  },
+                                }}
+                              >
+                                <Add />
+                              </IconButton>
+                            </Box>
+
+                            <Box
+                              sx={{ textAlign: isMobile ? "center" : "right" }}
+                            >
+                              <Typography
+                                variant="h5"
+                                fontWeight="bold"
+                                color="secondary"
+                              >
+                                ৳{item.price * item.quantity}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                              >
+                                total
+                              </Typography>
+                            </Box>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Fade>
+              ))}
+            </Stack>
           </Grid>
 
+          {/* Order Summary */}
           <Grid
             size={{
               xs: 12,
               md: 4,
             }}
           >
-            <Card elevation={3}>
-              <CardContent>
-                <Typography variant="h6" fontWeight="bold" mb={2}>
-                  Order Summary
-                </Typography>
-                <Divider />
-                <Box display="flex" justifyContent="space-between" my={2}>
+            <Paper
+              elevation={6}
+              sx={{
+                p: 3,
+                borderRadius: 3,
+                position: "sticky",
+                top: 24,
+                background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+              }}
+            >
+              <Typography variant="h5" fontWeight="bold" gutterBottom>
+                Order Summary
+              </Typography>
+              <Divider sx={{ mb: 3 }} />
+
+              <Stack spacing={2} sx={{ mb: 3 }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                   <Typography>Subtotal</Typography>
-                  <Typography fontWeight="bold">৳{subtotal}</Typography>
+                  <Typography fontWeight="medium">৳{subtotal}</Typography>
                 </Box>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Typography>Tax (8%)</Typography>
+                  <Typography fontWeight="medium">৳{tax.toFixed(0)}</Typography>
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Typography>Shipping</Typography>
+                  <Typography fontWeight="medium">
+                    {shipping === 0 ? "Free" : `৳${shipping}`}
+                  </Typography>
+                </Box>
+
+                {shipping === 0 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      p: 2,
+                      backgroundColor: "success.50",
+                      borderRadius: 2,
+                      border: 1,
+                      borderColor: "success.200",
+                    }}
+                  >
+                    <LocalShipping color="success" />
+                    <Typography
+                      variant="body2"
+                      color="success.main"
+                      fontWeight="medium"
+                    >
+                      Free shipping applied!
+                    </Typography>
+                  </Box>
+                )}
+
                 <Divider />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                >
-                  Proceed to Checkout
-                </Button>
-              </CardContent>
-            </Card>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Typography variant="h6" fontWeight="bold">
+                    Total
+                  </Typography>
+                  <Typography variant="h6" fontWeight="bold" color="primary">
+                    ৳{total.toFixed(0)}
+                  </Typography>
+                </Box>
+              </Stack>
+
+              <Button
+                variant="contained"
+                fullWidth
+                size="large"
+                onClick={handleCheckout}
+                disabled={isLoading}
+                sx={{
+                  py: 2,
+                  borderRadius: 2,
+                  fontSize: "1.1rem",
+                  fontWeight: "bold",
+                  textTransform: "none",
+                  background:
+                    "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+                  "&:hover": {
+                    background:
+                      "linear-gradient(45deg, #1976D2 30%, #1CB5E0 90%)",
+                  },
+                  mb: 2,
+                }}
+              >
+                {isLoading ? (
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <CircularProgress size={20} color="inherit" />
+                    Processing...
+                  </Box>
+                ) : (
+                  "Proceed to Checkout"
+                )}
+              </Button>
+
+              <Button
+                variant="text"
+                fullWidth
+                sx={{
+                  textTransform: "none",
+                  fontWeight: "medium",
+                  mb: 3,
+                }}
+              >
+                Continue Shopping
+              </Button>
+
+              {/* Security Badge */}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 1,
+                  p: 2,
+                  backgroundColor: "grey.50",
+                  borderRadius: 2,
+                }}
+              >
+                <Security color="primary" />
+                <Typography variant="body2" color="text.secondary">
+                  Secure checkout guaranteed
+                </Typography>
+              </Box>
+            </Paper>
           </Grid>
         </Grid>
-      )}
-    </Container>
+      </Container>
+
+      {/* Loading Backdrop */}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <Box sx={{ textAlign: "center" }}>
+          <CircularProgress color="inherit" size={60} />
+          <Typography variant="h6" sx={{ mt: 2 }}>
+            Processing your order...
+          </Typography>
+        </Box>
+      </Backdrop>
+    </Box>
   );
 }
