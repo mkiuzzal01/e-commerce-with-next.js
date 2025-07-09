@@ -2,27 +2,22 @@
 import React from "react";
 import { Box, Button, Grid, TextField, Typography, Paper } from "@mui/material";
 import Map from "@/components/sections/map/Map";
+import SectionHeader from "@/components/Shared/SectionHeader";
+import { Contact } from "lucide-react";
+import SectionButton from "@/utils/buttons/sectionButton";
 
 export default function ContactUsPage() {
   return (
     <Box className="container m-auto p-4">
-      <Typography
-        variant="h4"
-        fontWeight="bold"
-        align="center"
-        gutterBottom
-        color="primary"
-      >
-        Contact Us
-      </Typography>
-      <Typography align="center" color="text.secondary" mb={4}>
-        We'd love to hear from you! Please fill out the form below and we'll get
-        back to you shortly.
-      </Typography>
-      <Box className="grid grid-cols-2 gap-4
-      
-      
-      \">
+      <Box className="py-4">
+        <SectionHeader
+          title={"  Contact Us"}
+          icon={<Contact />}
+          description={`We'd love to hear from you! Please fill out the form below and we'll get
+        back to you shortly.`}
+        />
+      </Box>
+      <Box className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Paper>
           <Map />
         </Paper>
@@ -87,14 +82,7 @@ export default function ContactUsPage() {
                 xs: 12,
               }}
             >
-              <Button
-                variant="contained"
-                size="large"
-                color="primary"
-                fullWidth
-              >
-                Send Message
-              </Button>
+              <SectionButton title="Submit" className="w-full" />
             </Grid>
           </Grid>
         </Paper>

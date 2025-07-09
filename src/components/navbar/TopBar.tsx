@@ -1,6 +1,6 @@
 import AppLink from "@/utils/AppLink";
 import { Box, Stack, Typography } from "@mui/material";
-import { Contact, Headphones, MapPin, Phone, Store, Truck } from "lucide-react";
+import { Contact, Headphones, Phone, Store, Truck } from "lucide-react";
 import React from "react";
 
 export default function TopBar() {
@@ -10,7 +10,7 @@ export default function TopBar() {
       sx={{ bgcolor: "var(--color-brand-background)", color: "#fff" }}
     >
       <Box
-        className="container mx-auto py-3"
+        className="container mx-auto p-4"
         display="flex"
         justifyContent="space-between"
         fontSize="0.875rem"

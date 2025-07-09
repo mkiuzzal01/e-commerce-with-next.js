@@ -2,22 +2,16 @@
 import React, { useState } from "react";
 import {
   Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Chip,
-  Container,
-  Grid,
-  IconButton,
-  Rating,
-  Stack,
   Typography,
   Snackbar,
   Alert,
+  Grid,
+  Container,
 } from "@mui/material";
-import { ShoppingCart, Trash2, Share2, Eye } from "lucide-react";
+import { List } from "lucide-react";
+import SectionHeader from "@/components/Shared/SectionHeader";
+import WishListCard from "@/utils/cards/WishListCard";
+import ReusablePagination from "@/components/Shared/ReusablePagination";
 
 type WishlistItem = {
   id: string;
@@ -76,154 +70,46 @@ const initialWishlist: WishlistItem[] = [
 ];
 
 export default function WishlistPage() {
-  const [wishlist, setWishlist] = useState(initialWishlist);
-  const [snackbar, setSnackbar] = useState<{
-    open: boolean;
-    message: string;
-    severity: "success" | "info" | "error";
-  }>({ open: false, message: "", severity: "success" });
+  const [wishlist, setWishlist] = useState<WishlistItem[]>(initialWishlist);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleAddToCart = (item: WishlistItem) => {
-    setSnackbar({
-      open: true,
-      message: `${item.name} added to cart!`,
-      severity: "success",
-    });
-  };
-
-  const handleRemove = (id: string) => {
-    setWishlist((prev) => prev.filter((item) => item.id !== id));
-    setSnackbar({
-      open: true,
-      message: "Removed from wishlist",
-      severity: "info",
-    });
+    // Add-to-cart logic here
+    console.log("Added to cart:", item);
+    setSnackbarOpen(true);
   };
 
   return (
-    <Box className="container m-auto">
-      <Typography
-        variant="h4"
-        fontWeight="bold"
-        mb={4}
-        color="primary"
-        textAlign="center"
-      >
-        My Wishlist
-      </Typography>
+    <Box className="container mx-auto px-4">
+      <Box className="py-8">
+        <SectionHeader
+          icon={<List />}
+          title="Your Wishlist"
+          description="View, manage, and shop your saved favorites — all in one place."
+        />
+      </Box>
 
-      {wishlist.length === 0 ? (
-        <Typography align="center" color="text.secondary">
-          Your wishlist is empty.
-        </Typography>
-      ) : (
-        <Grid container spacing={4}>
-          {wishlist.map((item) => (
-            <Grid size={{ xs: 12, md: 4 }} key={item.id}>
-              <Card elevation={3} sx={{ borderRadius: 3 }}>
-                <CardMedia
-                  component="img"
-                  height="180"
-                  image={item.image}
-                  alt={item.name}
-                  sx={{ objectFit: "cover" }}
-                />
-
-                <CardContent>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    mb={1}
-                  >
-                    <Chip size="small" label={item.category} color="primary" />
-                    {!item.inStock && (
-                      <Chip size="small" label="Out of Stock" color="warning" />
-                    )}
-                  </Stack>
-
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight="bold"
-                    gutterBottom
-                    noWrap
-                  >
-                    {item.name}
-                  </Typography>
-
-                  <Stack direction="row" spacing={1} alignItems="center" mb={1}>
-                    <Typography variant="h6" color="primary">
-                      ৳{item.price}
-                    </Typography>
-                    {item.originalPrice && (
-                      <Typography
-                        variant="body2"
-                        sx={{ textDecoration: "line-through" }}
-                      >
-                        ৳{item.originalPrice}
-                      </Typography>
-                    )}
-                  </Stack>
-
-                  {item.rating && (
-                    <Rating
-                      name="rating"
-                      value={item.rating}
-                      precision={0.1}
-                      size="small"
-                      readOnly
-                    />
-                  )}
-                </CardContent>
-
-                <CardActions sx={{ px: 2, pb: 2, pt: 0 }}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    disabled={!item.inStock}
-                    onClick={() => handleAddToCart(item)}
-                    startIcon={<ShoppingCart size={16} />}
-                  >
-                    {item.inStock ? "Add to Cart" : "Out of Stock"}
-                  </Button>
-                </CardActions>
-
-                <Box display="flex" justifyContent="space-around" pb={2}>
-                  <IconButton
-                    color="error"
-                    onClick={() => handleRemove(item.id)}
-                  >
-                    <Trash2 size={18} />
-                  </IconButton>
-                  <IconButton color="info">
-                    <Share2 size={18} />
-                  </IconButton>
-                  <IconButton color="success">
-                    <Eye size={18} />
-                  </IconButton>
-                </Box>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
+      <Grid container spacing={4}>
+        {wishlist.map((item) => (
+          <Grid size={{ xs: 12, md: 6 }} key={item.id}>
+            <WishListCard item={item} onAddToCart={handleAddToCart} />
+          </Grid>
+        ))}
+      </Grid>
 
       <Snackbar
-        open={snackbar.open}
+        open={snackbarOpen}
         autoHideDuration={3000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert
-          onClose={() => setSnackbar({ ...snackbar, open: false })}
-          severity={snackbar.severity}
-          sx={{ width: "100%" }}
-        >
-          {snackbar.message}
+        <Alert severity="success" onClose={() => setSnackbarOpen(false)}>
+          Product added to cart!
         </Alert>
       </Snackbar>
+      <Box textAlign="center" py={4}>
+        <ReusablePagination currentPage={1} totalPages={10} />
+      </Box>
     </Box>
   );
 }

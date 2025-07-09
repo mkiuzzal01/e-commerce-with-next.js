@@ -2,8 +2,8 @@ import React from "react";
 import { Box, Typography, Stack, useTheme } from "@mui/material";
 
 type SectionHeaderProps = {
-  title: string;
-  subTitle: string;
+  title?: string;
+  subTitle?: string;
   description?: string;
   icon?: React.ReactNode;
   alignment?: "left" | "center" | "right";

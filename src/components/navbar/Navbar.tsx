@@ -101,7 +101,7 @@ export default function Navbar() {
           }}
         >
           <Box
-            className="container mx-auto"
+            className="container mx-auto px-4"
             display="flex"
             alignItems="center"
             justifyContent="space-between"

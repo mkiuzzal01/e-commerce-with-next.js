@@ -6,6 +6,8 @@ import {
   Pagination,
   PaginationItem,
   Stack,
+  useMediaQuery,
+  useTheme,
   PaginationProps,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -35,19 +37,27 @@ const ReusablePagination: React.FC<ReusablePaginationProps> = ({
   boundaryCount = 1,
   showFirstButton = true,
   showLastButton = true,
-  size = "medium",
+  size,
   shape = "rounded",
   color = "primary",
   disabled = false,
   className,
   sx,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   if (totalPages <= 1) return null;
 
   return (
     <Box
       className={className}
-      sx={{ display: "flex", justifyContent: "center", ...sx }}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        my: { xs: 4, md: 6 },
+        ...sx,
+      }}
     >
       <Stack spacing={2}>
         <Pagination
@@ -58,7 +68,7 @@ const ReusablePagination: React.FC<ReusablePaginationProps> = ({
           boundaryCount={boundaryCount}
           showFirstButton={showFirstButton}
           showLastButton={showLastButton}
-          size={size}
+          size={size ?? (isMobile ? "small" : "medium")}
           shape={shape}
           color={color}
           disabled={disabled}
