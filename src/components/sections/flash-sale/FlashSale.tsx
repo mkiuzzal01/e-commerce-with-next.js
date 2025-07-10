@@ -11,6 +11,7 @@ import SectionHeader from "@/components/Shared/SectionHeader";
 import { SwiperSlide } from "swiper/react";
 import CarouselArrows from "@/components/Shared/CarouselArrows";
 import ProductCard from "@/utils/cards/ProductCard1";
+import SectionButton from "@/utils/buttons/sectionButton";
 
 const calculateTimeLeft = (targetDate: string) => {
   const difference = +new Date(targetDate) - +new Date();
@@ -119,6 +120,15 @@ export default function FlashSale() {
               </SwiperSlide>
             ))}
           </ReusableCarousel>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            pt: 4,
+          }}
+        >
+          <SectionButton link="/flash-sale" title={"View All Products"} />
         </Box>
       </Box>
     </Box>

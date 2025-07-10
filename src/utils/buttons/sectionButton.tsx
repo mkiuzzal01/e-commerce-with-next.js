@@ -1,23 +1,30 @@
+"use client";
 import React, { type ReactNode, memo } from "react";
-import { Button, type ButtonProps } from "@mui/material";
+import Link from "next/link";
+import { Button, type ButtonProps as MUIButtonProps } from "@mui/material";
 
-export interface SectionButtonProps extends ButtonProps {
+type SectionButtonProps = {
   title: string;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
   className?: string;
-}
-const SectionButton: React.FC<SectionButtonProps> = memo(
+  link?: string;
+  variant?: "contained" | "outlined" | "text";
+  color?: MUIButtonProps["color"];
+} & Omit<MUIButtonProps, "variant" | "color">;
+
+const SectionButton = memo(
   ({
     title,
     startIcon,
     endIcon,
-    className,
+    className = "",
     variant = "contained",
     color = "primary",
+    link,
     ...rest
-  }) => {
-    return (
+  }: SectionButtonProps) => {
+    const buttonElement = (
       <Button
         startIcon={startIcon}
         endIcon={endIcon}
@@ -29,6 +36,8 @@ const SectionButton: React.FC<SectionButtonProps> = memo(
         {title}
       </Button>
     );
+
+    return link ? <Link href={link}>{buttonElement}</Link> : buttonElement;
   }
 );
 

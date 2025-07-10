@@ -9,7 +9,6 @@ import {
   CardMedia,
   Chip,
   CircularProgress,
-  Container,
   Divider,
   Grid,
   IconButton,
@@ -18,14 +17,12 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
-  Fade,
 } from "@mui/material";
 import {
   Add,
   Remove,
   Delete,
   LocalShipping,
-  Security,
 } from "@mui/icons-material";
 import SectionHeader from "@/components/Shared/SectionHeader";
 import { ShoppingCart } from "lucide-react";

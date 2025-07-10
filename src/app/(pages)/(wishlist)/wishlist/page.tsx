@@ -2,11 +2,9 @@
 import React, { useState } from "react";
 import {
   Box,
-  Typography,
   Snackbar,
   Alert,
   Grid,
-  Container,
 } from "@mui/material";
 import { List } from "lucide-react";
 import SectionHeader from "@/components/Shared/SectionHeader";
@@ -77,6 +75,7 @@ export default function WishlistPage() {
     // Add-to-cart logic here
     console.log("Added to cart:", item);
     setSnackbarOpen(true);
+    setWishlist((prevWishlist) => [...prevWishlist, item]);
   };
 
   return (

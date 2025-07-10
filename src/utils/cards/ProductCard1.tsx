@@ -60,15 +60,16 @@ const ProductCard1: React.FC<ProductCardProps> = ({ product }) => {
         >
           <Link href={`/men/${product?.id}`}>
             <Typography
-              variant="subtitle1"
-              fontWeight={700}
               sx={{
                 color: "var(--color-brand-heading)",
-                lineHeight: 1.3,
-                mb: 0.5,
-                ":hover":"blue"
+                fontSize: "16px",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                ":hover": {
+                  color: "orange",
+                },
+                mb: 1,
               }}
-              noWrap
             >
               {product?.name}
             </Typography>
@@ -110,20 +111,22 @@ const ProductCard1: React.FC<ProductCardProps> = ({ product }) => {
             >
               Add to Cart
             </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              className="btn-primary"
-              sx={{
-                whiteSpace: "nowrap",
-                color: "white",
-                fontWeight: 600,
-                px: 3,
-                py: 1.5,
-              }}
-            >
-              Buy Now
-            </Button>
+            <Link href={`/product/${product.id}`}>
+              <Button
+                fullWidth
+                variant="contained"
+                className="btn-primary"
+                sx={{
+                  whiteSpace: "nowrap",
+                  color: "white",
+                  fontWeight: 600,
+                  px: 3,
+                  py: 1.5,
+                }}
+              >
+                View
+              </Button>
+            </Link>
           </Stack>
         </Box>
       </Box>

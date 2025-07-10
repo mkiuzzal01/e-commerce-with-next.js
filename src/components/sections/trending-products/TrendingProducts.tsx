@@ -71,7 +71,10 @@ export default function TrendingProducts() {
             pt: 4,
           }}
         >
-          <SectionButton title={"View All Trending Products"} />
+          <SectionButton
+            link="/trending-products"
+            title={"View All Trending Products"}
+          />
         </Box>
       </Box>
     </Box>

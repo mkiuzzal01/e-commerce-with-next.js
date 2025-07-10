@@ -32,7 +32,15 @@ import {
   Person,
 } from "@mui/icons-material";
 
-function TabPanel({ children, value, index, ...other }) {
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
   return (
     <div
       role="tabpanel"
@@ -124,11 +132,11 @@ export default function ProductDetails() {
     },
   ];
 
-  const handleQuantityChange = (change) => {
+  const handleQuantityChange = (change: number) => {
     setQuantity(Math.max(1, Math.min(product.stockCount, quantity + change)));
   };
 
-  const handleTabChange = (event, newValue) => {
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
@@ -141,7 +149,12 @@ export default function ProductDetails() {
       <Box className="container m-auto p-4">
         <Grid container spacing={4}>
           {/* Product Images */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid
+            size={{
+              xs: 12,
+              md: 6,
+            }}
+          >
             <Box sx={{ position: "sticky", top: 20 }}>
               <Card sx={{ mb: 2, borderRadius: 2 }}>
                 <CardMedia
@@ -154,7 +167,12 @@ export default function ProductDetails() {
               </Card>
               <Grid container spacing={1}>
                 {product.images.map((image, index) => (
-                  <Grid size={{ xs: 3 }} key={index}>
+                  <Grid
+                    size={{
+                      xs: 3,
+                    }}
+                    key={index}
+                  >
                     <Card
                       sx={{
                         cursor: "pointer",
@@ -180,7 +198,12 @@ export default function ProductDetails() {
           </Grid>
 
           {/* Product Details */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid
+            size={{
+              xs: 12,
+              md: 6,
+            }}
+          >
             <Box>
               {/* Brand and Category */}
               <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
@@ -347,7 +370,11 @@ export default function ProductDetails() {
 
               {/* Product Info Cards */}
               <Grid container spacing={2} sx={{ mb: 3 }}>
-                <Grid size={{ xs: 4 }}>
+                <Grid
+                  size={{
+                    xs: 4,
+                  }}
+                >
                   <Paper sx={{ p: 2, textAlign: "center" }}>
                     <LocalShipping color="primary" sx={{ mb: 1 }} />
                     <Typography variant="body2" fontWeight="bold">
@@ -358,7 +385,11 @@ export default function ProductDetails() {
                     </Typography>
                   </Paper>
                 </Grid>
-                <Grid size={{ xs: 4 }}>
+                <Grid
+                  size={{
+                    xs: 4,
+                  }}
+                >
                   <Paper sx={{ p: 2, textAlign: "center" }}>
                     <Security color="primary" sx={{ mb: 1 }} />
                     <Typography variant="body2" fontWeight="bold">
@@ -369,7 +400,11 @@ export default function ProductDetails() {
                     </Typography>
                   </Paper>
                 </Grid>
-                <Grid size={{ xs: 4 }}>
+                <Grid
+                  size={{
+                    xs: 4,
+                  }}
+                >
                   <Paper sx={{ p: 2, textAlign: "center" }}>
                     <Refresh color="primary" sx={{ mb: 1 }} />
                     <Typography variant="body2" fontWeight="bold">
@@ -407,7 +442,13 @@ export default function ProductDetails() {
               </Typography>
               <Grid container spacing={2}>
                 {product.features.map((feature, index) => (
-                  <Grid size={{ xs: 12, md: 6 }} key={index}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 6,
+                    }}
+                    key={index}
+                  >
                     <Stack direction="row" alignItems="center" spacing={1}>
                       <Star color="primary" fontSize="small" />
                       <Typography variant="body2">{feature}</Typography>

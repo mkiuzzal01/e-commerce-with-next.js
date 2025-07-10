@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
 import {
@@ -15,7 +16,7 @@ import {
   Paper,
   Stack,
 } from "@mui/material";
-import { Search, Filter, X, ChevronDown, ShoppingBag } from "lucide-react";
+import { Search, Filter, X, ChevronDown } from "lucide-react";
 
 const categories = ["T-Shirts", "Shirts", "Jeans", "Shoes", "Accessories"];
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
@@ -31,7 +32,7 @@ export default function SeasonalProductFilterFrom() {
     color: "",
   });
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field: any, value: any) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -185,7 +186,7 @@ export default function SeasonalProductFilterFrom() {
           </Box>
 
           {/* Active Filters */}
-          {activeFilters.some(([_, val]) => val) && (
+          {activeFilters.some(([val]) => val) && (
             <Box>
               <Typography variant="subtitle1" fontWeight={600} gutterBottom>
                 Active Filters:

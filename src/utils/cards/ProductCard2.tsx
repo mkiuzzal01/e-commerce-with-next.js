@@ -5,6 +5,7 @@ import React from "react";
 import { Box, Button, Card, Rating, Stack, Typography } from "@mui/material";
 import { ShoppingCart, Heart } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export type TProduct = {
   id?: string;
@@ -57,8 +58,8 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
             bottom: 0,
             left: 0,
             right: 0,
-            bgcolor: "rgba(255,255,255,0.15)",
-            backdropFilter: "blur(10px)",
+            bgcolor: "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(5px)",
             color: "#222",
             px: 3,
             py: 2.5,
@@ -69,17 +70,25 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
             borderTopRightRadius: 20,
           }}
         >
-          <Typography
-            variant="subtitle1"
-            fontWeight="bold"
-            noWrap
-            sx={{
-              textShadow: "0 1px 4px rgba(255, 255, 255, 0.6)",
-              color: "var(--color-brand-heading)",
-            }}
-          >
-            {name}
-          </Typography>
+          <Link href={`/men/${product?.id}`}>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              noWrap
+              sx={{
+                color: "black",
+                fontSize: "16px",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                ":hover": {
+                  color: "orange",
+                },
+                mb: 1,
+              }}
+            >
+              {name}
+            </Typography>
+          </Link>
 
           {/* Rating */}
           <Rating
@@ -94,8 +103,7 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
           <Typography
             fontWeight="bold"
             sx={{
-              color: "var(--color-brand-primary)",
-              textShadow: "0 1px 4px rgba(255, 255, 255, 0.7)",
+              color: "red",
             }}
           >
             ৳{price.toLocaleString()}
