@@ -3,7 +3,7 @@ import ProductCard1 from "@/utils/cards/ProductCard1";
 import { Box } from "@mui/material";
 import ReusablePagination from "@/components/Shared/ReusablePagination";
 import FilteringFrom from "@/app/(pages)/(men)/men/category/subCategory/[sub-slug]/components/FilteringForm";
-import { kidsData } from "../../../../components/kidsData";
+import { kidsData } from "../../../components/kidsData";
 
 export default function page() {
   return (

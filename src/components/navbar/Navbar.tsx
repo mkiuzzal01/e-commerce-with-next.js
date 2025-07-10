@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import {
   ChevronDown,
   ShoppingCart,
@@ -34,6 +34,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isClosingMenu, setIsClosingMenu] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const theme = useTheme();
 
@@ -49,6 +50,7 @@ export default function Navbar() {
   const handleOpenMobileMenu = () => {
     setIsClosingMenu(false);
     setIsMobileMenuOpen(true);
+    document.body.style.overflow = "hidden";
   };
 
   const handleCloseMobileMenu = () => {
@@ -56,20 +58,23 @@ export default function Navbar() {
     setTimeout(() => {
       setIsMobileMenuOpen(false);
       setIsClosingMenu(false);
+      document.body.style.overflow = "auto";
     }, 400);
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    setIsMounted(true);
     setIsScrolled(window.scrollY > 0);
+  }, []);
 
+  useLayoutEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0);
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      document.body.style.overflow = isMobileMenuOpen ? "hidden" : "auto";
     };
-  }, [isMobileMenuOpen]);
+  }, []);
 
   const [expandedAccordion, setExpandedAccordion] = useState<number | false>(
     false
@@ -79,21 +84,22 @@ export default function Navbar() {
     <Box className="relative">
       <Box
         component="header"
-        className={`sticky top-0 z-50 transition-shadow duration-300 ${
-          isScrolled ? "shadow-md" : "shadow-sm"
-        }`}
+        className="sticky top-0 z-50"
         sx={{
-          boxShadow: isScrolled ? theme.shadows[4] : theme.shadows[1],
+          boxShadow: isMounted
+            ? isScrolled
+              ? theme.shadows[4]
+              : theme.shadows[1]
+            : theme.shadows[1],
           background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
+          transition: "box-shadow 0.3s ease",
         }}
       >
-        {/* Top Bar */}
         <TopBar />
 
-        {/* Main Nav */}
         <Box
           sx={{
-            py: isScrolled ? 1 : 2,
+            py: isMounted && isScrolled ? 1 : 2,
             transition: "padding 0.3s ease",
           }}
         >
@@ -103,21 +109,30 @@ export default function Navbar() {
             alignItems="center"
             justifyContent="space-between"
           >
-            {/* Logo */}
-            <Box onClick={() => setActiveMenu(null)}>
-              <Link href="/">
+            <Box
+              onClick={() => setActiveMenu(null)}
+              sx={{
+                width: 80,
+                height: 50,
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Link href="/" passHref>
                 <Image
                   src={logo}
                   alt="Company Logo"
-                  width={isScrolled ? 60 : 80}
-                  height={isScrolled ? 40 : 50}
-                  className="transition-all duration-300"
+                  width={isMounted && isScrolled ? 60 : 80}
+                  height={isMounted && isScrolled ? 40 : 50}
+                  style={{
+                    transition: "all 0.3s ease",
+                    objectFit: "contain",
+                  }}
                   priority
                 />
               </Link>
             </Box>
 
-            {/* Desktop Nav */}
             <Box
               component="nav"
               sx={{
@@ -151,9 +166,13 @@ export default function Navbar() {
                       endIcon={
                         <ChevronDown
                           size={16}
-                          className={`transition-transform ${
-                            activeMenu === idx ? "rotate-180" : ""
-                          }`}
+                          style={{
+                            transition: "transform 0.2s ease",
+                            transform:
+                              activeMenu === idx
+                                ? "rotate(180deg)"
+                                : "rotate(0)",
+                          }}
                         />
                       }
                       sx={{
@@ -175,10 +194,8 @@ export default function Navbar() {
               ))}
             </Box>
 
-            {/* Action Buttons */}
             <Stack direction="row" spacing={1.5} alignItems="center">
-              {/* User / Wishlist / Cart Buttons */}
-              <Link href={"/login"}>
+              <Link href="/login" passHref>
                 <IconButton aria-label="User" size="large">
                   <User size={20} />
                 </IconButton>
@@ -242,7 +259,6 @@ export default function Navbar() {
                 </IconButton>
               </AppLink>
 
-              {/* Mobile Menu Toggle */}
               <IconButton
                 onClick={handleOpenMobileMenu}
                 sx={{ display: { lg: "none" } }}
@@ -255,7 +271,6 @@ export default function Navbar() {
           </Box>
         </Box>
 
-        {/* Mega Menu (Desktop only) */}
         {activeMenu !== null && (
           <Box
             component="nav"
@@ -359,8 +374,8 @@ export default function Navbar() {
                         <Image
                           src={megaMenuData[activeMenu]?.featured?.image}
                           alt="Featured"
-                          objectFit="cover"
                           fill
+                          style={{ objectFit: "cover" }}
                         />
                       </Box>
                     </Box>
@@ -378,12 +393,19 @@ export default function Navbar() {
                     <Box onClick={() => setActiveMenu(null)}>
                       <Link
                         href={megaMenuData[activeMenu]?.featured?.buttonLink}
+                        passHref
                       >
                         <Button
-                          className="btn-primary"
                           variant="contained"
                           size="medium"
                           component="a"
+                          sx={{
+                            backgroundColor: "#fe6731",
+                            "&:hover": {
+                              backgroundColor: "#e55d2d",
+                            },
+                            color: "#fff",
+                          }}
                         >
                           {megaMenuData[activeMenu]?.featured?.buttonText}
                         </Button>
@@ -397,10 +419,8 @@ export default function Navbar() {
         )}
       </Box>
 
-      {/* Mobile Menu Drawer */}
       {(isMobileMenuOpen || isClosingMenu) && (
         <>
-          {/* Overlay */}
           <Box
             onClick={handleCloseMobileMenu}
             sx={{
@@ -413,7 +433,6 @@ export default function Navbar() {
             }}
           />
 
-          {/* Drawer */}
           <Box
             sx={{
               position: "fixed",
@@ -449,7 +468,6 @@ export default function Navbar() {
             </Box>
             <Divider />
 
-            {/* Accordion Menu */}
             <Box mt={2}>
               {megaMenuData.map((mainCat, idx) => (
                 <Accordion
