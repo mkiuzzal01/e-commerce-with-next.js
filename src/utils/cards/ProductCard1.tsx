@@ -111,7 +111,7 @@ const ProductCard1: React.FC<ProductCardProps> = ({ product }) => {
             >
               Add to Cart
             </Button>
-            <Link href={`/product/${product.id}`}>
+            <Link href={`/men/${product?.id}`}>
               <Button
                 fullWidth
                 variant="contained"
