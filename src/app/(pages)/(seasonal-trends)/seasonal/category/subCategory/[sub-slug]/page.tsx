@@ -1,9 +1,9 @@
 import ProductCard1 from "@/utils/cards/ProductCard1";
 import React from "react";
-import { seasonalTrendsData } from "../components/seasonalData";
 import { Box } from "@mui/material";
 import ReusablePagination from "@/components/Shared/ReusablePagination";
-import SeasonalProductFilterFrom from "../components/SeasonalProductFilterFrom";
+import FilteringFrom from "@/app/(pages)/(men)/men/category/subCategory/[sub-slug]/components/FilteringForm";
+import { seasonalTrendsData } from "../../../components/seasonalData";
 
 export default function page() {
   return (
@@ -14,7 +14,7 @@ export default function page() {
     >
       <Box className="container m-auto p-4">
         <Box>
-          <SeasonalProductFilterFrom />
+          <FilteringFrom />
         </Box>
         <Box className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {seasonalTrendsData?.map((item, idx) => (

@@ -81,39 +81,40 @@ export default function WishlistPage() {
 
   return (
     <Box
-      className="container mx-auto px-4"
       sx={{
         background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
       }}
     >
-      <Box className="py-8">
-        <SectionHeader
-          icon={<List />}
-          title="Your Wishlist"
-          description="View, manage, and shop your saved favorites — all in one place."
-        />
-      </Box>
+      <Box className="container mx-auto px-4">
+        <Box className="py-8">
+          <SectionHeader
+            icon={<List />}
+            title="Your Wishlist"
+            description="View, manage, and shop your saved favorites — all in one place."
+          />
+        </Box>
 
-      <Grid container spacing={4}>
-        {wishlist.map((item) => (
-          <Grid size={{ xs: 12, md: 6 }} key={item.id}>
-            <WishListCard item={item} onAddToCart={handleAddToCart} />
-          </Grid>
-        ))}
-      </Grid>
+        <Grid container spacing={4}>
+          {wishlist.map((item) => (
+            <Grid size={{ xs: 12, md: 6 }} key={item.id}>
+              <WishListCard item={item} onAddToCart={handleAddToCart} />
+            </Grid>
+          ))}
+        </Grid>
 
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert severity="success" onClose={() => setSnackbarOpen(false)}>
-          Product added to cart!
-        </Alert>
-      </Snackbar>
-      <Box textAlign="center" py={4}>
-        <ReusablePagination currentPage={1} totalPages={10} />
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={() => setSnackbarOpen(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert severity="success" onClose={() => setSnackbarOpen(false)}>
+            Product added to cart!
+          </Alert>
+        </Snackbar>
+        <Box textAlign="center" py={4}>
+          <ReusablePagination currentPage={1} totalPages={10} />
+        </Box>
       </Box>
     </Box>
   );

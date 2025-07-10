@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import {
   ChevronDown,
   ShoppingCart,
@@ -59,7 +59,7 @@ export default function Navbar() {
     }, 400);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setIsScrolled(window.scrollY > 0);
 
     const handleScroll = () => setIsScrolled(window.scrollY > 0);
@@ -67,11 +67,8 @@ export default function Navbar() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      document.body.style.overflow = isMobileMenuOpen ? "hidden" : "auto";
     };
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "auto";
   }, [isMobileMenuOpen]);
 
   const [expandedAccordion, setExpandedAccordion] = useState<number | false>(

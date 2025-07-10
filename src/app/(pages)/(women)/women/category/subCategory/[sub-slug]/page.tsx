@@ -1,24 +1,24 @@
-import ProductCard1 from "@/utils/cards/ProductCard1";
 import React from "react";
-import { seasonalTrendsData } from "../../components/seasonalData";
+import ProductCard from "@/utils/cards/ProductCard1";
 import { Box } from "@mui/material";
 import ReusablePagination from "@/components/Shared/ReusablePagination";
-import FilteringFrom from "@/app/(pages)/(men)/men/[slug]/[sub-slug]/components/FilteringForm";
+import FilteringFrom from "@/app/(pages)/(men)/men/category/subCategory/[sub-slug]/components/FilteringForm";
+import { womenData } from "../../../components/womansData";
 
-export default function page() {
+export default function Page() {
   return (
     <Box
       sx={{
         background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
       }}
     >
+      <Box>
+        <FilteringFrom />
+      </Box>
       <Box className="container m-auto p-4">
-        <Box>
-          <FilteringFrom />
-        </Box>
         <Box className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-          {seasonalTrendsData?.map((item, idx) => (
-            <ProductCard1
+          {womenData?.map((item, idx) => (
+            <ProductCard
               key={idx}
               product={{
                 id: item?.id?.toString(),

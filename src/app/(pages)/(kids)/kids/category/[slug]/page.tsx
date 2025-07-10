@@ -1,9 +1,9 @@
 import React from "react";
 import ProductCard1 from "@/utils/cards/ProductCard1";
-import { kidsData } from "../components/kidsData";
+import { kidsData } from "../../components/kidsData";
 import { Box } from "@mui/material";
 import ReusablePagination from "@/components/Shared/ReusablePagination";
-import KidsProductFilterFrom from "../components/KidsProductFilterFrom";
+import KidsProductFilterFrom from "../../components/KidsProductFilterFrom";
 
 export default function page() {
   return (

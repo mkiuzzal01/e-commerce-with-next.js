@@ -18,34 +18,67 @@ export const megaMenuData: TNavLink = [
     Category: [
       {
         categoryName: "Clothing",
-        link: "/men/clothing",
+        link: "/men/category/clothing",
         subCategory: [
-          { subCategoryName: "T-Shirts", link: "/men/clothing/tshirts" },
-          { subCategoryName: "Shirts", link: "/men/clothing/shirts" },
-          { subCategoryName: "Jeans", link: "/men/clothing/jeans" },
-          { subCategoryName: "Trousers", link: "/men/clothing/trousers" },
-          { subCategoryName: "Ethnic Wear", link: "/men/clothing/ethnic" },
-          { subCategoryName: "Winter Wear", link: "/men/clothing/winter" },
+          {
+            subCategoryName: "T-Shirts",
+            link: "/men/category/subCategory/t-shirts",
+          },
+          {
+            subCategoryName: "Shirts",
+            link: "/men/category/subCategory/shirts",
+          },
+          {
+            subCategoryName: "Jeans",
+            link: "/men/category/subCategory/jeans",
+          },
+          {
+            subCategoryName: "Trousers",
+            link: "/men/category/subCategory/trousers",
+          },
+          {
+            subCategoryName: "Ethnic Wear",
+            link: "/men/category/subCategory/ethnic-wear",
+          },
+          {
+            subCategoryName: "Winter Wear",
+            link: "/men/category/subCategory/winter-wear",
+          },
         ],
       },
       {
         categoryName: "Footwear",
-        link: "/men/footwear",
+        link: "/men/category/footwear",
         subCategory: [
-          { subCategoryName: "Casual Shoes", link: "/men/footwear/casual" },
-          { subCategoryName: "Sports Shoes", link: "/men/footwear/sports" },
-          { subCategoryName: "Sandals", link: "/men/footwear/sandals" },
+          {
+            subCategoryName: "Casual Shoes",
+            link: "/men/category/subCategory/casual-shoes",
+          },
+          {
+            subCategoryName: "Sports Shoes",
+            link: "/men/category/subCategory/sports-shoes",
+          },
+          {
+            subCategoryName: "Sandals",
+            link: "/men/category/subCategory/sandals",
+          },
         ],
       },
       {
         categoryName: "Accessories",
-        link: "/men/accessories",
+        link: "/men/category/accessories",
         subCategory: [
-          { subCategoryName: "Watches", link: "/men/accessories/watches" },
-          { subCategoryName: "Belts", link: "/men/accessories/belts" },
+          {
+            subCategoryName: "Watches",
+            link: "/men/category/subCategory/watches",
+          },
+          {
+            subCategoryName: "Belts",
+            link: "/men/category/subCategory/belts",
+          },
           {
             subCategoryName: "Sunglasses",
-            link: "/men/accessories/sunglasses",
+            link: "/men/category/subCategory/sunglasses",
           },
         ],
       },
@@ -64,32 +97,68 @@ export const megaMenuData: TNavLink = [
     Category: [
       {
         categoryName: "Clothing",
-        link: "/women/clothing",
+        link: "/women/category/clothing",
         subCategory: [
-          { subCategoryName: "Dresses", link: "/women/clothing/dresses" },
-          { subCategoryName: "Tops", link: "/women/clothing/tops" },
-          { subCategoryName: "Skirts", link: "/women/clothing/skirts" },
-          { subCategoryName: "Sarees", link: "/women/clothing/sarees" },
-          { subCategoryName: "Salwar Kameez", link: "/women/clothing/salwar" },
-          { subCategoryName: "Winter Wear", link: "/women/clothing/winter" },
+          {
+            subCategoryName: "Dresses",
+            link: "/women/category/subCategory/dresses",
+          },
+          {
+            subCategoryName: "Tops",
+            link: "/women/category/subCategory/tops",
+          },
+          {
+            subCategoryName: "Skirts",
+            link: "/women/category/subCategory/skirts",
+          },
+          {
+            subCategoryName: "Sarees",
+            link: "/women/category/subCategory/sarees",
+          },
+          {
+            subCategoryName: "Salwar Kameez",
+            link: "/women/category/subCategory/salwar-kameez",
+          },
+          {
+            subCategoryName: "Winter Wear",
+            link: "/women/category/subCategory/winter-wear",
+          },
         ],
       },
       {
         categoryName: "Footwear",
-        link: "/women/footwear",
+        link: "/women/category/footwear",
         subCategory: [
-          { subCategoryName: "Flats", link: "/women/footwear/flats" },
-          { subCategoryName: "Heels", link: "/women/footwear/heels" },
-          { subCategoryName: "Sneakers", link: "/women/footwear/sneakers" },
+          {
+            subCategoryName: "Flats",
+            link: "/women/category/subCategory/flats",
+          },
+          {
+            subCategoryName: "Heels",
+            link: "/women/category/subCategory/heels",
+          },
+          {
+            subCategoryName: "Sneakers",
+            link: "/women/category/subCategory/sneakers",
+          },
         ],
       },
       {
         categoryName: "Accessories",
-        link: "/women/accessories",
+        link: "/women/category/accessories",
         subCategory: [
-          { subCategoryName: "Handbags", link: "/women/accessories/handbags" },
-          { subCategoryName: "Jewelry", link: "/women/accessories/jewelry" },
-          { subCategoryName: "Scarves", link: "/women/accessories/scarves" },
+          {
+            subCategoryName: "Handbags",
+            link: "/women/category/subCategory/handbags",
+          },
+          {
+            subCategoryName: "Jewelry",
+            link: "/women/category/subCategory/jewelry",
+          },
+          {
+            subCategoryName: "Scarves",
+            link: "/women/category/subCategory/scarves",
+          },
         ],
       },
     ],
@@ -107,29 +176,56 @@ export const megaMenuData: TNavLink = [
     Category: [
       {
         categoryName: "Boys",
-        link: "/kids/boys",
+        link: "/kids/category/boys",
         subCategory: [
-          { subCategoryName: "T-Shirts", link: "/kids/boys/tshirts" },
-          { subCategoryName: "Shorts", link: "/kids/boys/shorts" },
-          { subCategoryName: "Ethnic Wear", link: "/kids/boys/ethnic" },
+          {
+            subCategoryName: "T-Shirts",
+            link: "/kids/category/subCategory/t-shirts",
+          },
+          {
+            subCategoryName: "Shorts",
+            link: "/kids/category/subCategory/shorts",
+          },
+          {
+            subCategoryName: "Ethnic Wear",
+            link: "/kids/category/subCategory/ethnic-wear",
+          },
         ],
       },
       {
         categoryName: "Girls",
-        link: "/kids/girls",
+        link: "/kids/category/girls",
         subCategory: [
-          { subCategoryName: "Frocks", link: "/kids/girls/frocks" },
-          { subCategoryName: "Leggings", link: "/kids/girls/leggings" },
-          { subCategoryName: "Sets", link: "/kids/girls/sets" },
+          {
+            subCategoryName: "Frocks",
+            link: "/kids/category/subCategory/frocks",
+          },
+          {
+            subCategoryName: "Leggings",
+            link: "/kids/category/subCategory/leggings",
+          },
+          {
+            subCategoryName: "Sets",
+            link: "/kids/category/subCategory/sets",
+          },
         ],
       },
       {
         categoryName: "Baby",
-        link: "/kids/baby",
+        link: "/kids/category/baby",
         subCategory: [
-          { subCategoryName: "Onesies", link: "/kids/baby/onesies" },
-          { subCategoryName: "Rompers", link: "/kids/baby/rompers" },
-          { subCategoryName: "Newborn Sets", link: "/kids/baby/newborn" },
+          {
+            subCategoryName: "Onesies",
+            link: "/kids/category/subCategory/onesies",
+          },
+          {
+            subCategoryName: "Rompers",
+            link: "/kids/category/subCategory/rompers",
+          },
+          {
+            subCategoryName: "Newborn Sets",
+            link: "/kids/category/subCategory/newborn-sets",
+          },
         ],
       },
     ],
@@ -147,40 +243,55 @@ export const megaMenuData: TNavLink = [
     Category: [
       {
         categoryName: "Winter Collection",
-        link: "/seasonal/winter",
+        link: "/seasonal/category/winter",
         subCategory: [
-          { subCategoryName: "Jackets", link: "/seasonal/winter/jackets" },
-          { subCategoryName: "Sweaters", link: "/seasonal/winter/sweaters" },
-          { subCategoryName: "Thermals", link: "/seasonal/winter/thermals" },
+          {
+            subCategoryName: "Jackets",
+            link: "/seasonal/category/subCategory/jackets",
+          },
+          {
+            subCategoryName: "Sweaters",
+            link: "/seasonal/category/subCategory/sweaters",
+          },
+          {
+            subCategoryName: "Thermals",
+            link: "/seasonal/category/subCategory/thermals",
+          },
         ],
       },
       {
         categoryName: "Summer Styles",
-        link: "/seasonal/summer",
+        link: "/seasonal/category/summer",
         subCategory: [
-          { subCategoryName: "Shorts", link: "/seasonal/summer/shorts" },
-          { subCategoryName: "T-Shirts", link: "/seasonal/summer/tshirts" },
+          {
+            subCategoryName: "Shorts",
+            link: "/seasonal/category/subCategory/shorts",
+          },
+          {
+            subCategoryName: "T-Shirts",
+            link: "/seasonal/category/subCategory/t-shirts",
+          },
           {
             subCategoryName: "Cotton Dresses",
-            link: "/seasonal/summer/dresses",
+            link: "/seasonal/category/subCategory/cotton-dresses",
           },
         ],
       },
       {
         categoryName: "Festive Wear",
-        link: "/seasonal/festive",
+        link: "/seasonal/category/festive",
         subCategory: [
           {
             subCategoryName: "Men's Kurta",
-            link: "/seasonal/festive/men-kurta",
+            link: "/seasonal/category/subCategory/mens-kurta",
           },
           {
             subCategoryName: "Women's Saree",
-            link: "/seasonal/festive/saree",
+            link: "/seasonal/category/subCategory/womens-saree",
           },
           {
             subCategoryName: "Kids Festive",
-            link: "/seasonal/festive/kids",
+            link: "/seasonal/category/subCategory/kids-festive",
           },
         ],
       },

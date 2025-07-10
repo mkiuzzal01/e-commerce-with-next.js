@@ -28,6 +28,7 @@ export default function Login() {
         alignItems: "center",
         justifyContent: "center",
         py: 4,
+        background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
       }}
     >
       <Container maxWidth="xs">

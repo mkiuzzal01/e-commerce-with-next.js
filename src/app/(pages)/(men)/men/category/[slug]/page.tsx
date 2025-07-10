@@ -1,8 +1,8 @@
 import ProductCard from "@/utils/cards/ProductCard1";
 import { Box } from "@mui/material";
 import ReusablePagination from "@/components/Shared/ReusablePagination";
-import MenForm from "../components/MenProductFilterFrom";
-import { menData } from "../components/menData";
+import MenForm from "../../components/MenProductFilterFrom";
+import { menData } from "../../components/menData";
 
 export default function page() {
   return (

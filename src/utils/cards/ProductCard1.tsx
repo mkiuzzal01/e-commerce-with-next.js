@@ -5,6 +5,7 @@ import React from "react";
 import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export type TProduct = {
   id?: string;
@@ -57,18 +58,21 @@ const ProductCard1: React.FC<ProductCardProps> = ({ product }) => {
             p: 2,
           }}
         >
-          <Typography
-            variant="subtitle1"
-            fontWeight={700}
-            sx={{
-              color: "var(--color-brand-heading)",
-              lineHeight: 1.3,
-              mb: 0.5,
-            }}
-            noWrap
-          >
-            {product.name}
-          </Typography>
+          <Link href={`/men/${product?.id}`}>
+            <Typography
+              variant="subtitle1"
+              fontWeight={700}
+              sx={{
+                color: "var(--color-brand-heading)",
+                lineHeight: 1.3,
+                mb: 0.5,
+                ":hover":"blue"
+              }}
+              noWrap
+            >
+              {product?.name}
+            </Typography>
+          </Link>
 
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography

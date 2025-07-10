@@ -12,25 +12,26 @@ import CoreValues from "./components/CoreValues";
 const AboutPage = () => {
   return (
     <Box
-      className="container m-auto px-4"
       sx={{
         background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
       }}
     >
-      <Box className="py-4">
-        <SectionHeader
-          title={"About Us"}
-          icon={<Store />}
-          description={
-            "At Your Store, we are passionate about bringing you the best products with exceptional service and value."
-          }
-        />
+      <Box className="container m-auto px-4">
+        <Box className="py-4">
+          <SectionHeader
+            title={"About Us"}
+            icon={<Store />}
+            description={
+              "At Your Store, we are passionate about bringing you the best products with exceptional service and value."
+            }
+          />
+        </Box>
+        <MissionVision />
+        <WhyShop />
+        <Divider />
+        <CoreValues />
+        <Stakeholders />
       </Box>
-      <MissionVision />
-      <WhyShop />
-      <Divider />
-      <CoreValues />
-      <Stakeholders />
       <Map />
     </Box>
   );

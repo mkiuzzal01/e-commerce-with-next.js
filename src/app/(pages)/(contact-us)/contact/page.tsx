@@ -1,96 +1,73 @@
 "use client";
 import React from "react";
-import { Box, Grid, TextField, Paper } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import Map from "@/components/sections/map/Map";
 import SectionHeader from "@/components/Shared/SectionHeader";
-import { Contact } from "lucide-react";
-import SectionButton from "@/utils/buttons/sectionButton";
+import { Contact, Mail, Phone, MapPin, Clock } from "lucide-react";
+import ContactForm from "./components/ContactForm";
 
 export default function ContactUsPage() {
   return (
     <Box
-      className="container m-auto p-4"
       sx={{
         background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
       }}
     >
-      <Box className="py-4">
-        <SectionHeader
-          title={"  Contact Us"}
-          icon={<Contact />}
-          description={`We'd love to hear from you! Please fill out the form below and we'll get
-        back to you shortly.`}
-        />
-      </Box>
-      <Box className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Paper>
-          <Map />
-        </Paper>
+      <Box className="container m-auto p-4">
+        <Box className="mb-8">
+          <SectionHeader
+            title={"Contact Us"}
+            icon={<Contact />}
+            description={`We'd love to hear from you! Please fill out the form below and we'll get back to you shortly.`}
+          />
+        </Box>
 
-        <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
-          <Grid container spacing={3}>
-            <Grid
-              size={{
-                xs: 12,
-                md: 6,
-              }}
-            >
-              <TextField
-                fullWidth
-                label="Full Name"
-                variant="outlined"
-                required
-              />
-            </Grid>
-            <Grid
-              size={{
-                xs: 12,
-                md: 6,
-              }}
-            >
-              <TextField
-                fullWidth
-                label="Email Address"
-                variant="outlined"
-                type="email"
-                required
-              />
-            </Grid>
-            <Grid
-              size={{
-                xs: 12,
-              }}
-            >
-              <TextField
-                fullWidth
-                label="Subject"
-                variant="outlined"
-                required
-              />
-            </Grid>
-            <Grid
-              size={{
-                xs: 12,
-              }}
-            >
-              <TextField
-                fullWidth
-                label="Message"
-                variant="outlined"
-                multiline
-                rows={5}
-                required
-              />
-            </Grid>
-            <Grid
-              size={{
-                xs: 12,
-              }}
-            >
-              <SectionButton title="Submit" className="w-full" />
-            </Grid>
-          </Grid>
-        </Paper>
+        <Box className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left Side - Contact Information */}
+          <Box>
+            <Stack spacing={2}>
+              <Typography variant="h3">Get in Touch</Typography>
+
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Phone size={20} />
+                <Typography variant="body1">
+                  <strong>Phone:</strong> +880 1234 567 890
+                </Typography>
+              </Stack>
+
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Mail size={20} />
+                <Typography variant="body1">
+                  <strong>Email:</strong> support@example.com
+                </Typography>
+              </Stack>
+
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <MapPin size={20} />
+                <Typography variant="body1">
+                  <strong>Address:</strong> 123, Dhanmondi, Dhaka, Bangladesh
+                </Typography>
+              </Stack>
+
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Clock size={20} />
+                <Typography variant="body1">
+                  <strong>Working Hours:</strong> Sun - Thu, 10:00 AM - 6:00 PM
+                </Typography>
+              </Stack>
+            </Stack>
+          </Box>
+
+          {/* Right Side - Contact Form */}
+          <Box>
+            <ContactForm />
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Map Section */}
+      <Box className="mt-5">
+        <Map />
       </Box>
     </Box>
   );

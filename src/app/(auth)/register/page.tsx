@@ -1,18 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React from "react";
 import { Box, Button, Container, Typography, Paper, Grid } from "@mui/material";
 import ReusableForm from "@/components/Shared/ReusableTable"; // or rename to ReusableForm
 import { TextInput } from "@/components/Shared/input-fields/TextInput";
 import { useRouter } from "next/navigation";
-import { FieldValue } from "react-hook-form";
+import {FieldValues } from "react-hook-form";
 
 export default function Register() {
   const router = useRouter();
 
-  const handleSubmit = (data: FieldValue<any>) => {
+  const handleSubmit = (data: FieldValues) => {
     console.log("Register form submitted:", data);
-    // Example: You can send `data` to your API here
     router.push("/login");
   };
 
@@ -24,6 +22,7 @@ export default function Register() {
         alignItems: "center",
         justifyContent: "center",
         py: 4,
+        background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
       }}
     >
       <Container maxWidth="xs">
