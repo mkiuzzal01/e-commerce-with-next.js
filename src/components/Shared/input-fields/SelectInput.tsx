@@ -57,7 +57,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({
             {options.map((option) => {
               if (typeof option === "string") {
                 return (
-                  <MenuItem key={option} value={option}>
+                  <MenuItem key={option} value={option.toLowerCase()}>
                     {option}
                   </MenuItem>
                 );

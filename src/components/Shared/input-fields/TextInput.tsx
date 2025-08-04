@@ -47,7 +47,7 @@ export const TextInput = ({
           variant={variant}
           fullWidth={fullWidth}
           error={!!fieldState.error}
-          helperText={fieldState.error ? `${label} is required` : ""}
+          helperText={fieldState.error?.message}
           type={isPassword ? (showPassword ? "text" : "password") : type}
           multiline={multiline}
           rows={multiline ? row : undefined}
@@ -69,4 +69,3 @@ export const TextInput = ({
     />
   );
 };
-

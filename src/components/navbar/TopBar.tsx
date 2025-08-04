@@ -29,7 +29,6 @@ export default function TopBar() {
 
         <Stack direction="row" spacing={5} alignItems="center">
           <Box
-            component="a"
             sx={{
               display: "flex",
               alignItems: "center",

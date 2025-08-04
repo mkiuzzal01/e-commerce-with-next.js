@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import { Box, Grid, Typography, IconButton } from "@mui/material";
-import { Facebook, Twitter, Instagram, YouTube } from "@mui/icons-material"; // Adjust path accordingly
+import { Facebook, Twitter, Instagram, YouTube } from "@mui/icons-material";
 import Link from "next/link";
 import { megaMenuData } from "../navbar/NavLinks";
-import logo from "../../../public/assets/logo/logo1.png";
+import logo from "../../../public/assets/logo/logo.png";
 import Image from "next/image";
 
 export default function Footer() {

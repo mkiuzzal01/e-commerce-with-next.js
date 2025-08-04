@@ -1,19 +1,42 @@
 "use client";
 import React from "react";
 import { Box, Button, Container, Typography, Paper, Grid } from "@mui/material";
-import ReusableForm from "@/components/Shared/ReusableTable"; // or rename to ReusableForm
 import { TextInput } from "@/components/Shared/input-fields/TextInput";
 import { useRouter } from "next/navigation";
-import {FieldValues } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
+import { useToast } from "@/utils/tost-alert/ToastProvider";
+import { useRegisterMutation } from "@/redux/features/auth/auth.Api";
+import Loader from "@/utils/Loader";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterFormValidation } from "./components/RegisterFormValidation";
+import ReusableForm from "@/components/Shared/ReusableForm";
 
 export default function Register() {
   const router = useRouter();
+  const { showToast } = useToast();
+  const [register, { isLoading }] = useRegisterMutation();
 
-  const handleSubmit = (data: FieldValues) => {
-    console.log("Register form submitted:", data);
-    router.push("/login");
+  const handleSubmit = async (values: FieldValues) => {
+    if (values?.password !== values?.confirmPassword) {
+     return showToast({
+        message: "Password not match!",
+        type: "error",
+      });
+    }
+    try {
+      const { data } = await register(values);
+
+      if (data?.success) {
+        showToast({ message: "User registered successfully", type: "success" });
+        router.push("/login");
+      }
+    } catch (error) {
+      console.error(error);
+      showToast({ message: "Failed to register user", type: "error" });
+    }
   };
 
+  if (isLoading) return <Loader />;
   return (
     <Box
       sx={{
@@ -25,7 +48,7 @@ export default function Register() {
         background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
       }}
     >
-      <Container maxWidth="xs">
+      <Container maxWidth="md">
         <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
           <Typography
             variant="h5"
@@ -44,13 +67,25 @@ export default function Register() {
             Sign up to get started with your journey
           </Typography>
 
-          <ReusableForm onSubmit={handleSubmit}>
+          <ReusableForm
+            onSubmit={handleSubmit}
+            resolver={zodResolver(RegisterFormValidation)}
+          >
             <Grid container spacing={2}>
-              <Grid size={{ xs: 12 }}>
-                <TextInput name="name" label="Name" required />
+              <Grid size={{ xs: 12, md: 4 }}>
+                <TextInput name="name.firstName" label="First Name" required />
               </Grid>
-              <Grid size={{ xs: 12 }}>
+              <Grid size={{ xs: 12, md: 4 }}>
+                <TextInput name="name.middleName" label="Middle Name" />
+              </Grid>
+              <Grid size={{ xs: 12, md: 4 }}>
+                <TextInput name="name.lastName" label="Last Name" required />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextInput name="email" label="Email" required />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextInput name="phone" type="tel" label="Phone" required />
               </Grid>
               <Grid size={{ xs: 12 }}>
                 <TextInput

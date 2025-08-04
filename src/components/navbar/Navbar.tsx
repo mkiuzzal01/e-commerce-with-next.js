@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../../../public/assets/logo/logo1.png";
+import logo from "../../../public/assets/logo/logo.png";
 import { megaMenuData } from "./NavLinks";
 import {
   Accordion,

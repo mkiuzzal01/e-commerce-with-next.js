@@ -1,24 +1,42 @@
 "use client";
-import React from "react";
 import { Box, Button, Container, Typography, Paper, Grid } from "@mui/material";
-import ReusableForm from "@/components/Shared/ReusableTable"; // your form wrapper
 import { TextInput } from "@/components/Shared/input-fields/TextInput";
 import { useRouter } from "next/navigation";
-
-type LoginFormValues = {
-  email: string;
-  password: string;
-};
+import { FieldValues } from "react-hook-form";
+import { useLoginMutation } from "@/redux/features/auth/auth.Api";
+import Loader from "@/utils/Loader";
+import { useToast } from "@/utils/tost-alert/ToastProvider";
+import ReusableForm from "@/components/Shared/ReusableForm";
+import { verifyToken } from "@/lib/verifyToken";
+import { setUser, TUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
 
 export default function Login() {
+  const { showToast } = useToast();
   const router = useRouter();
-
-  const handleSubmit = (data: LoginFormValues) => {
-    console.log("Login data submitted:", data);
-    if (data.email === "demo@gmail.com" && data.password === "12345") {
-      router.push("/");
+  const dispatch = useAppDispatch();
+  const [loginUser, { isLoading }] = useLoginMutation();
+  const handleSubmit = async (values: FieldValues) => {
+    try {
+      const { data } = await loginUser(values);
+      const user = verifyToken(data?.data?.accessToken) as TUser;
+      dispatch(setUser({ user: user, token: data?.data?.accessToken }));
+      if (data?.success) {
+        showToast({
+          message: "User login successfully",
+          type: "success",
+        });
+        router.push("/");
+      }
+    } catch {
+      showToast({
+        message: "Something went wrong",
+        type: "error",
+      });
     }
   };
+
+  if (isLoading) return <Loader />;
 
   return (
     <Box
@@ -50,16 +68,14 @@ export default function Login() {
             Please login to your account
           </Typography>
 
-          <ReusableForm
-            onSubmit={handleSubmit}
-            defaultValues={{
-              email: "demo@gmail.com",
-              password: "12345",
-            }}
-          >
+          <ReusableForm onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12 }}>
-                <TextInput name="email" label="Email" required />
+                <TextInput
+                  name="emailOrPhone"
+                  label="Email or phone"
+                  required
+                />
               </Grid>
               <Grid size={{ xs: 12 }}>
                 <TextInput

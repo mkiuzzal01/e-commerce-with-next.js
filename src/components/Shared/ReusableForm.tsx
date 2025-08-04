@@ -1,23 +1,38 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import type { SubmitHandler } from "react-hook-form";
+import {
+  FormProvider,
+  useForm,
+  type FieldValues,
+  type SubmitHandler,
+  type UseFormProps,
+  type Resolver,
+} from "react-hook-form";
 
-type FormProps = {
+type FormProps<T extends FieldValues> = {
   children: React.ReactNode;
-  onSubmit: SubmitHandler<any>;
-  defaultValues?: Record<string, any>;
+  onSubmit: SubmitHandler<T>;
+  defaultValues?: UseFormProps<T>["defaultValues"];
+  resolver?: Resolver<T>;
 };
 
-const ReusableForm = ({ children, onSubmit, defaultValues }: FormProps) => {
-  const methods = useForm({ defaultValues });
-  const { handleSubmit } = methods;
+function ReusableForm<T extends FieldValues>({
+  children,
+  onSubmit,
+  defaultValues,
+  resolver,
+}: FormProps<T>) {
+  const methods = useForm<T>({
+    defaultValues,
+    resolver,
+  });
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>{children}</form>
+      <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
+        {children}
+      </form>
     </FormProvider>
   );
-};
+}
 
 export default ReusableForm;
