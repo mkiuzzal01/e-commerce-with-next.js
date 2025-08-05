@@ -12,7 +12,6 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../../../public/assets/logo/logo.png";
-import { megaMenuData } from "./NavLinks";
 import {
   Accordion,
   AccordionSummary,
@@ -28,6 +27,9 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AppLink from "@/utils/AppLink";
 import TopBar from "./TopBar";
+import { useAllMainCategoryQuery } from "@/redux/features/category/category.Api";
+import Loader from "@/utils/Loader";
+import { TNavLink } from "./TNavbar";
 
 export default function Navbar() {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
@@ -37,6 +39,8 @@ export default function Navbar() {
   const [isMounted, setIsMounted] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const theme = useTheme();
+  const { data, isLoading } = useAllMainCategoryQuery({});
+  const navLinks: TNavLink[] = data?.data?.result;
 
   const handleMouseEnter = (index: number) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -79,6 +83,9 @@ export default function Navbar() {
   const [expandedAccordion, setExpandedAccordion] = useState<number | false>(
     false
   );
+
+  if (isLoading) return <Loader />;
+  if (!navLinks) return null;
 
   return (
     <Box className="relative">
@@ -153,7 +160,7 @@ export default function Navbar() {
                   />
                 </Button>
               </Box>
-              {megaMenuData.map((item, idx) => (
+              {navLinks.map((item, idx) => (
                 <Box
                   key={idx}
                   onClick={() => setActiveMenu(null)}
@@ -161,7 +168,7 @@ export default function Navbar() {
                   onMouseLeave={handleMouseLeave}
                   sx={{ position: "relative" }}
                 >
-                  <AppLink href={item?.link}>
+                  <AppLink href={`/${item?.name}`}>
                     <Button
                       endIcon={
                         <ChevronDown
@@ -176,7 +183,6 @@ export default function Navbar() {
                         />
                       }
                       sx={{
-                        textTransform: "none",
                         color: "inherit",
                         fontWeight: "medium",
                         px: 2,
@@ -185,9 +191,10 @@ export default function Navbar() {
                           color: "#fe6731",
                           backgroundColor: "transparent",
                         },
+                        textTransform: "uppercase",
                       }}
                     >
-                      {item?.MainCategoryName}
+                      {item?.name}
                     </Button>
                   </AppLink>
                 </Box>
@@ -271,7 +278,7 @@ export default function Navbar() {
           </Box>
         </Box>
 
-        {activeMenu !== null && (
+        {activeMenu !== null && navLinks[activeMenu] && (
           <Box
             component="nav"
             onMouseEnter={() => handleMouseEnter(activeMenu)}
@@ -300,7 +307,7 @@ export default function Navbar() {
               }}
             >
               <Box sx={{ width: "75%", display: "flex", flexWrap: "wrap" }}>
-                {megaMenuData[activeMenu].Category.map((cat, i) => (
+                {navLinks[activeMenu]?.category?.map((cat, i) => (
                   <Box
                     onClick={() => setActiveMenu(null)}
                     key={i}
@@ -310,7 +317,9 @@ export default function Navbar() {
                       mb: 4,
                     }}
                   >
-                    <AppLink href={cat?.link}>
+                    <AppLink
+                      href={`/${navLinks[activeMenu]?.name}/category/${cat?.name}`}
+                    >
                       <Typography
                         variant="subtitle1"
                         fontWeight="600"
@@ -323,21 +332,24 @@ export default function Navbar() {
                           cursor: "pointer",
                         }}
                       >
-                        {cat?.categoryName}
+                       {cat?.name?.charAt(0).toUpperCase() + cat?.name?.slice(1)}
                       </Typography>
                     </AppLink>
+
                     <Box
                       component="ul"
                       sx={{ pl: 2, mt: 0, listStyle: "none" }}
                     >
-                      {cat.subCategory.map((sub, j) => (
+                      {navLinks[activeMenu]?.subCategory?.map((sub, j) => (
                         <Box
                           onClick={() => setActiveMenu(null)}
                           key={j}
                           component="li"
                           sx={{ mb: 0.5 }}
                         >
-                          <AppLink href={sub?.link}>
+                          <AppLink
+                            href={`/${navLinks[activeMenu]?.name}/category/subCategory/${sub?.name}`}
+                          >
                             <Box
                               sx={{
                                 textDecoration: "none",
@@ -346,7 +358,7 @@ export default function Navbar() {
                                 cursor: "pointer",
                               }}
                             >
-                              {sub?.subCategoryName}
+                           {sub?.name?.charAt(0).toUpperCase() + sub?.name?.slice(1)}
                             </Box>
                           </AppLink>
                         </Box>
@@ -356,7 +368,7 @@ export default function Navbar() {
                 ))}
               </Box>
               <Box sx={{ width: "25%" }}>
-                {megaMenuData[activeMenu]?.featured && (
+                {navLinks[activeMenu]?.image && (
                   <Box
                     sx={{
                       borderRadius: 2,
@@ -372,7 +384,7 @@ export default function Navbar() {
                     <Box className="w-3/5 m-auto">
                       <Box className="relative aspect-[3/4] w-full mb-2">
                         <Image
-                          src={megaMenuData[activeMenu]?.featured?.image}
+                          src={navLinks[activeMenu]?.image?.url}
                           alt="Featured"
                           fill
                           style={{ objectFit: "cover" }}
@@ -380,21 +392,10 @@ export default function Navbar() {
                       </Box>
                     </Box>
                     <Typography variant="h6" fontWeight="600" mb={1}>
-                      {megaMenuData[activeMenu]?.featured.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      mb={2}
-                      sx={{ maxWidth: 280, mx: "auto" }}
-                    >
-                      {megaMenuData[activeMenu]?.featured?.description}
+                      {navLinks[activeMenu]?.name}
                     </Typography>
                     <Box onClick={() => setActiveMenu(null)}>
-                      <Link
-                        href={megaMenuData[activeMenu]?.featured?.buttonLink}
-                        passHref
-                      >
+                      <Link href={`/${navLinks[activeMenu]?.name}`} passHref>
                         <Button
                           variant="contained"
                           size="medium"
@@ -407,7 +408,7 @@ export default function Navbar() {
                             color: "#fff",
                           }}
                         >
-                          {megaMenuData[activeMenu]?.featured?.buttonText}
+                          See All
                         </Button>
                       </Link>
                     </Box>
@@ -469,7 +470,7 @@ export default function Navbar() {
             <Divider />
 
             <Box mt={2}>
-              {megaMenuData.map((mainCat, idx) => (
+              {navLinks.map((mainCat, idx) => (
                 <Accordion
                   key={idx}
                   disableGutters
@@ -486,39 +487,41 @@ export default function Navbar() {
                     id={`panel-header-${idx}`}
                   >
                     <Box onClick={handleCloseMobileMenu}>
-                      <AppLink href={mainCat?.link}>
+                      <AppLink href={`/${mainCat?.slug}`}>
                         <Typography variant="subtitle1" fontWeight="medium">
-                          {mainCat?.MainCategoryName}
+                          {mainCat?.name}
                         </Typography>
                       </AppLink>
                     </Box>
                   </AccordionSummary>
                   <AccordionDetails sx={{ pl: 2 }}>
-                    {mainCat?.Category?.map((cat, i) => (
+                    {mainCat?.category?.map((cat, i) => (
                       <Box onClick={handleCloseMobileMenu} key={i} mb={2}>
-                        <AppLink href={cat?.link}>
+                        <AppLink href={`/${mainCat.name}/category/${cat.name}`}>
                           <Typography
                             variant="subtitle2"
                             fontWeight="bold"
                             mb={0.5}
                           >
-                            {cat?.categoryName}
+                            {cat?.name}
                           </Typography>
                         </AppLink>
                         <Box
                           component="ul"
                           sx={{ pl: 2, mt: 0, listStyle: "none" }}
                         >
-                          {cat?.subCategory?.map((sub, j) => (
+                          {mainCat?.subCategory?.map((sub, j) => (
                             <Box
                               onClick={handleCloseMobileMenu}
                               key={j}
                               component="li"
                               mb={0.5}
                             >
-                              <AppLink href={sub?.link}>
+                              <AppLink
+                                href={`/${mainCat.name}/category/${cat.name}/${sub.name}`}
+                              >
                                 <Box onClick={handleCloseMobileMenu}>
-                                  {sub?.subCategoryName}
+                                  {sub?.name}
                                 </Box>
                               </AppLink>
                             </Box>

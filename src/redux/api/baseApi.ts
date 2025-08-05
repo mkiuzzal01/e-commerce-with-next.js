@@ -9,6 +9,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { logout, setUser, TUser } from "../features/auth/authSlice";
 import { RootState } from "../store";
+import { tagTypes } from "./tagType";
 
 //this is the  base query:
 const baseQuery = fetchBaseQuery({
@@ -66,5 +67,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
+  tagTypes:tagTypes,
   endpoints: () => ({}),
 });
