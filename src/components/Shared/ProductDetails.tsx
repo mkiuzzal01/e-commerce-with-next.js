@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import {
   Box,
-  Grid,
   Typography,
   Button,
   Card,
@@ -15,8 +14,8 @@ import {
   Stack,
   Tabs,
   Tab,
-  Avatar,
   TextField,
+  Grid,
 } from "@mui/material";
 import {
   ShoppingCart,
@@ -24,13 +23,12 @@ import {
   Share,
   Add,
   Remove,
-  Star,
-  Verified,
   LocalShipping,
   Security,
   Refresh,
-  Person,
 } from "@mui/icons-material";
+import { useSingleProductBySlugQuery } from "@/redux/features/product/product.Api";
+import Loader from "@/utils/Loader";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -54,91 +52,35 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-export default function ProductDetails() {
+export default function ProductDetails({ slug }: { slug: string }) {
+  const { data: product, isLoading } = useSingleProductBySlugQuery(slug || "");
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState("M");
-  const [selectedColor, setSelectedColor] = useState("Black");
+  const [selectedVariant, setSelectedVariant] = useState(
+    product?.variants?.[0]
+  );
   const [tabValue, setTabValue] = useState(0);
 
-  const product = {
-    id: 1,
-    name: "Premium Wireless Headphones",
-    brand: "TechSound Pro",
-    price: 299.99,
-    originalPrice: 399.99,
-    discount: 25,
-    rating: 4.5,
-    reviewCount: 1247,
-    inStock: true,
-    stockCount: 15,
-    category: "Electronics",
-    sku: "TSP-WH-001",
-    description:
-      "Experience premium sound quality with our flagship wireless headphones. Featuring advanced noise cancellation, 30-hour battery life, and premium materials for ultimate comfort.",
-    images: [
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop",
-      "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=500&h=500&fit=crop",
-      "https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=500&h=500&fit=crop",
-      "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500&h=500&fit=crop",
-    ],
-    colors: ["Black", "White", "Silver", "Blue"],
-    sizes: ["S", "M", "L", "XL"],
-    features: [
-      "Active Noise Cancellation",
-      "30-hour battery life",
-      "Premium leather comfort",
-      "Bluetooth 5.0 connectivity",
-      "Quick charge technology",
-    ],
-    specifications: {
-      "Driver Size": "40mm",
-      "Frequency Response": "20Hz - 20kHz",
-      Impedance: "32 Ohms",
-      Weight: "250g",
-      "Bluetooth Version": "5.0",
-      "Battery Life": "30 hours",
-      "Charging Time": "2 hours",
-    },
-  };
-
-  const reviews = [
-    {
-      id: 1,
-      user: "John Smith",
-      rating: 5,
-      date: "2 weeks ago",
-      comment:
-        "Excellent sound quality and comfort. The noise cancellation is outstanding!",
-      verified: true,
-    },
-    {
-      id: 2,
-      user: "Sarah Johnson",
-      rating: 4,
-      date: "1 month ago",
-      comment:
-        "Great headphones overall. Battery life is as advertised. Highly recommend!",
-      verified: true,
-    },
-    {
-      id: 3,
-      user: "Mike Davis",
-      rating: 5,
-      date: "3 weeks ago",
-      comment:
-        "Best purchase I've made this year. Perfect for long flights and work.",
-      verified: false,
-    },
-  ];
-
   const handleQuantityChange = (change: number) => {
-    setQuantity(Math.max(1, Math.min(product.stockCount, quantity + change)));
+    const newQuantity = quantity + change;
+    const maxQuantity =
+      selectedVariant?.attributes?.[0]?.quantity ||
+      product?.totalQuantity ||
+      25;
+    setQuantity(Math.max(1, Math.min(maxQuantity, newQuantity)));
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
+
+  if (isLoading || !product) return <Loader />;
+
+  // Combine main image with optional images for the gallery
+  const allImages = [
+    product.productImage.url,
+    ...product.optionalImages.map((img) => img.photo.url),
+  ];
 
   return (
     <Box
@@ -149,30 +91,20 @@ export default function ProductDetails() {
       <Box className="container m-auto p-4">
         <Grid container spacing={4}>
           {/* Product Images */}
-          <Grid
-            size={{
-              xs: 12,
-              md: 6,
-            }}
-          >
+          <Grid size={{ xs: 12, md: 6 }}>
             <Box sx={{ position: "sticky", top: 20 }}>
               <Card sx={{ mb: 2, borderRadius: 2 }}>
-                <CardMedia
+                {/* <CardMedia
                   component="img"
                   height="400"
-                  image={product.images[selectedImage]}
-                  alt={product.name}
+                  image={allImages[selectedImage]}
+                  alt={product.title}
                   sx={{ objectFit: "cover" }}
-                />
+                /> */}
               </Card>
               <Grid container spacing={1}>
-                {product.images.map((image, index) => (
-                  <Grid
-                    size={{
-                      xs: 3,
-                    }}
-                    key={index}
-                  >
+                {allImages.map((image, index) => (
+                  <Grid size={{ xs: 3 }} key={index}>
                     <Card
                       sx={{
                         cursor: "pointer",
@@ -183,13 +115,13 @@ export default function ProductDetails() {
                       }}
                       onClick={() => setSelectedImage(index)}
                     >
-                      <CardMedia
+                      {/* <CardMedia
                         component="img"
                         height="80"
                         image={image}
-                        alt={`${product.name} ${index + 1}`}
+                        alt={`${product.title} ${index + 1}`}
                         sx={{ objectFit: "cover" }}
-                      />
+                      /> */}
                     </Card>
                   </Grid>
                 ))}
@@ -198,46 +130,55 @@ export default function ProductDetails() {
           </Grid>
 
           {/* Product Details */}
-          <Grid
-            size={{
-              xs: 12,
-              md: 6,
-            }}
-          >
+          <Grid size={{ xs: 12, md: 6 }}>
             <Box>
-              {/* Brand and Category */}
+              {/* Categories */}
               <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
-                <Chip label={product.brand} size="small" variant="outlined" />
                 <Chip
-                  label={product.category}
+                  label={product.categories?.mainCategory?.name || "Men"}
+                  size="small"
+                  variant="outlined"
+                />
+                <Chip
+                  label={product.categories?.category?.name || "Clothing"}
                   size="small"
                   color="primary"
                   variant="outlined"
                 />
-                {product.inStock && (
+                <Chip
+                  label={product.categories?.subCategory?.name || "Jeans"}
+                  size="small"
+                  variant="outlined"
+                />
+                {product.status === "in-stock" && (
                   <Chip label="In Stock" size="small" color="success" />
                 )}
               </Stack>
 
-              {/* Product Name */}
+              {/* Product Title */}
               <Typography
                 variant="h4"
                 component="h1"
                 sx={{ mb: 2, fontWeight: "bold" }}
               >
-                {product.name}
+                {product.title}
               </Typography>
 
-              {/* Rating and Reviews */}
+              {/* Subtitle */}
+              <Typography variant="subtitle1" sx={{ mb: 2 }}>
+                {product.subTitle}
+              </Typography>
+
+              {/* Rating */}
               <Stack
                 direction="row"
                 alignItems="center"
                 spacing={2}
                 sx={{ mb: 2 }}
               >
-                <Rating value={product.rating} precision={0.5} readOnly />
+                <Rating value={product.rating || 0} precision={0.5} readOnly />
                 <Typography variant="body2" color="text.secondary">
-                  {product.rating} ({product.reviewCount} reviews)
+                  {product.rating || 0} (0 reviews)
                 </Typography>
               </Stack>
 
@@ -255,21 +196,13 @@ export default function ProductDetails() {
                 >
                   ${product.price}
                 </Typography>
-                <Typography
-                  variant="h5"
-                  component="span"
-                  sx={{
-                    textDecoration: "line-through",
-                    color: "text.secondary",
-                  }}
-                >
-                  ${product.originalPrice}
-                </Typography>
-                <Chip
-                  label={`${product.discount}% OFF`}
-                  color="error"
-                  size="small"
-                />
+                {product.discount > 0 && (
+                  <Chip
+                    label={`${product.discount}% OFF`}
+                    color="error"
+                    size="small"
+                  />
+                )}
               </Stack>
 
               {/* Description */}
@@ -277,46 +210,35 @@ export default function ProductDetails() {
                 {product.description}
               </Typography>
 
-              {/* Color Selection */}
-              <Box sx={{ mb: 3 }}>
-                <Typography variant="h6" sx={{ mb: 1 }}>
-                  Color
-                </Typography>
-                <Stack direction="row" spacing={1}>
-                  {product.colors.map((color) => (
-                    <Button
-                      key={color}
-                      variant={
-                        selectedColor === color ? "contained" : "outlined"
-                      }
-                      onClick={() => setSelectedColor(color)}
-                      size="small"
-                    >
-                      {color}
-                    </Button>
-                  ))}
-                </Stack>
-              </Box>
-
-              {/* Size Selection */}
-              <Box sx={{ mb: 3 }}>
-                <Typography variant="h6" sx={{ mb: 1 }}>
-                  Size
-                </Typography>
-                <Stack direction="row" spacing={1}>
-                  {product.sizes.map((size) => (
-                    <Button
-                      key={size}
-                      variant={selectedSize === size ? "contained" : "outlined"}
-                      onClick={() => setSelectedSize(size)}
-                      size="small"
-                      sx={{ minWidth: 50 }}
-                    >
-                      {size}
-                    </Button>
-                  ))}
-                </Stack>
-              </Box>
+              {/* Variant Selection */}
+              {product.variants?.length > 0 && (
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="h6" sx={{ mb: 1 }}>
+                    Variants
+                  </Typography>
+                  <Stack direction="row" spacing={1} flexWrap="wrap">
+                    {product.variants.map((variant) => (
+                      <Button
+                        key={variant.name}
+                        variant={
+                          selectedVariant?.name === variant.name
+                            ? "contained"
+                            : "outlined"
+                        }
+                        onClick={() => {
+                          setSelectedVariant(variant);
+                          setQuantity(1); // Reset quantity when variant changes
+                        }}
+                        size="small"
+                        sx={{ minWidth: 50, mb: 1 }}
+                      >
+                        {variant.name.toUpperCase()} (
+                        {variant.attributes[0].value})
+                      </Button>
+                    ))}
+                  </Stack>
+                </Box>
+              )}
 
               {/* Quantity Selector */}
               <Box sx={{ mb: 3 }}>
@@ -339,12 +261,19 @@ export default function ProductDetails() {
                   />
                   <IconButton
                     onClick={() => handleQuantityChange(1)}
-                    disabled={quantity >= product.stockCount}
+                    disabled={
+                      quantity >=
+                      (selectedVariant?.attributes?.[0]?.quantity ||
+                        product.totalQuantity)
+                    }
                   >
                     <Add />
                   </IconButton>
                   <Typography variant="body2" color="text.secondary">
-                    ({product.stockCount} available)
+                    (
+                    {selectedVariant?.attributes?.[0]?.quantity ||
+                      product.totalQuantity}{" "}
+                    available)
                   </Typography>
                 </Stack>
               </Box>
@@ -356,7 +285,7 @@ export default function ProductDetails() {
                   size="large"
                   startIcon={<ShoppingCart />}
                   sx={{ flex: 1 }}
-                  disabled={!product.inStock}
+                  disabled={product.status !== "in-stock"}
                 >
                   Add to Cart
                 </Button>
@@ -370,11 +299,7 @@ export default function ProductDetails() {
 
               {/* Product Info Cards */}
               <Grid container spacing={2} sx={{ mb: 3 }}>
-                <Grid
-                  size={{
-                    xs: 4,
-                  }}
-                >
+                <Grid size={{ xs: 4 }}>
                   <Paper sx={{ p: 2, textAlign: "center" }}>
                     <LocalShipping color="primary" sx={{ mb: 1 }} />
                     <Typography variant="body2" fontWeight="bold">
@@ -385,11 +310,7 @@ export default function ProductDetails() {
                     </Typography>
                   </Paper>
                 </Grid>
-                <Grid
-                  size={{
-                    xs: 4,
-                  }}
-                >
+                <Grid size={{ xs: 4 }}>
                   <Paper sx={{ p: 2, textAlign: "center" }}>
                     <Security color="primary" sx={{ mb: 1 }} />
                     <Typography variant="body2" fontWeight="bold">
@@ -400,11 +321,7 @@ export default function ProductDetails() {
                     </Typography>
                   </Paper>
                 </Grid>
-                <Grid
-                  size={{
-                    xs: 4,
-                  }}
-                >
+                <Grid ize={{ xs: 4 }}>
                   <Paper sx={{ p: 2, textAlign: "center" }}>
                     <Refresh color="primary" sx={{ mb: 1 }} />
                     <Typography variant="body2" fontWeight="bold">
@@ -415,9 +332,9 @@ export default function ProductDetails() {
                 </Grid>
               </Grid>
 
-              {/* SKU and Additional Info */}
+              {/* Product Code */}
               <Typography variant="body2" color="text.secondary">
-                SKU: {product.sku}
+                Product Code: {product.productCode}
               </Typography>
             </Box>
           </Grid>
@@ -432,92 +349,112 @@ export default function ProductDetails() {
               aria-label="product details tabs"
             >
               <Tab label="Description" />
-              <Tab label="Specifications" />
-              <Tab label="Reviews" />
+              <Tab label="Details" />
             </Tabs>
 
             <TabPanel value={tabValue} index={0}>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                Key Features
+                Product Description
               </Typography>
-              <Grid container spacing={2}>
-                {product.features.map((feature, index) => (
-                  <Grid
-                    size={{
-                      xs: 12,
-                      md: 6,
-                    }}
-                    key={index}
-                  >
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                      <Star color="primary" fontSize="small" />
-                      <Typography variant="body2">{feature}</Typography>
-                    </Stack>
-                  </Grid>
-                ))}
-              </Grid>
+              <Typography variant="body1">
+                {product.description || "No description available."}
+              </Typography>
             </TabPanel>
 
             <TabPanel value={tabValue} index={1}>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                Technical Specifications
+                Product Details
               </Typography>
-              {Object.entries(product.specifications).map(([key, value]) => (
-                <Box key={key} sx={{ mb: 2 }}>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Typography variant="body1" fontWeight="medium">
-                      {key}
-                    </Typography>
-                    <Typography variant="body1">{value}</Typography>
-                  </Stack>
-                  <Divider sx={{ mt: 1 }} />
-                </Box>
-              ))}
-            </TabPanel>
-
-            <TabPanel value={tabValue} index={2}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Customer Reviews
-              </Typography>
-              {reviews.map((review) => (
-                <Box key={review.id} sx={{ mb: 3 }}>
-                  <Stack direction="row" spacing={2} alignItems="flex-start">
-                    <Avatar sx={{ bgcolor: "primary.main" }}>
-                      <Person />
-                    </Avatar>
-                    <Box sx={{ flex: 1 }}>
-                      <Stack
-                        direction="row"
-                        alignItems="center"
-                        spacing={1}
-                        sx={{ mb: 1 }}
-                      >
-                        <Typography variant="subtitle2" fontWeight="bold">
-                          {review.user}
-                        </Typography>
-                        {review.verified && (
-                          <Verified color="primary" fontSize="small" />
-                        )}
-                        <Typography variant="caption" color="text.secondary">
-                          {review.date}
-                        </Typography>
-                      </Stack>
-                      <Rating
-                        value={review.rating}
-                        size="small"
-                        readOnly
-                        sx={{ mb: 1 }}
-                      />
-                      <Typography variant="body2">{review.comment}</Typography>
-                    </Box>
-                  </Stack>
-                  <Divider sx={{ mt: 2 }} />
-                </Box>
-              ))}
+              <Box sx={{ mb: 2 }}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Typography variant="body1" fontWeight="medium">
+                    Status
+                  </Typography>
+                  <Typography variant="body1" textTransform="capitalize">
+                    {product.status}
+                  </Typography>
+                </Stack>
+                <Divider sx={{ mt: 1 }} />
+              </Box>
+              <Box sx={{ mb: 2 }}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Typography variant="body1" fontWeight="medium">
+                    Main Category
+                  </Typography>
+                  <Typography variant="body1">
+                    {product.categories?.mainCategory?.name || "N/A"}
+                  </Typography>
+                </Stack>
+                <Divider sx={{ mt: 1 }} />
+              </Box>
+              <Box sx={{ mb: 2 }}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Typography variant="body1" fontWeight="medium">
+                    Category
+                  </Typography>
+                  <Typography variant="body1">
+                    {product.categories?.category?.name || "N/A"}
+                  </Typography>
+                </Stack>
+                <Divider sx={{ mt: 1 }} />
+              </Box>
+              <Box sx={{ mb: 2 }}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Typography variant="body1" fontWeight="medium">
+                    Subcategory
+                  </Typography>
+                  <Typography variant="body1">
+                    {product.categories?.subCategory?.name || "N/A"}
+                  </Typography>
+                </Stack>
+                <Divider sx={{ mt: 1 }} />
+              </Box>
+              <Box sx={{ mb: 2 }}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Typography variant="body1" fontWeight="medium">
+                    Product Placement
+                  </Typography>
+                  <Typography variant="body1" textTransform="capitalize">
+                    {product.productPlace}
+                  </Typography>
+                </Stack>
+                <Divider sx={{ mt: 1 }} />
+              </Box>
+              <Box sx={{ mb: 2 }}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Typography variant="body1" fontWeight="medium">
+                    Created At
+                  </Typography>
+                  <Typography variant="body1">
+                    {new Date(product.createdAt).toLocaleDateString()}
+                  </Typography>
+                </Stack>
+                <Divider sx={{ mt: 1 }} />
+              </Box>
             </TabPanel>
           </Paper>
         </Box>

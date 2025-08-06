@@ -11,15 +11,16 @@ export type TProduct = {
   id?: string;
   name: string;
   image?: any;
-  price: number;
-  originalPrice: number;
+  price: number | string;
+  originalPrice: number | string;
 };
 
 type ProductCardProps = {
+  viewLink?: string;
   product: TProduct;
 };
 
-const ProductCard1: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
   return (
     <Card
       sx={{
@@ -40,7 +41,6 @@ const ProductCard1: React.FC<ProductCardProps> = ({ product }) => {
         <Image
           src={product.image}
           alt={product.name}
-          placeholder="blur"
           fill
           className="object-cover transition-transform duration-500 hover:scale-105"
         />
@@ -58,7 +58,7 @@ const ProductCard1: React.FC<ProductCardProps> = ({ product }) => {
             p: 2,
           }}
         >
-          <Link href={`/men/${product?.id}`}>
+          <Link href={viewLink || ""}>
             <Typography
               sx={{
                 color: "var(--color-brand-heading)",
@@ -111,7 +111,7 @@ const ProductCard1: React.FC<ProductCardProps> = ({ product }) => {
             >
               Add to Cart
             </Button>
-            <Link href={`/men/${product?.id}`}>
+            <Link href={viewLink || ""}>
               <Button
                 fullWidth
                 variant="contained"

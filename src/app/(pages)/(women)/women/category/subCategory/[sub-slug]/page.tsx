@@ -2,7 +2,7 @@ import React from "react";
 import ProductCard from "@/utils/cards/ProductCard1";
 import { Box } from "@mui/material";
 import ReusablePagination from "@/components/Shared/ReusablePagination";
-import FilteringFrom from "@/app/(pages)/(men)/men/category/subCategory/[sub-slug]/components/FilteringForm";
+import FilteringFrom from "@/app/(pages)/(products)/[prams]/category/subCategory/[sub_slug]/components/FilteringForm";
 import { womenData } from "../../../components/womansData";
 
 export default function Page() {

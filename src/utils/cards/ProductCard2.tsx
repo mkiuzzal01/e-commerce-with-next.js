@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
 import React from "react";
 import { Box, Button, Card, Rating, Stack, Typography } from "@mui/material";
 import { ShoppingCart, Heart } from "lucide-react";
@@ -11,8 +10,8 @@ export type TProduct = {
   id?: string;
   name: string;
   image: any;
-  price: number;
-  rating?: number;
+  price: number | string;
+  rating?: number | string;
   showWishlist?: boolean;
 };
 

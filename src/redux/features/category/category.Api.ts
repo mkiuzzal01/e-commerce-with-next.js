@@ -18,10 +18,28 @@ const categoryApi = baseApi.injectEndpoints({
         url: `/category/single-main-category/${slug}`,
         method: "GET",
       }),
-      providesTags: ["category"],
+      providesTags: ["single-main-category"],
+    }),
+    singleCategory: builder.query({
+      query: (slug: string) => ({
+        url: `/category/single-category/${slug}`,
+        method: "GET",
+      }),
+      providesTags: ["single-category"],
+    }),
+    singleSubCategory: builder.query({
+      query: (slug: string) => ({
+        url: `/category/single-sub-category/${slug}`,
+        method: "GET",
+      }),
+      providesTags: ["single-sub-category"],
     }),
   }),
 });
 
-export const { useAllMainCategoryQuery, useSingleMainCategoryQuery } =
-  categoryApi;
+export const {
+  useAllMainCategoryQuery,
+  useSingleMainCategoryQuery,
+  useSingleCategoryQuery,
+  useSingleSubCategoryQuery,
+} = categoryApi;

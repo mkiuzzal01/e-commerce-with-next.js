@@ -168,7 +168,7 @@ export default function Navbar() {
                   onMouseLeave={handleMouseLeave}
                   sx={{ position: "relative" }}
                 >
-                  <AppLink href={`/${item?.name}`}>
+                  <AppLink href={`/${item?.slug}`}>
                     <Button
                       endIcon={
                         <ChevronDown
@@ -318,7 +318,7 @@ export default function Navbar() {
                     }}
                   >
                     <AppLink
-                      href={`/${navLinks[activeMenu]?.name}/category/${cat?.name}`}
+                      href={`/${navLinks[activeMenu]?.slug}/category/${cat?.slug}`}
                     >
                       <Typography
                         variant="subtitle1"
@@ -332,7 +332,8 @@ export default function Navbar() {
                           cursor: "pointer",
                         }}
                       >
-                       {cat?.name?.charAt(0).toUpperCase() + cat?.name?.slice(1)}
+                        {cat?.name?.charAt(0).toUpperCase() +
+                          cat?.name?.slice(1)}
                       </Typography>
                     </AppLink>
 
@@ -348,7 +349,7 @@ export default function Navbar() {
                           sx={{ mb: 0.5 }}
                         >
                           <AppLink
-                            href={`/${navLinks[activeMenu]?.name}/category/subCategory/${sub?.name}`}
+                            href={`/${navLinks[activeMenu]?.slug}/category/subCategory/${sub?.slug}`}
                           >
                             <Box
                               sx={{
@@ -358,7 +359,8 @@ export default function Navbar() {
                                 cursor: "pointer",
                               }}
                             >
-                           {sub?.name?.charAt(0).toUpperCase() + sub?.name?.slice(1)}
+                              {sub?.name?.charAt(0).toUpperCase() +
+                                sub?.name?.slice(1)}
                             </Box>
                           </AppLink>
                         </Box>
@@ -395,7 +397,7 @@ export default function Navbar() {
                       {navLinks[activeMenu]?.name}
                     </Typography>
                     <Box onClick={() => setActiveMenu(null)}>
-                      <Link href={`/${navLinks[activeMenu]?.name}`} passHref>
+                      <Link href={`/${navLinks[activeMenu]?.slug}`} passHref>
                         <Button
                           variant="contained"
                           size="medium"
@@ -497,7 +499,7 @@ export default function Navbar() {
                   <AccordionDetails sx={{ pl: 2 }}>
                     {mainCat?.category?.map((cat, i) => (
                       <Box onClick={handleCloseMobileMenu} key={i} mb={2}>
-                        <AppLink href={`/${mainCat.name}/category/${cat.name}`}>
+                        <AppLink href={`/${mainCat.slug}/category/${cat.slug}`}>
                           <Typography
                             variant="subtitle2"
                             fontWeight="bold"
@@ -518,7 +520,7 @@ export default function Navbar() {
                               mb={0.5}
                             >
                               <AppLink
-                                href={`/${mainCat.name}/category/${cat.name}/${sub.name}`}
+                                href={`/${mainCat?.slug}/category/subCategory/${sub?.slug}`}
                               >
                                 <Box onClick={handleCloseMobileMenu}>
                                   {sub?.name}

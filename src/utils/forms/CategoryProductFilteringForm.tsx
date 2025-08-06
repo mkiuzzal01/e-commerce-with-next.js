@@ -22,7 +22,7 @@ const categories = ["T-Shirts", "Shirts", "Jeans", "Shoes", "Accessories"];
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const colors = ["Black", "White", "Blue", "Red", "Gray"];
 
-export default function ProductFilterFrom() {
+export default function CategoryProductFilteringForm() {
   const [formData, setFormData] = useState({
     category: "",
     brand: "",
@@ -32,7 +32,7 @@ export default function ProductFilterFrom() {
     color: "",
   });
 
-  const handleInputChange = (field: any, value: any) => {
+  const handleInputChange = (field:any, value:any) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -186,7 +186,7 @@ export default function ProductFilterFrom() {
           </Box>
 
           {/* Active Filters */}
-          {activeFilters.some(([val]) => val) && (
+          {activeFilters.some(([ val]) => val) && (
             <Box>
               <Typography variant="subtitle1" fontWeight={600} gutterBottom>
                 Active Filters:

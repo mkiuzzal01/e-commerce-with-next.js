@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { Box, Tabs, Tab } from "@mui/material";
+import { Box, Tabs, Tab, Typography } from "@mui/material";
 import { Sparkles } from "lucide-react";
-import { productData } from "./NewArrivalsData";
 import SectionHeader from "@/components/Shared/SectionHeader";
 import ReusableCarousel, {
   CarouselRef,
@@ -11,6 +10,9 @@ import ReusableCarousel, {
 import { SwiperSlide } from "swiper/react";
 import CarouselArrows from "@/components/Shared/CarouselArrows";
 import ProductCard2 from "@/utils/cards/ProductCard2";
+import { useAllProductByKeyWordQuery } from "@/redux/features/product/product.Api";
+import Loader from "@/utils/Loader";
+import { TProduct } from "@/Types/ProductType";
 
 const categories = ["All", "Women", "Men", "Kids"];
 
@@ -18,10 +20,14 @@ export default function NewArrivals() {
   const [selected, setSelected] = useState("All");
   const carouselRef = useRef<CarouselRef>(null);
 
-  const filtered =
-    selected === "All"
-      ? productData
-      : productData.filter((p) => p.category === selected);
+  const { data, isLoading } = useAllProductByKeyWordQuery({
+    queryParams: {},
+    headerParams: { params: {} },
+  });
+
+  const newArrivalProducts: TProduct[] = data?.data?.result || [];
+
+  if (isLoading) return <Loader />;
 
   return (
     <Box className="py-6 bg-gradient-to-br from-orange-50 via-white to-red-50">
@@ -34,7 +40,7 @@ export default function NewArrivals() {
           alignment="center"
         />
 
-        <Box className="flex flex-col md:flex-row items-center justify-between ">
+        <Box className="flex flex-col md:flex-row items-center justify-between mb-4">
           <Box display="flex" justifyContent="center">
             <Tabs
               value={selected}
@@ -71,33 +77,42 @@ export default function NewArrivals() {
           />
         </Box>
 
-        <ReusableCarousel
-          ref={carouselRef}
-          autoplay={false}
-          pagination={false}
-          navigation={false}
-          loop={false}
-          spaceBetween={5}
-          breakpoints={{
-            320: { slidesPerView: 1 },
-            640: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-            1280: { slidesPerView: 4 },
-          }}
-        >
-          {filtered.map((product) => (
-            <SwiperSlide key={product.id}>
-              <ProductCard2
-                product={{
-                  id: String(product?.id),
-                  name: product?.name,
-                  image: product?.image,
-                  price: product?.price,
-                }}
-              />
-            </SwiperSlide>
-          ))}
-        </ReusableCarousel>
+        {/* Conditional rendering based on product array */}
+        {newArrivalProducts.length === 0 ? (
+          <Box className="text-center py-12">
+            <Typography className="text-gray-500 text-lg font-medium">
+              No new arrivals products available right now.
+            </Typography>
+          </Box>
+        ) : (
+          <ReusableCarousel
+            ref={carouselRef}
+            autoplay={false}
+            pagination={false}
+            navigation={false}
+            loop={false}
+            spaceBetween={5}
+            breakpoints={{
+              320: { slidesPerView: 1 },
+              640: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+              1280: { slidesPerView: 4 },
+            }}
+          >
+            {newArrivalProducts.map((product) => (
+              <SwiperSlide key={product._id}>
+                <ProductCard2
+                  product={{
+                    id: product._id,
+                    name: product.title,
+                    image: product.productImage?.photo?.url,
+                    price: product.price,
+                  }}
+                />
+              </SwiperSlide>
+            ))}
+          </ReusableCarousel>
+        )}
       </Box>
     </Box>
   );

@@ -2,10 +2,37 @@
 import Image from "next/image";
 import { SwiperSlide } from "swiper/react";
 import ReusableCarousel from "../Shared/ReusableCarousel";
-import { bannerData } from "./BannerData";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { useAllContentQuery } from "@/redux/features/banner-content/content.Api";
+import Loader from "@/utils/Loader";
+
+interface ICloudinaryImage {
+  publicId: string;
+  url: string;
+}
+
+interface IBannerItem {
+  _id: string;
+  buttonText: string;
+  createdAt: string;
+  description: string;
+  image: {
+    photo: ICloudinaryImage;
+  };
+  link: string;
+  slug: string;
+  subTitle: string;
+  title: string;
+  updatedAt: string;
+  __v: number;
+}
 
 export default function Banner() {
+  const { data, isLoading } = useAllContentQuery({});
+  const bannerData: IBannerItem[] = data?.data?.result;
+
+  if (isLoading) return <Loader />;
+
   return (
     <Box className="relative third-color overflow-hidden">
       <Box className="relative z-10">
@@ -17,8 +44,8 @@ export default function Banner() {
           speed={1000}
           loop
         >
-          {bannerData?.map((item, index) => (
-            <SwiperSlide key={item.id}>
+          {bannerData.map((item) => (
+            <SwiperSlide key={item?._id}>
               <Box className="min-h-[500px] md:min-h-[600px] lg:min-h-[790px] flex items-center">
                 <Container className="py-12 lg:py-16">
                   <Grid
@@ -27,7 +54,7 @@ export default function Banner() {
                     alignItems="center"
                     className="!items-center"
                   >
-                    {/* Text */}
+                    {/* Text Content */}
                     <Grid
                       size={{
                         xs: 12,
@@ -36,25 +63,12 @@ export default function Banner() {
                       sx={{ textAlign: { xs: "center", md: "left" } }}
                     >
                       <Box className="flex flex-col gap-6">
-                        {item?.offer && (
-                          <Box className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 backdrop-blur-sm border border-amber-500/30 rounded-full px-6 py-3 text-sm font-semibold text-amber-400 shadow-lg">
-                            <span className="relative flex h-2.5 w-2.5">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-                              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-400" />
-                            </span>
-                            {item.offer}
-                          </Box>
-                        )}
-
-                        {item?.subtitle && (
-                          <Typography
-                            className="text-xs sm:text-sm font-bold tracking-[0.2em] text-amber-400 uppercase opacity-90"
-                            component="div"
-                          >
-                            {item?.subtitle}
-                          </Typography>
-                        )}
-
+                        <Typography
+                          className="text-xs sm:text-sm font-bold tracking-[0.2em] text-amber-400 uppercase opacity-90"
+                          component="div"
+                        >
+                          {item?.subTitle}
+                        </Typography>
                         <Typography variant="h3">
                           <span className="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
                             {item?.title}
@@ -66,16 +80,21 @@ export default function Banner() {
                         </Typography>
 
                         <Box className="pt-4">
-                          <Button size="large"  variant="contained"  className="btn-primary group relative inline-flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/25 focus:outline-none focus:ring-4 focus:ring-amber-500/50">
+                          <Button
+                            size="large"
+                            variant="contained"
+                            href={item?.link}
+                            className="btn-primary group relative inline-flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/25 focus:outline-none focus:ring-4 focus:ring-amber-500/50"
+                          >
                             <span className="text-base sm:text-lg">
-                              {item?.buttonLabel}
+                              {item?.buttonText}
                             </span>
                           </Button>
                         </Box>
                       </Box>
                     </Grid>
 
-                    {/* Image */}
+                    {/* Image Content */}
                     <Grid
                       size={{
                         xs: 12,
@@ -96,9 +115,8 @@ export default function Banner() {
                           <Box className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl backdrop-blur-sm border border-white/20 shadow-2xl" />
                           <Box className="relative h-full rounded-3xl overflow-hidden">
                             <Image
-                              src={item.image}
-                              alt={item.title}
-                              priority={index === 0}
+                              src={item?.image?.photo?.url}
+                              alt={item?.title}
                               fill
                               className="object-contain p-4 transition-transform duration-500 hover:scale-110"
                               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"

@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import React from "react";
-import FilteringFrom from "../../(men)/men/category/subCategory/[sub-slug]/components/FilteringForm";
+import FilteringFrom from "../../(products)/[prams]/category/subCategory/[sub_slug]/components/FilteringForm";
 import ProductCard1 from "@/utils/cards/ProductCard1";
 import ReusablePagination from "@/components/Shared/ReusablePagination";
 import { flashProducts } from "@/components/sections/flash-sale/flashProductsData";
