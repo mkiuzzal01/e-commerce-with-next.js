@@ -6,5 +6,8 @@ export const tagTypes = [
   "category",
   "allContent",
   "content",
+  "allProduct",
+  "view-product",
+  "update-product",
   "product-by-key-word",
 ];

@@ -8,14 +8,14 @@ import {
   CardMedia,
   Chip,
   Rating,
-  Divider,
   IconButton,
   Paper,
   Stack,
-  Tabs,
-  Tab,
   TextField,
   Grid,
+  Divider,
+  Alert,
+  Snackbar,
 } from "@mui/material";
 import {
   ShoppingCart,
@@ -26,161 +26,299 @@ import {
   LocalShipping,
   Security,
   Refresh,
+  Favorite,
 } from "@mui/icons-material";
 import { useSingleProductBySlugQuery } from "@/redux/features/product/product.Api";
 import Loader from "@/utils/Loader";
+import { TProduct } from "@/Types/ProductType";
+import ReusableForm from "./ReusableForm";
+import { FieldValues } from "react-hook-form";
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
+type CartFormData = {
+  productId: string;
+  variantName?: string;
+  colorValue?: string;
+  quantity: number;
+  price: number;
+};
 
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
+type WishlistFormData = {
+  productId: string;
+};
 
 export default function ProductDetails({ slug }: { slug: string }) {
-  const { data: product, isLoading } = useSingleProductBySlugQuery(slug || "");
+  const { data, isLoading } = useSingleProductBySlugQuery(slug || "");
   const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedVariant, setSelectedVariant] = useState<number | null>(null);
+  const [selectedColor, setSelectedColor] = useState<number | null>(null);
   const [quantity, setQuantity] = useState(1);
-  const [selectedVariant, setSelectedVariant] = useState(
-    product?.variants?.[0]
-  );
-  const [tabValue, setTabValue] = useState(0);
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
+
+  const product: TProduct = data?.data;
+
+  if (isLoading) return <Loader />;
+
+  if (!product) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "50vh",
+        }}
+      >
+        <Typography variant="h5" color="text.secondary">
+          Product not found
+        </Typography>
+      </Box>
+    );
+  }
+
+  // Create array of all images (main + optional)
+  const allImages = [
+    product.productImage?.photo?.url,
+    ...(product.optionalImages?.map((img) => img.photo?.url) || []),
+  ].filter(Boolean);
 
   const handleQuantityChange = (change: number) => {
     const newQuantity = quantity + change;
-    const maxQuantity =
-      selectedVariant?.attributes?.[0]?.quantity ||
-      product?.totalQuantity ||
-      25;
-    setQuantity(Math.max(1, Math.min(maxQuantity, newQuantity)));
+    if (
+      newQuantity >= 1 &&
+      newQuantity <= (Number(product.totalQuantity) || 1)
+    ) {
+      setQuantity(newQuantity);
+    }
   };
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue);
+  const discountedPrice =
+    Number(product.discount) > 0
+      ? (Number(product.price) * (1 - Number(product.discount) / 100)).toFixed(
+          2
+        )
+      : Number(product.price).toFixed(2);
+
+  const getAvailableQuantity = () => {
+    if (selectedVariant !== null && selectedColor !== null) {
+      return (
+        product.variants[selectedVariant]?.attributes[selectedColor]
+          ?.quantity || 0
+      );
+    }
+    return Number(product.totalQuantity) || 0;
   };
 
-  if (isLoading || !product) return <Loader />;
+  const getSelectedVariantInfo = () => {
+    if (selectedVariant !== null) {
+      const variant = product.variants[selectedVariant];
+      const color =
+        selectedColor !== null ? variant?.attributes[selectedColor] : null;
+      return {
+        variantName: variant?.name,
+        colorValue: color?.value,
+        availableQuantity: color?.quantity || Number(product.totalQuantity),
+      };
+    }
+    return {
+      variantName: undefined,
+      colorValue: undefined,
+      availableQuantity: Number(product.totalQuantity),
+    };
+  };
 
-  // Combine main image with optional images for the gallery
-  const allImages = [
-    product.productImage.url,
-    ...product.optionalImages.map((img) => img.photo.url),
-  ];
+  const handleAddToCart = (formData: FieldValues) => {
+    const variantInfo = getSelectedVariantInfo();
+
+    // Validate selection if variants exist
+    if (product.variants && product.variants.length > 0) {
+      if (selectedVariant === null) {
+        setSnackbar({
+          open: true,
+          message: "Please select a size",
+          severity: "error",
+        });
+        return;
+      }
+
+      if (selectedColor === null) {
+        setSnackbar({
+          open: true,
+          message: "Please select a color",
+          severity: "error",
+        });
+        return;
+      }
+    }
+
+    // Check stock availability
+    if (quantity > variantInfo.availableQuantity) {
+      setSnackbar({
+        open: true,
+        message: "Selected quantity exceeds available stock",
+        severity: "error",
+      });
+      return;
+    }
+
+    const cartData: CartFormData = {
+      productId: product._id,
+      variantName: variantInfo.variantName,
+      colorValue: variantInfo.colorValue,
+      quantity,
+      price: Number(discountedPrice),
+    };
+
+    console.log("Adding to cart:", cartData);
+
+    setSnackbar({
+      open: true,
+      message: "Product added to cart successfully!",
+      severity: "success",
+    });
+  };
+
+  const handleAddToWishlist = (formData: FieldValues) => {
+    const wishlistData: WishlistFormData = {
+      productId: product._id,
+    };
+
+    console.log("Adding to wishlist:", wishlistData);
+
+    setIsWishlisted(!isWishlisted);
+    setSnackbar({
+      open: true,
+      message: isWishlisted
+        ? "Removed from wishlist"
+        : "Added to wishlist successfully!",
+      severity: "success",
+    });
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: product.title,
+        text: product.description,
+        url: window.location.href,
+      });
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(window.location.href);
+      setSnackbar({
+        open: true,
+        message: "Product link copied to clipboard!",
+        severity: "success",
+      });
+    }
+  };
 
   return (
     <Box
       sx={{
         background: "linear-gradient(135deg, #fefce8 0%, #ffe4e6 100%)",
+        minHeight: "100vh",
+        py: 4,
       }}
     >
-      <Box className="container m-auto p-4">
+      <Box className="container" sx={{ maxWidth: "1200px", mx: "auto", px: 2 }}>
         <Grid container spacing={4}>
           {/* Product Images */}
           <Grid size={{ xs: 12, md: 6 }}>
-            <Box sx={{ position: "sticky", top: 20 }}>
-              <Card sx={{ mb: 2, borderRadius: 2 }}>
-                {/* <CardMedia
-                  component="img"
-                  height="400"
-                  image={allImages[selectedImage]}
-                  alt={product.title}
-                  sx={{ objectFit: "cover" }}
-                /> */}
-              </Card>
-              <Grid container spacing={1}>
-                {allImages.map((image, index) => (
-                  <Grid size={{ xs: 3 }} key={index}>
+            <Box sx={{ position: "sticky", top: 10 }}>
+              {/* Main Image */}
+              {allImages.length > 0 && (
+                <Card sx={{ mb: 2, borderRadius: 2, overflow: "hidden" }}>
+                  <CardMedia
+                    component="img"
+                    height="500"
+                    image={allImages[selectedImage] || allImages[0]}
+                    alt={product.title}
+                    sx={{ objectFit: "cover" }}
+                  />
+                </Card>
+              )}
+
+              {/* Thumbnail Images */}
+              {allImages.length > 1 && (
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{ overflowX: "auto", pb: 1 }}
+                >
+                  {allImages.map((image, index) => (
                     <Card
+                      key={index}
                       sx={{
+                        minWidth: 80,
+                        height: 80,
                         cursor: "pointer",
-                        border: selectedImage === index ? 2 : 1,
-                        borderColor:
-                          selectedImage === index ? "primary.main" : "grey.300",
+                        border: selectedImage === index ? 2 : 0,
+                        borderColor: "primary.main",
                         borderRadius: 1,
+                        overflow: "hidden",
                       }}
                       onClick={() => setSelectedImage(index)}
                     >
-                      {/* <CardMedia
+                      <CardMedia
                         component="img"
                         height="80"
                         image={image}
                         alt={`${product.title} ${index + 1}`}
                         sx={{ objectFit: "cover" }}
-                      /> */}
+                      />
                     </Card>
-                  </Grid>
-                ))}
-              </Grid>
+                  ))}
+                </Stack>
+              )}
             </Box>
           </Grid>
 
           {/* Product Details */}
           <Grid size={{ xs: 12, md: 6 }}>
             <Box>
-              {/* Categories */}
-              <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
-                <Chip
-                  label={product.categories?.mainCategory?.name || "Men"}
-                  size="small"
-                  variant="outlined"
-                />
-                <Chip
-                  label={product.categories?.category?.name || "Clothing"}
-                  size="small"
-                  color="primary"
-                  variant="outlined"
-                />
-                <Chip
-                  label={product.categories?.subCategory?.name || "Jeans"}
-                  size="small"
-                  variant="outlined"
-                />
-                {product.status === "in-stock" && (
-                  <Chip label="In Stock" size="small" color="success" />
-                )}
-              </Stack>
-
               {/* Product Title */}
               <Typography
                 variant="h4"
                 component="h1"
-                sx={{ mb: 2, fontWeight: "bold" }}
+                sx={{ mb: 1, fontWeight: "bold" }}
               >
-                {product.title}
+                {product?.title}
               </Typography>
 
               {/* Subtitle */}
-              <Typography variant="subtitle1" sx={{ mb: 2 }}>
-                {product.subTitle}
-              </Typography>
+              {product?.subTitle && (
+                <Typography
+                  variant="subtitle1"
+                  color="text.secondary"
+                  sx={{ mb: 2 }}
+                >
+                  {product?.subTitle}
+                </Typography>
+              )}
 
               {/* Rating */}
               <Stack
                 direction="row"
                 alignItems="center"
                 spacing={2}
-                sx={{ mb: 2 }}
+                sx={{ mb: 3 }}
               >
-                <Rating value={product.rating || 0} precision={0.5} readOnly />
+                <Rating
+                  value={Number(product?.rating) || 0}
+                  precision={0.5}
+                  readOnly
+                />
                 <Typography variant="body2" color="text.secondary">
-                  {product.rating || 0} (0 reviews)
+                  {Number(product?.rating) || 0} (24 reviews)
                 </Typography>
               </Stack>
+
+              <Divider sx={{ mb: 3 }} />
 
               {/* Price */}
               <Stack
@@ -194,55 +332,106 @@ export default function ProductDetails({ slug }: { slug: string }) {
                   component="span"
                   sx={{ fontWeight: "bold", color: "primary.main" }}
                 >
-                  ${product.price}
+                  ${discountedPrice}
                 </Typography>
-                {product.discount > 0 && (
-                  <Chip
-                    label={`${product.discount}% OFF`}
-                    color="error"
-                    size="small"
-                  />
+                {Number(product?.discount) > 0 && (
+                  <>
+                    <Typography
+                      variant="h5"
+                      component="span"
+                      sx={{
+                        textDecoration: "line-through",
+                        color: "text.secondary",
+                      }}
+                    >
+                      ${Number(product?.price).toFixed(2)}
+                    </Typography>
+                    <Chip
+                      label={`${product?.discount}% OFF`}
+                      color="error"
+                      size="small"
+                    />
+                  </>
                 )}
               </Stack>
 
               {/* Description */}
-              <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.6 }}>
-                {product.description}
+              <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.7 }}>
+                {product?.description}
               </Typography>
 
               {/* Variant Selection */}
-              {product.variants?.length > 0 && (
+              {product?.variants && product?.variants?.length > 0 && (
                 <Box sx={{ mb: 3 }}>
-                  <Typography variant="h6" sx={{ mb: 1 }}>
-                    Variants
+                  <Typography variant="h6" sx={{ mb: 2 }}>
+                    Size
                   </Typography>
-                  <Stack direction="row" spacing={1} flexWrap="wrap">
-                    {product.variants.map((variant) => (
+                  <Stack direction="row" spacing={1} sx={{ mb: 3 }}>
+                    {product.variants.map((variant, index) => (
                       <Button
-                        key={variant.name}
+                        key={index}
                         variant={
-                          selectedVariant?.name === variant.name
-                            ? "contained"
-                            : "outlined"
+                          selectedVariant === index ? "contained" : "outlined"
                         }
                         onClick={() => {
-                          setSelectedVariant(variant);
-                          setQuantity(1); // Reset quantity when variant changes
+                          setSelectedVariant(index);
+                          setSelectedColor(null);
                         }}
-                        size="small"
-                        sx={{ minWidth: 50, mb: 1 }}
+                        sx={{ minWidth: 50 }}
                       >
-                        {variant.name.toUpperCase()} (
-                        {variant.attributes[0].value})
+                        {variant?.name?.toUpperCase()}
                       </Button>
                     ))}
                   </Stack>
+
+                  {/* Color Selection */}
+                  {selectedVariant !== null &&
+                    product?.variants[selectedVariant]?.attributes && (
+                      <Box sx={{ mb: 2 }}>
+                        <Typography variant="h6" sx={{ mb: 1 }}>
+                          Color
+                        </Typography>
+                        <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
+                          {product.variants[selectedVariant].attributes.map(
+                            (attr, index) => (
+                              <Button
+                                style={{
+                                  backgroundColor: attr?.value,
+                                }}
+                                key={index}
+                                
+                                variant="contained"
+                                onClick={() => setSelectedColor(index)}
+                                sx={{ textTransform: "capitalize" }}
+                                disabled={attr.quantity === 0 }
+                              >
+                                {attr?.value}
+                                {attr?.quantity === 0 && " (Out of Stock)"}
+                              </Button>
+                            )
+                          )}
+                        </Stack>
+                        {selectedColor !== null && (
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ mt: 1 }}
+                          >
+                            Available:{" "}
+                            {product.variants[selectedVariant].attributes[
+                              selectedColor
+                            ]?.quantity || 0}{" "}
+                            items
+                          </Typography>
+                        )}
+                      </Box>
+                    )}
                 </Box>
               )}
 
               {/* Quantity Selector */}
-              <Box sx={{ mb: 3 }}>
-                <Typography variant="h6" sx={{ mb: 1 }}>
+              <Box sx={{ mb: 4 }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>
                   Quantity
                 </Typography>
                 <Stack direction="row" alignItems="center" spacing={1}>
@@ -256,43 +445,65 @@ export default function ProductDetails({ slug }: { slug: string }) {
                     value={quantity}
                     size="small"
                     sx={{ width: 80 }}
-                    inputProps={{ style: { textAlign: "center" } }}
-                    disabled
+                    inputProps={{
+                      style: { textAlign: "center" },
+                      min: 1,
+                      max: getAvailableQuantity(),
+                    }}
+                    type="number"
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      if (value >= 1 && value <= getAvailableQuantity()) {
+                        setQuantity(value);
+                      }
+                    }}
                   />
                   <IconButton
                     onClick={() => handleQuantityChange(1)}
-                    disabled={
-                      quantity >=
-                      (selectedVariant?.attributes?.[0]?.quantity ||
-                        product.totalQuantity)
-                    }
+                    disabled={quantity >= getAvailableQuantity()}
                   >
                     <Add />
                   </IconButton>
                   <Typography variant="body2" color="text.secondary">
-                    (
-                    {selectedVariant?.attributes?.[0]?.quantity ||
-                      product.totalQuantity}{" "}
-                    available)
+                    {getAvailableQuantity()} available
                   </Typography>
                 </Stack>
               </Box>
 
               {/* Action Buttons */}
-              <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
-                <Button
-                  variant="contained"
-                  size="large"
-                  startIcon={<ShoppingCart />}
-                  sx={{ flex: 1 }}
-                  disabled={product.status !== "in-stock"}
-                >
-                  Add to Cart
-                </Button>
-                <IconButton color="primary" size="large">
-                  <FavoriteBorder />
-                </IconButton>
-                <IconButton color="primary" size="large">
+              <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+                {/* Add to Cart Form */}
+                <ReusableForm onSubmit={handleAddToCart}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                    startIcon={<ShoppingCart />}
+                    sx={{ flex: 1 }}
+                    disabled={
+                      product.status !== "in-stock" ||
+                      getAvailableQuantity() === 0
+                    }
+                  >
+                    Add to Cart
+                  </Button>
+                </ReusableForm>
+
+                {/* Add to Wishlist Form */}
+                <ReusableForm onSubmit={handleAddToWishlist}>
+                  <IconButton
+                    type="submit"
+                    color="primary"
+                    size="large"
+                    sx={{
+                      color: isWishlisted ? "error.main" : "primary.main",
+                    }}
+                  >
+                    {isWishlisted ? <Favorite /> : <FavoriteBorder />}
+                  </IconButton>
+                </ReusableForm>
+
+                <IconButton color="primary" size="large" onClick={handleShare}>
                   <Share />
                 </IconButton>
               </Stack>
@@ -321,7 +532,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
                     </Typography>
                   </Paper>
                 </Grid>
-                <Grid ize={{ xs: 4 }}>
+                <Grid size={{ xs: 4 }}>
                   <Paper sx={{ p: 2, textAlign: "center" }}>
                     <Refresh color="primary" sx={{ mb: 1 }} />
                     <Typography variant="body2" fontWeight="bold">
@@ -331,133 +542,24 @@ export default function ProductDetails({ slug }: { slug: string }) {
                   </Paper>
                 </Grid>
               </Grid>
-
-              {/* Product Code */}
-              <Typography variant="body2" color="text.secondary">
-                Product Code: {product.productCode}
-              </Typography>
             </Box>
           </Grid>
         </Grid>
 
-        {/* Product Details Tabs */}
-        <Box sx={{ mt: 6 }}>
-          <Paper sx={{ borderRadius: 2 }}>
-            <Tabs
-              value={tabValue}
-              onChange={handleTabChange}
-              aria-label="product details tabs"
-            >
-              <Tab label="Description" />
-              <Tab label="Details" />
-            </Tabs>
-
-            <TabPanel value={tabValue} index={0}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Product Description
-              </Typography>
-              <Typography variant="body1">
-                {product.description || "No description available."}
-              </Typography>
-            </TabPanel>
-
-            <TabPanel value={tabValue} index={1}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Product Details
-              </Typography>
-              <Box sx={{ mb: 2 }}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="body1" fontWeight="medium">
-                    Status
-                  </Typography>
-                  <Typography variant="body1" textTransform="capitalize">
-                    {product.status}
-                  </Typography>
-                </Stack>
-                <Divider sx={{ mt: 1 }} />
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="body1" fontWeight="medium">
-                    Main Category
-                  </Typography>
-                  <Typography variant="body1">
-                    {product.categories?.mainCategory?.name || "N/A"}
-                  </Typography>
-                </Stack>
-                <Divider sx={{ mt: 1 }} />
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="body1" fontWeight="medium">
-                    Category
-                  </Typography>
-                  <Typography variant="body1">
-                    {product.categories?.category?.name || "N/A"}
-                  </Typography>
-                </Stack>
-                <Divider sx={{ mt: 1 }} />
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="body1" fontWeight="medium">
-                    Subcategory
-                  </Typography>
-                  <Typography variant="body1">
-                    {product.categories?.subCategory?.name || "N/A"}
-                  </Typography>
-                </Stack>
-                <Divider sx={{ mt: 1 }} />
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="body1" fontWeight="medium">
-                    Product Placement
-                  </Typography>
-                  <Typography variant="body1" textTransform="capitalize">
-                    {product.productPlace}
-                  </Typography>
-                </Stack>
-                <Divider sx={{ mt: 1 }} />
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="body1" fontWeight="medium">
-                    Created At
-                  </Typography>
-                  <Typography variant="body1">
-                    {new Date(product.createdAt).toLocaleDateString()}
-                  </Typography>
-                </Stack>
-                <Divider sx={{ mt: 1 }} />
-              </Box>
-            </TabPanel>
-          </Paper>
-        </Box>
+        {/* Snackbar for notifications */}
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000}
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            severity={snackbar.severity}
+            onClose={() => setSnackbar({ ...snackbar, open: false })}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </Box>
     </Box>
   );

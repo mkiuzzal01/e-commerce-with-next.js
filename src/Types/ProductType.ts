@@ -48,3 +48,30 @@ export type TProduct = {
   productImage: TImage;
   isDeleted: boolean;
 };
+
+export type TCartItem = {
+  _id: string;
+  title: string;
+  slug?: string;
+  productImage: string;
+  price: number;
+  discount: number;
+  quantity: number;
+  selectedVariant?: {
+    name: string;
+    attribute: {
+      value: string;
+      quantity: number;
+    };
+  };
+};
+
+export type TWishlistItem = {
+  _id: string;
+  title: string;
+  slug?: string;
+  productImage: string;
+  price: number;
+  discount: number;
+};
+

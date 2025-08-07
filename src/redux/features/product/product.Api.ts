@@ -19,7 +19,7 @@ const ProductApi = baseApi.injectEndpoints({
         url: `/product/single-product/${slug}`,
         method: "GET",
       }),
-      providesTags: ["product"],
+      providesTags: ["view-product"],
     }),
 
     updateProduct: builder.mutation({
@@ -28,7 +28,7 @@ const ProductApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["allProduct", "product"],
+      invalidatesTags: ["update-product"],
     }),
 
     allProductByKeyWord: builder.query({
