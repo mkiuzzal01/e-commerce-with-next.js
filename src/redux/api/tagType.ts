@@ -1,7 +1,9 @@
 export const tagTypes = [
   "allMainCategory",
   "single-main-category",
+  "all-category",
   "single-category",
+  "all-sub-category",
   "single-sub-category",
   "category",
   "allContent",

@@ -6,7 +6,7 @@ type PageProps = {
   };
 };
 
-export default function Page({ params }: PageProps) {
-  const { prams, sub_slug } = params;
+export default async function Page({ params }: PageProps) {
+  const { prams, sub_slug } = await params;
   return <SubCategoryProducts params={{ prams, sub_slug }} />;
 }

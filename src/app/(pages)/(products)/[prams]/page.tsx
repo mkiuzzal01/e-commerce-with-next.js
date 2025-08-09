@@ -6,6 +6,7 @@ type PageProps = {
   };
 };
 
-export default function Page({ params }: PageProps) {
-  return <MainCategoryProducts prams={params?.prams} />;
+export default async function Page({ params }: PageProps) {
+  const { prams } = await params;
+  return <MainCategoryProducts prams={prams} />;
 }

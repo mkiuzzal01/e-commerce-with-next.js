@@ -8,7 +8,6 @@ type PageProps = {
 
 export default function Page({ params }: PageProps) {
   const { id } = params;
-
   return (
     <div>
       <ProductDetails slug={id} />

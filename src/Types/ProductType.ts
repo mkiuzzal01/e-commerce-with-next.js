@@ -75,3 +75,8 @@ export type TWishlistItem = {
   discount: number;
 };
 
+export type TOptions = {
+  label:string;
+  value:string;
+}
+

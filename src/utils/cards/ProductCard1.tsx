@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
-import React from "react";
+import { useDiscount } from "@/lib/useDiscount";
 import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
@@ -12,7 +11,7 @@ export type TProduct = {
   name: string;
   image?: any;
   price: number | string;
-  originalPrice: number | string;
+  discount: number | string;
 };
 
 type ProductCardProps = {
@@ -21,6 +20,9 @@ type ProductCardProps = {
 };
 
 const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
+  const { originalPrice, finalPrice, discountAmount, isDiscounted } =
+    useDiscount(product.price, product.discount);
+
   return (
     <Card
       sx={{
@@ -45,6 +47,29 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
           className="object-cover transition-transform duration-500 hover:scale-105"
         />
 
+        {/* Discount badge */}
+        {isDiscounted && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: 12,
+              left: 12,
+              background: "linear-gradient(45deg, #ef4444, #f97316)",
+              color: "white",
+              fontWeight: "bold",
+              px: 1.5,
+              py: 0.5,
+              borderRadius: 1,
+              fontSize: "0.85rem",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+            }}
+          >
+            {product.discount < 100
+              ? `-${product.discount}%`
+              : `Save ৳${discountAmount.toLocaleString()}`}
+          </Box>
+        )}
+
         {/* Overlay */}
         <Box
           sx={{
@@ -65,9 +90,7 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
                 fontSize: "16px",
                 fontWeight: "bold",
                 textTransform: "uppercase",
-                ":hover": {
-                  color: "orange",
-                },
+                ":hover": { color: "orange" },
                 mb: 1,
               }}
             >
@@ -75,24 +98,28 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
             </Typography>
           </Link>
 
+          {/* Price display */}
           <Stack direction="row" spacing={1} alignItems="center">
+            {isDiscounted && (
+              <Typography
+                sx={{
+                  color: "rgba(255,255,255,0.7)",
+                  textDecoration: "line-through",
+                  fontSize: "14px",
+                }}
+              >
+                ৳{originalPrice.toLocaleString()}
+              </Typography>
+            )}
             <Typography
               fontWeight="bold"
               sx={{ color: "var(--color-brand-heading)" }}
             >
-              ৳{product.price.toLocaleString()}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                textDecoration: "line-through",
-                color: "rgba(255,255,255,0.7)",
-              }}
-            >
-              ৳{product.originalPrice.toLocaleString()}
+              ৳{finalPrice.toLocaleString()}
             </Typography>
           </Stack>
 
+          {/* Buttons */}
           <Stack direction="row" spacing={1} mt={2}>
             <Button
               fullWidth

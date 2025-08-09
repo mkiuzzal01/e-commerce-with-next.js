@@ -47,7 +47,6 @@ const ReusablePagination: React.FC<ReusablePaginationProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  if (totalPages <= 1) return null;
 
   return (
     <Box

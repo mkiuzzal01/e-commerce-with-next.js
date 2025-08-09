@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useAllSubCategoryQuery } from "@/redux/features/category/category.Api";
 import { useGetAllVariantsQuery } from "@/redux/variant/variant.Api";
 import { TOptions } from "@/Types/ProductType";
 import { Search } from "@mui/icons-material";
@@ -18,11 +17,9 @@ import {
 import { ChevronDown } from "lucide-react";
 import { useMemo } from "react";
 
-type CategoryProductFilteringFormProps = {
+type FilteringFormProps = {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
-  category: string;
-  setCategory: React.Dispatch<React.SetStateAction<string>>;
   size: string;
   setSize: React.Dispatch<React.SetStateAction<string>>;
   color: string;
@@ -31,29 +28,17 @@ type CategoryProductFilteringFormProps = {
   setPriceRange: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
-export default function CategoryProductFilteringForm({
+export default function FilteringForm({
   search,
   setSearch,
-  category,
-  setCategory,
   size,
   setSize,
   color,
   setColor,
   priceRange,
   setPriceRange,
-}: CategoryProductFilteringFormProps) {
-  const { data: subCategoryData } = useAllSubCategoryQuery({});
+}: FilteringFormProps) {
   const { data: variantData } = useGetAllVariantsQuery({});
-
-  const subCategories = useMemo(
-    () =>
-      subCategoryData?.data?.result?.map((subCat: any) => ({
-        label: subCat.name,
-        value: subCat._id,
-      })) || [],
-    [subCategoryData]
-  );
 
   const sizes = useMemo(
     () =>
@@ -82,13 +67,6 @@ export default function CategoryProductFilteringForm({
   }, [variantData]);
 
   const filterFields = [
-    {
-      label: "Category",
-      value: category,
-      options: subCategories,
-      field: "category",
-      setter: setCategory,
-    },
     {
       label: "Size",
       value: size,
@@ -156,7 +134,7 @@ export default function CategoryProductFilteringForm({
         {/* Dropdown Filters */}
         <Grid container spacing={3} mb={4}>
           {filterFields.map(({ label, value, options, setter, field }) => (
-            <Grid size={{ xs: 12, md: 4 }} key={field}>
+            <Grid size={{ xs: 12, md: 6 }} key={field}>
               <Typography
                 variant="body2"
                 fontWeight={600}

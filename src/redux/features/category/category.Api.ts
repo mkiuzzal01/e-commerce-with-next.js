@@ -20,12 +20,27 @@ const categoryApi = baseApi.injectEndpoints({
       }),
       providesTags: ["single-main-category"],
     }),
+    allCategory: builder.query({
+      query: () => ({
+        url: `/category/all-category`,
+        method: "GET",
+      }),
+      providesTags: ["all-category"],
+    }),
     singleCategory: builder.query({
       query: (slug: string) => ({
         url: `/category/single-category/${slug}`,
         method: "GET",
       }),
       providesTags: ["single-category"],
+    }),
+
+    allSubCategory: builder.query({
+      query: () => ({
+        url: `/category/all-sub-category`,
+        method: "GET",
+      }),
+      providesTags: ["all-sub-category"],
     }),
     singleSubCategory: builder.query({
       query: (slug: string) => ({
@@ -40,6 +55,8 @@ const categoryApi = baseApi.injectEndpoints({
 export const {
   useAllMainCategoryQuery,
   useSingleMainCategoryQuery,
+  useAllCategoryQuery,
   useSingleCategoryQuery,
+  useAllSubCategoryQuery,
   useSingleSubCategoryQuery,
 } = categoryApi;

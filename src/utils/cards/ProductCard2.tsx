@@ -93,7 +93,7 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
           <Rating
             size="small"
             name="product-rating"
-            value={rating}
+          
             readOnly
             sx={{ color: "var(--color-brand-primary)" }}
           />

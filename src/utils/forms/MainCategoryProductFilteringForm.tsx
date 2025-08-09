@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useAllSubCategoryQuery } from "@/redux/features/category/category.Api";
+import { useAllCategoryQuery } from "@/redux/features/category/category.Api";
 import { useGetAllVariantsQuery } from "@/redux/variant/variant.Api";
 import { TOptions } from "@/Types/ProductType";
 import { Search } from "@mui/icons-material";
@@ -18,7 +18,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import { useMemo } from "react";
 
-type CategoryProductFilteringFormProps = {
+type MainCategoryProductFilteringFormProps = {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   category: string;
@@ -31,7 +31,7 @@ type CategoryProductFilteringFormProps = {
   setPriceRange: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
-export default function CategoryProductFilteringForm({
+export default function MainCategoryProductFilteringForm({
   search,
   setSearch,
   category,
@@ -42,17 +42,17 @@ export default function CategoryProductFilteringForm({
   setColor,
   priceRange,
   setPriceRange,
-}: CategoryProductFilteringFormProps) {
-  const { data: subCategoryData } = useAllSubCategoryQuery({});
+}: MainCategoryProductFilteringFormProps) {
+  const { data: categoryData } = useAllCategoryQuery({});
   const { data: variantData } = useGetAllVariantsQuery({});
 
-  const subCategories = useMemo(
+  const categories = useMemo(
     () =>
-      subCategoryData?.data?.result?.map((subCat: any) => ({
-        label: subCat.name,
-        value: subCat._id,
+      categoryData?.data?.result?.map((cat: any) => ({
+        label: cat.name,
+        value: cat._id,
       })) || [],
-    [subCategoryData]
+    [categoryData]
   );
 
   const sizes = useMemo(
@@ -85,7 +85,7 @@ export default function CategoryProductFilteringForm({
     {
       label: "Category",
       value: category,
-      options: subCategories,
+      options: categories,
       field: "category",
       setter: setCategory,
     },
