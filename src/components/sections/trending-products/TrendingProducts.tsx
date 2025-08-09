@@ -64,12 +64,13 @@ export default function TrendingProducts() {
               {trendingProducts.map((product) => (
                 <SwiperSlide key={product?._id}>
                   <ProductCard
+                    viewLink={`/trending-products/${product?.slug}`}
                     product={{
                       id: String(product?._id),
                       name: product?.title,
                       image: product?.productImage?.photo?.url,
                       price: product?.price,
-                      originalPrice: product?.price,
+                      discount: product?.discount,
                     }}
                   />
                 </SwiperSlide>

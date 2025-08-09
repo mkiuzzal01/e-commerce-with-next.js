@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
 import React, { useRef, useState } from "react";
 import { Box, Tabs, Tab, Typography } from "@mui/material";
 import { Sparkles } from "lucide-react";
@@ -10,24 +10,30 @@ import ReusableCarousel, {
 import { SwiperSlide } from "swiper/react";
 import CarouselArrows from "@/components/Shared/CarouselArrows";
 import ProductCard2 from "@/utils/cards/ProductCard2";
-import { useAllProductByKeyWordQuery } from "@/redux/features/product/product.Api";
 import Loader from "@/utils/Loader";
 import { TProduct } from "@/Types/ProductType";
-
-const categories = ["All", "Women", "Men", "Kids"];
+import { useAllMainCategoryQuery } from "@/redux/features/category/category.Api";
+import { useAllProductByKeyWordQuery } from "@/redux/features/product/product.Api";
 
 export default function NewArrivals() {
-  const [selected, setSelected] = useState("All");
+  const { data, isLoading: isMainCategoryLoading } = useAllMainCategoryQuery(
+    {}
+  );
+  const [selected, setSelected] = useState<string>("");
   const carouselRef = useRef<CarouselRef>(null);
 
-  const { data, isLoading } = useAllProductByKeyWordQuery({
+  const mainCategory = data?.data?.result || [];
+
+  const { data: products, isLoading } = useAllProductByKeyWordQuery({
     queryParams: {},
-    headerParams: { params: {} },
+    headerParams: {
+      params: selected ? { "categories.mainCategory": selected } : {},
+    },
   });
 
-  const newArrivalProducts: TProduct[] = data?.data?.result || [];
+  const newArrivalProducts: TProduct[] = products?.data?.result || [];
 
-  if (isLoading) return <Loader />;
+  if (isLoading || isMainCategoryLoading) return <Loader />;
 
   return (
     <Box className="py-6 bg-gradient-to-br from-orange-50 via-white to-red-50">
@@ -65,8 +71,12 @@ export default function NewArrivals() {
                 },
               }}
             >
-              {categories.map((cat) => (
-                <Tab key={cat} label={cat} value={cat} />
+              {mainCategory.map((cat: any) => (
+                <Tab
+                  key={cat?._id}
+                  label={cat?.name.toUpperCase()}
+                  value={cat?._id}
+                />
               ))}
             </Tabs>
           </Box>
@@ -77,7 +87,6 @@ export default function NewArrivals() {
           />
         </Box>
 
-        {/* Conditional rendering based on product array */}
         {newArrivalProducts.length === 0 ? (
           <Box className="text-center py-12">
             <Typography className="text-gray-500 text-lg font-medium">

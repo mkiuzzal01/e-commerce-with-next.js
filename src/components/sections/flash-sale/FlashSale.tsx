@@ -110,14 +110,15 @@ export default function FlashSale() {
               className="pb-12"
             >
               {flashSaleProducts.map((product) => (
-                <SwiperSlide key={product._id}>
+                <SwiperSlide key={product?._id}>
                   <ProductCard
+                    viewLink={`/flash-sale/${product?.slug}`}
                     product={{
-                      id: String(product._id),
-                      name: product.title,
+                      id: product?._id,
+                      name: product?.title,
                       image: product?.productImage?.photo?.url,
-                      price: product.price,
-                      originalPrice: product.price,
+                      price: product?.price,
+                      discount: product?.discount,
                     }}
                   />
                 </SwiperSlide>

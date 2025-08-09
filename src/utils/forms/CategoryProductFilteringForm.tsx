@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAllSubCategoryQuery } from "@/redux/features/category/category.Api";
-import { useGetAllVariantsQuery } from "@/redux/variant/variant.Api";
+import { useGetAllVariantsQuery } from "@/redux/features/variant/variant.Api";
 import { TOptions } from "@/Types/ProductType";
 import { Search } from "@mui/icons-material";
 import {

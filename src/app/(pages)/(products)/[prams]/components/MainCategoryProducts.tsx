@@ -9,7 +9,7 @@ import { useAllProductByKeyWordQuery } from "@/redux/features/product/product.Ap
 import Loader from "@/utils/Loader";
 import { useSingleMainCategoryQuery } from "@/redux/features/category/category.Api";
 import MainCategoryProductFilteringForm from "@/utils/forms/MainCategoryProductFilteringForm";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function MainCategoryProducts({ prams }: { prams: string }) {
   const [page, setPage] = useState(1);
@@ -38,24 +38,13 @@ export default function MainCategoryProducts({ prams }: { prams: string }) {
   const { data, isLoading } = useAllProductByKeyWordQuery({
     queryParams,
     headerParams: {
-      params: {},
+      params: { "categories.mainCategory": singleMainCategoryData?.data?._id,},
     },
   });
 
   const mainCateProducts: TProduct[] = data?.data?.result || [];
   const meta = data?.data?.meta || { totalPages: 1 };
   const totalPages = meta.totalPages || 1;
-
-  useEffect(() => {
-    setPage(1);
-  }, [
-    search,
-    category,
-    size,
-    color,
-    priceRange,
-    singleMainCategoryData?.data?._id,
-  ]);
 
   if (isLoading || singleMainCategoryIsLoading) return <Loader />;
 
