@@ -14,8 +14,6 @@ import {
   TextField,
   Grid,
   Divider,
-  Alert,
-  Snackbar,
 } from "@mui/material";
 import {
   ShoppingCart,
@@ -27,12 +25,14 @@ import {
   Security,
   Refresh,
   Favorite,
+  Check,
 } from "@mui/icons-material";
 import { useSingleProductBySlugQuery } from "@/redux/features/product/product.Api";
 import Loader from "@/utils/Loader";
 import { TProduct } from "@/Types/ProductType";
 import ReusableForm from "./ReusableForm";
-import { FieldValues } from "react-hook-form";
+import { useToast } from "@/utils/tost-alert/ToastProvider";
+import { useDiscount } from "@/lib/useDiscount";
 
 type CartFormData = {
   productId: string;
@@ -53,15 +53,10 @@ export default function ProductDetails({ slug }: { slug: string }) {
   const [selectedColor, setSelectedColor] = useState<number | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "success" as "success" | "error",
-  });
+  const { showToast } = useToast();
 
   const product: TProduct = data?.data;
-
-  if (isLoading) return <Loader />;
+  const { finalPrice } = useDiscount(product?.price, product?.discount);
 
   if (!product) {
     return (
@@ -80,7 +75,6 @@ export default function ProductDetails({ slug }: { slug: string }) {
     );
   }
 
-  // Create array of all images (main + optional)
   const allImages = [
     product.productImage?.photo?.url,
     ...(product.optionalImages?.map((img) => img.photo?.url) || []),
@@ -95,13 +89,6 @@ export default function ProductDetails({ slug }: { slug: string }) {
       setQuantity(newQuantity);
     }
   };
-
-  const discountedPrice =
-    Number(product.discount) > 0
-      ? (Number(product.price) * (1 - Number(product.discount) / 100)).toFixed(
-          2
-        )
-      : Number(product.price).toFixed(2);
 
   const getAvailableQuantity = () => {
     if (selectedVariant !== null && selectedColor !== null) {
@@ -131,92 +118,83 @@ export default function ProductDetails({ slug }: { slug: string }) {
     };
   };
 
-  const handleAddToCart = (formData: FieldValues) => {
+  const handleAddToCart = () => {
     const variantInfo = getSelectedVariantInfo();
-
-    // Validate selection if variants exist
     if (product.variants && product.variants.length > 0) {
       if (selectedVariant === null) {
-        setSnackbar({
-          open: true,
-          message: "Please select a size",
-          severity: "error",
+        showToast({
+          message: "Please select a variant",
+          type: "error",
         });
         return;
       }
 
       if (selectedColor === null) {
-        setSnackbar({
-          open: true,
+        showToast({
           message: "Please select a color",
-          severity: "error",
+          type: "error",
         });
         return;
       }
     }
-
-    // Check stock availability
     if (quantity > variantInfo.availableQuantity) {
-      setSnackbar({
-        open: true,
+      showToast({
         message: "Selected quantity exceeds available stock",
-        severity: "error",
+        type: "error",
       });
       return;
     }
 
     const cartData: CartFormData = {
-      productId: product._id,
-      variantName: variantInfo.variantName,
-      colorValue: variantInfo.colorValue,
+      productId: product?._id,
+      variantName: variantInfo?.variantName,
+      colorValue: variantInfo?.colorValue,
       quantity,
-      price: Number(discountedPrice),
+      price: finalPrice,
     };
 
     console.log("Adding to cart:", cartData);
 
-    setSnackbar({
-      open: true,
+    showToast({
       message: "Product added to cart successfully!",
-      severity: "success",
+      type: "success",
     });
   };
 
-  const handleAddToWishlist = (formData: FieldValues) => {
+  const handleAddToWishlist = () => {
     const wishlistData: WishlistFormData = {
-      productId: product._id,
+      productId: product?._id,
     };
 
     console.log("Adding to wishlist:", wishlistData);
 
     setIsWishlisted(!isWishlisted);
-    setSnackbar({
-      open: true,
+    showToast({
       message: isWishlisted
         ? "Removed from wishlist"
         : "Added to wishlist successfully!",
-      severity: "success",
+      type: "success",
     });
   };
 
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: product.title,
-        text: product.description,
-        url: window.location.href,
+        title: product?.title,
+        text: product?.description,
+        url: window?.location?.href,
       });
     } else {
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(window.location.href);
-      setSnackbar({
-        open: true,
+      showToast({
         message: "Product link copied to clipboard!",
-        severity: "success",
+        type: "success",
       });
     }
   };
 
+  if (isLoading) return <Loader />;
   return (
     <Box
       sx={{
@@ -332,7 +310,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
                   component="span"
                   sx={{ fontWeight: "bold", color: "primary.main" }}
                 >
-                  ${discountedPrice}
+                  {finalPrice}
                 </Typography>
                 {Number(product?.discount) > 0 && (
                   <>
@@ -385,47 +363,47 @@ export default function ProductDetails({ slug }: { slug: string }) {
                   </Stack>
 
                   {/* Color Selection */}
-                  {selectedVariant !== null &&
-                    product?.variants[selectedVariant]?.attributes && (
-                      <Box sx={{ mb: 2 }}>
-                        <Typography variant="h6" sx={{ mb: 1 }}>
-                          Color
-                        </Typography>
-                        <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
-                          {product.variants[selectedVariant].attributes.map(
-                            (attr, index) => (
-                              <Button
-                                style={{
-                                  backgroundColor: attr?.value,
-                                }}
-                                key={index}
-                                
-                                variant="contained"
-                                onClick={() => setSelectedColor(index)}
-                                sx={{ textTransform: "capitalize" }}
-                                disabled={attr.quantity === 0 }
-                              >
-                                {attr?.value}
-                                {attr?.quantity === 0 && " (Out of Stock)"}
-                              </Button>
-                            )
-                          )}
-                        </Stack>
-                        {selectedColor !== null && (
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{ mt: 1 }}
-                          >
-                            Available:{" "}
-                            {product.variants[selectedVariant].attributes[
-                              selectedColor
-                            ]?.quantity || 0}{" "}
-                            items
-                          </Typography>
+                  {selectedVariant !== null && (
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="h6" sx={{ mb: 1 }}>
+                        Color
+                      </Typography>
+                      <Stack direction="row" spacing={1}>
+                        {product.variants[selectedVariant].attributes.map(
+                          (attr, index) => (
+                            <Box
+                              key={index}
+                              onClick={() => setSelectedColor(index)}
+                              sx={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: "50%",
+                                backgroundColor: attr?.value,
+                                border:
+                                  selectedColor === index
+                                    ? "2px solid black"
+                                    : "1px solid #ccc",
+                                cursor: "pointer",
+                                position: "relative",
+                              }}
+                            >
+                              {selectedColor === index && (
+                                <Check
+                                  sx={{
+                                    color: "#fff",
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                  }}
+                                />
+                              )}
+                            </Box>
+                          )
                         )}
-                      </Box>
-                    )}
+                      </Stack>
+                    </Box>
+                  )}
                 </Box>
               )}
 
@@ -545,21 +523,6 @@ export default function ProductDetails({ slug }: { slug: string }) {
             </Box>
           </Grid>
         </Grid>
-
-        {/* Snackbar for notifications */}
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={3000}
-          onClose={() => setSnackbar({ ...snackbar, open: false })}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert
-            severity={snackbar.severity}
-            onClose={() => setSnackbar({ ...snackbar, open: false })}
-          >
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
       </Box>
     </Box>
   );

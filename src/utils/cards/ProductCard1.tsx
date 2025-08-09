@@ -4,7 +4,7 @@ import { useDiscount } from "@/lib/useDiscount";
 import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import AppLink from "../AppLink";
 
 export type TProduct = {
   id?: string;
@@ -83,7 +83,7 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
             p: 2,
           }}
         >
-          <Link href={viewLink || ""}>
+          <AppLink href={viewLink || ""}>
             <Typography
               sx={{
                 color: "var(--color-brand-heading)",
@@ -96,7 +96,7 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
             >
               {product?.name}
             </Typography>
-          </Link>
+          </AppLink>
 
           {/* Price display */}
           <Stack direction="row" spacing={1} alignItems="center">
@@ -138,7 +138,7 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
             >
               Add to Cart
             </Button>
-            <Link href={viewLink || ""}>
+            <AppLink href={viewLink || ""}>
               <Button
                 fullWidth
                 variant="contained"
@@ -153,7 +153,7 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
               >
                 View
               </Button>
-            </Link>
+            </AppLink>
           </Stack>
         </Box>
       </Box>

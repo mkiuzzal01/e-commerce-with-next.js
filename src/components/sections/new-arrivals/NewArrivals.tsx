@@ -19,15 +19,22 @@ export default function NewArrivals() {
   const { data, isLoading: isMainCategoryLoading } = useAllMainCategoryQuery(
     {}
   );
-  const [selected, setSelected] = useState<string>("");
+  const [selected, setSelected] = useState<string>("all"); // Default "ALL"
   const carouselRef = useRef<CarouselRef>(null);
 
   const mainCategory = data?.data?.result || [];
 
+  // Add ALL tab manually at the start
+  const tabs = [{ _id: "all", name: "All" }, ...mainCategory];
+
+  // Products query - no filter if "all"
   const { data: products, isLoading } = useAllProductByKeyWordQuery({
     queryParams: {},
     headerParams: {
-      params: selected ? { "categories.mainCategory": selected } : {},
+      params:
+        selected && selected !== "all"
+          ? { "categories.mainCategory": selected }
+          : {},
     },
   });
 
@@ -46,6 +53,7 @@ export default function NewArrivals() {
           alignment="center"
         />
 
+        {/* Tabs + Arrows */}
         <Box className="flex flex-col md:flex-row items-center justify-between mb-4">
           <Box display="flex" justifyContent="center">
             <Tabs
@@ -71,7 +79,7 @@ export default function NewArrivals() {
                 },
               }}
             >
-              {mainCategory.map((cat: any) => (
+              {tabs.map((cat) => (
                 <Tab
                   key={cat?._id}
                   label={cat?.name.toUpperCase()}
@@ -87,6 +95,7 @@ export default function NewArrivals() {
           />
         </Box>
 
+        {/* Product List */}
         {newArrivalProducts.length === 0 ? (
           <Box className="text-center py-12">
             <Typography className="text-gray-500 text-lg font-medium">
@@ -109,13 +118,14 @@ export default function NewArrivals() {
             }}
           >
             {newArrivalProducts.map((product) => (
-              <SwiperSlide key={product._id}>
+              <SwiperSlide key={product?._id}>
                 <ProductCard2
+                  viewLink={`/${selected}/${product?.slug}`}
                   product={{
-                    id: product._id,
-                    name: product.title,
-                    image: product.productImage?.photo?.url,
-                    price: product.price,
+                    id: product?._id,
+                    name: product?.title,
+                    image: product?.productImage?.photo?.url,
+                    price: product?.price,
                   }}
                 />
               </SwiperSlide>

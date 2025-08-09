@@ -1,23 +1,30 @@
 "use client";
 import React from "react";
-import { Box, Grid, Typography, IconButton } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  IconButton,
+  Link as MuiLink,
+} from "@mui/material";
 import { Facebook, Twitter, Instagram, YouTube } from "@mui/icons-material";
-import Link from "next/link";
-import { megaMenuData } from "../navbar/NavLinks";
-import logo from "../../../public/assets/logo/logo.png";
 import Image from "next/image";
+import logo from "../../../public/assets/logo/logo.png";
+import { useAllMainCategoryQuery } from "@/redux/features/category/category.Api";
+import { TNavLink } from "../navbar/TNavbar";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const { data, isLoading } = useAllMainCategoryQuery({});
+  const navLinks: TNavLink[] = data?.data?.result || [];
 
   return (
     <Box sx={{ bgcolor: "#111827", color: "white", pt: 6, pb: 3 }}>
-      <Box className="container mx-auto p-4">
+      <Box className="container mx-auto px-4">
         <Grid container spacing={3}>
-          {/* Brand & Social */}
-          <Grid size={{ xs: 12, md: 2 }}>
-            <Link href={"/"}>
-              <Box>
+          <Grid size={{ xs: 12, md: 3 }}>
+            <MuiLink href="/" underline="none" color="inherit">
+              <Box sx={{ mb: 2 }}>
                 <Image
                   src={logo}
                   alt="YourShop Logo"
@@ -26,35 +33,55 @@ export default function Footer() {
                   priority
                 />
               </Box>
-            </Link>
-          </Grid>
-
-          {/* Quick Navigation */}
-          {megaMenuData?.map((main, index) => (
-            <Grid size={{ xs: 12, md: 2 }} key={index}>
-              <Typography variant="subtitle1" gutterBottom>
-                {main.MainCategoryName}
-              </Typography>
-              {main.Category.map((cat, idx) => (
-                <Box key={idx} sx={{ mb: 1 }}>
-                  <Link href={cat.link}>{cat.categoryName}</Link>
-                </Box>
+            </MuiLink>
+            <Box>
+              {[Facebook, Twitter, Instagram, YouTube].map((Icon, idx) => (
+                <IconButton
+                  key={idx}
+                  color="inherit"
+                  size="large"
+                  sx={{ p: 1 }}
+                  aria-label={Icon.name || "social icon"}
+                  component="a"
+                  href="#"
+                >
+                  <Icon fontSize="medium" />
+                </IconButton>
               ))}
-            </Grid>
-          ))}
-
-          {/* Contact Info */}
-          <Grid size={{ xs: 12, md: 2 }}>
-            <Typography variant="subtitle1" gutterBottom>
+            </Box>
+          </Grid>
+          {!isLoading &&
+            navLinks.map((main, index) => (
+              <Grid size={{ xs: 6, md: 2 }} key={index}>
+                <Typography variant="subtitle1" gutterBottom fontWeight="bold">
+                  {main.name.toUpperCase()}
+                </Typography>
+                {main.category?.map((cat, idx) => (
+                  <Box key={idx} sx={{ mb: 1 }}>
+                    <MuiLink
+                      href={`/${main.slug}/category/${cat.slug}`}
+                      underline="hover"
+                      color="inherit"
+                    >
+                      {cat.name.charAt(0).toUpperCase() + cat.name.slice(1)}
+                    </MuiLink>
+                  </Box>
+                ))}
+              </Grid>
+            ))}
+          <Grid size={{ xs: 12, md: 3 }}>
+            <Typography variant="subtitle1" gutterBottom fontWeight="bold">
               Contact Us
             </Typography>
-            <Typography variant="body2">Email: support@yourshop.com</Typography>
-            <Typography variant="body2">Phone: +880-1234-567890</Typography>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              Email: support@yourshop.com
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              Phone: +880-1234-567890
+            </Typography>
             <Typography variant="body2">Address: Dhaka, Bangladesh</Typography>
           </Grid>
         </Grid>
-
-        {/* Bottom line */}
         <Box
           sx={{
             textAlign: "center",
@@ -63,24 +90,6 @@ export default function Footer() {
             pt: 2,
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {[Facebook, Twitter, Instagram, YouTube].map((Icon, idx) => (
-              <IconButton
-                key={idx}
-                color="inherit"
-                size="large"
-                sx={{ p: 1 }}
-              >
-                <Icon fontSize="medium" />
-              </IconButton>
-            ))}
-          </Box>
           <Typography variant="caption" color="grey.500">
             &copy; {year} YourShop. All rights reserved.
           </Typography>

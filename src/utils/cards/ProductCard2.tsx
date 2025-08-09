@@ -4,7 +4,7 @@ import React from "react";
 import { Box, Button, Card, Rating, Stack, Typography } from "@mui/material";
 import { ShoppingCart, Heart } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import AppLink from "../AppLink";
 
 export type TProduct = {
   id?: string;
@@ -16,12 +16,14 @@ export type TProduct = {
 };
 
 type ProductCard2Props = {
+  viewLink: string;
   product: TProduct;
   onAddToCart?: () => void;
   onWishlistToggle?: () => void;
 };
 
 const ProductCard2: React.FC<ProductCard2Props> = ({
+  viewLink,
   product,
   onAddToCart,
   onWishlistToggle,
@@ -69,7 +71,7 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
             borderTopRightRadius: 20,
           }}
         >
-          <Link href={`/men/${product?.id}`}>
+          <AppLink href={viewLink || ""}>
             <Typography
               variant="subtitle1"
               fontWeight="bold"
@@ -87,7 +89,7 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
             >
               {name}
             </Typography>
-          </Link>
+          </AppLink>
 
           {/* Rating */}
           <Rating
