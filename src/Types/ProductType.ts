@@ -27,6 +27,16 @@ export type TCategories = {
   subCategory?: string;
 };
 
+export type TReview = {
+  user: {
+    name: string;
+    profileImage: string;
+  };
+  rating: number;
+  comment: string;
+  createdAt: string;
+};
+
 export type TProduct = {
   _id: string;
   creatorId?: string;
@@ -34,11 +44,11 @@ export type TProduct = {
   slug?: string;
   title: string;
   subTitle?: string;
-  totalQuantity: number | string;
+  totalQuantity: number;
   variants: TProductVariant[];
-  price: number | string;
-  discount: number | string;
-  rating?: number | string;
+  price: number;
+  discount: number;
+  reviews: TReview[];
   categories: TCategories;
   description: string;
   status: TStatus;
@@ -51,12 +61,6 @@ export type TProduct = {
 
 export type TCartItem = {
   _id: string;
-  title: string;
-  slug?: string;
-  productImage: string;
-  price: number;
-  discount: number;
-  quantity: number;
   selectedVariant?: {
     name: string;
     attribute: {
@@ -68,15 +72,9 @@ export type TCartItem = {
 
 export type TWishlistItem = {
   _id: string;
-  title: string;
-  slug?: string;
-  productImage: string;
-  price: number;
-  discount: number;
 };
 
 export type TOptions = {
-  label:string;
-  value:string;
-}
-
+  label: string;
+  value: string;
+};

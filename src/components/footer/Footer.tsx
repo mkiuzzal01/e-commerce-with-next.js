@@ -70,9 +70,17 @@ export default function Footer() {
               </Grid>
             ))}
           <Grid size={{ xs: 12, md: 3 }}>
-            <Typography variant="subtitle1" gutterBottom fontWeight="bold">
+            <Typography
+              variant="subtitle1"
+              gutterBottom
+              fontWeight="bold"
+              sx={{
+                textTransform: "uppercase",
+              }}
+            >
               Contact Us
             </Typography>
+
             <Typography variant="body2" sx={{ mb: 0.5 }}>
               Email: support@yourshop.com
             </Typography>

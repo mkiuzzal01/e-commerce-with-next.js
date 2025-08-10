@@ -30,8 +30,12 @@ import TopBar from "./TopBar";
 import { useAllMainCategoryQuery } from "@/redux/features/category/category.Api";
 import Loader from "@/utils/Loader";
 import { TNavLink } from "./TNavbar";
+import { useAppSelector } from "@/redux/hooks";
+import { TCartItem, TWishlistItem } from "@/Types/ProductType";
 
 export default function Navbar() {
+  const wishlistItems: TWishlistItem[] = useAppSelector((state) => state?.wishlist?.items);
+  const cartItems: TCartItem[] = useAppSelector((state) => state?.cart?.items);
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isClosingMenu, setIsClosingMenu] = useState(false);
@@ -232,7 +236,7 @@ export default function Navbar() {
                       justifyContent: "center",
                     }}
                   >
-                    2
+                    {wishlistItems?.length}
                   </Box>
                 </IconButton>
               </AppLink>
@@ -261,7 +265,7 @@ export default function Navbar() {
                       justifyContent: "center",
                     }}
                   >
-                    3
+                    {cartItems?.length}
                   </Box>
                 </IconButton>
               </AppLink>
