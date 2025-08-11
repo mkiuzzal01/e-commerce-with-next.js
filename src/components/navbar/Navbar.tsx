@@ -32,9 +32,15 @@ import Loader from "@/utils/Loader";
 import { TNavLink } from "./TNavbar";
 import { useAppSelector } from "@/redux/hooks";
 import { TCartItem, TWishlistItem } from "@/Types/ProductType";
+import UserMenu from "@/utils/modal/UserInfoModal";
+import { userRouteLinks } from "./userRouteLinks";
+import { useUser } from "@/lib/useUser";
 
 export default function Navbar() {
-  const wishlistItems: TWishlistItem[] = useAppSelector((state) => state?.wishlist?.items);
+  const { user, userInfo, userComing } = useUser();
+  const wishlistItems: TWishlistItem[] = useAppSelector(
+    (state) => state?.wishlist?.items
+  );
   const cartItems: TCartItem[] = useAppSelector((state) => state?.cart?.items);
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -44,7 +50,7 @@ export default function Navbar() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const theme = useTheme();
   const { data, isLoading } = useAllMainCategoryQuery({});
-  const navLinks: TNavLink[] = data?.data?.result;
+  const navLinks: TNavLink[] = data?.data?.result || [];
 
   const handleMouseEnter = (index: number) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -88,7 +94,7 @@ export default function Navbar() {
     false
   );
 
-  if (isLoading) return <Loader />;
+  if (isLoading || userComing) return <Loader />;
   if (!navLinks) return null;
 
   return (
@@ -206,11 +212,23 @@ export default function Navbar() {
             </Box>
 
             <Stack direction="row" spacing={1.5} alignItems="center">
-              <Link href="/login" passHref>
-                <IconButton aria-label="User" size="large">
-                  <User size={20} />
-                </IconButton>
-              </Link>
+              {user !== null ? (
+                <UserMenu
+                  user={{
+                    name: `${userInfo?.name?.firstName || ""} ${
+                      userInfo?.name?.middleName || ""
+                    } ${userInfo?.name?.lastName || ""}`.trim(),
+                    image: userInfo?.profileImage,
+                  }}
+                  menuItems={userRouteLinks}
+                />
+              ) : (
+                <Link href="/login" passHref>
+                  <IconButton aria-label="User" size="large">
+                    <User size={20} />
+                  </IconButton>
+                </Link>
+              )}
 
               <AppLink href="/wishlist">
                 <IconButton

@@ -18,13 +18,23 @@ const authApi = baseApi.injectEndpoints({
     }),
     update: builder.mutation({
       query: (id, ...data) => ({
-        url: `/auth/update-user/${id}`,
+        url: `/user/update-user/${id}`,
         method: "POST",
         body: data,
+      }),
+    }),
+    getProfileBySlug: builder.query({
+      query: (slug: string) => ({
+        url: `/user/single-user/${slug}`,
+        method: "GET",
       }),
     }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useUpdateMutation } =
-  authApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useUpdateMutation,
+  useGetProfileBySlugQuery,
+} = authApi;
