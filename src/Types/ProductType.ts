@@ -60,7 +60,7 @@ export type TProduct = {
 };
 
 export type TCartItem = {
-  _id: string;
+  productId: string;
   selectedVariant?: {
     name: string;
     attribute: {
@@ -68,6 +68,10 @@ export type TCartItem = {
       quantity: number;
     };
   };
+  price: number;
+  discount?: number;
+  addedAt?: string;
+  lastUpdated?: string;
 };
 
 export type TWishlistItem = {

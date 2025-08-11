@@ -1,122 +1,174 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { LocalShipping } from "@mui/icons-material";
-import { Box, Button, CircularProgress, Divider, Paper, Stack, Typography } from "@mui/material";
-import React from "react";
+import {
+  Box,
+  Button,
+  Divider,
+  Stack,
+  Typography,
+  Alert,
+  CircularProgress,
+  Grid,
+} from "@mui/material";
+import { ShoppingCart, AlertTriangle } from "lucide-react";
 
-type OrderSummaryCardProps = {
+type OrderSummaryProps = {
   subtotal: number;
-  tax: number;
-  shipping: number;
   total: number;
+  totalDiscount: number;
   isLoading: boolean;
+  selectedCount: number;
   handleCheckout: () => void;
-  theme: any;
+  validationErrors?: string[];
 };
 
 export default function OrderSummary({
   subtotal,
-  tax,
-  shipping,
   total,
+  totalDiscount,
   isLoading,
+  selectedCount,
   handleCheckout,
-  theme,
-}: OrderSummaryCardProps) {
+  validationErrors = [],
+}: OrderSummaryProps) {
+  const hasErrors = validationErrors.length > 0;
+  const isCheckoutDisabled = selectedCount === 0 || hasErrors || isLoading;
+
   return (
-    <Paper
+    <Box
       sx={{
         p: 3,
-        borderRadius: 3,
+        borderRadius: 2,
+        bgcolor: "background.paper",
+        boxShadow: 1,
         position: "sticky",
-        top: 200,
-        background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
-        boxShadow: theme.shadows[4],
+        top: 20,
       }}
     >
-      <Typography variant="h5" fontWeight="bold" gutterBottom>
-        Order Summary
-      </Typography>
-      <Divider sx={{ mb: 3 }} />
+      <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+        <ShoppingCart size={24} />
+        <Typography variant="h6" fontWeight="bold">
+          Order Summary
+        </Typography>
+      </Stack>
 
-      <Stack spacing={2} sx={{ mb: 3 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography>Subtotal</Typography>
-          <Typography fontWeight="medium">৳{subtotal.toFixed(2)}</Typography>
+      <Divider sx={{ my: 2 }} />
+
+      {/* Validation Errors */}
+      {hasErrors && (
+        <Box sx={{ mb: 2 }}>
+          <Alert severity="error" icon={<AlertTriangle size={20} />}>
+            <Typography variant="body2" fontWeight="bold">
+              Please resolve the following issues:
+            </Typography>
+            <ul style={{ margin: "8px 0", paddingLeft: "20px" }}>
+              {validationErrors.map((error, index) => (
+                <li key={index}>
+                  <Typography variant="body2">{error}</Typography>
+                </li>
+              ))}
+            </ul>
+          </Alert>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography>Tax (8%)</Typography>
-          <Typography fontWeight="medium">৳{tax.toFixed(2)}</Typography>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography>Shipping</Typography>
-          <Typography fontWeight="medium">
-            {shipping === 0 ? "Free" : `৳${shipping.toFixed(2)}`}
-          </Typography>
+      )}
+
+      {/* Order Details */}
+      <Stack spacing={1.5}>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography>Items ({selectedCount})</Typography>
+          <Typography fontWeight="medium">${subtotal.toFixed(2)}</Typography>
         </Box>
 
-        {shipping === 0 && (
+        {totalDiscount > 0 && (
           <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              p: 2,
-              backgroundColor: "success.50",
-              borderRadius: 2,
-              border: 1,
-              borderColor: "success.200",
-            }}
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            <LocalShipping color="success" />
-            <Typography
-              variant="body2"
-              color="success.main"
-              fontWeight="medium"
-            >
-              Free shipping on orders over ৳2000
+            <Typography>Discount</Typography>
+            <Typography fontWeight="medium" color="success.main">
+              - ৳ {totalDiscount.toFixed(2)}
             </Typography>
           </Box>
         )}
 
-        <Divider />
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Divider sx={{ my: 1 }} />
+
+        <Box display="flex" justifyContent="space-between">
           <Typography variant="h6" fontWeight="bold">
             Total
           </Typography>
-          <Typography variant="h6" fontWeight="bold" color="primary">
-            ৳{total.toFixed(2)}
+          <Typography variant="h6" fontWeight="bold" color="primary.main">
+            ৳ {total.toFixed(2)}
           </Typography>
         </Box>
       </Stack>
 
+      {/* Checkout Button */}
       <Button
-        variant="contained"
         fullWidth
+        variant="contained"
         size="large"
         onClick={handleCheckout}
-        disabled={isLoading || subtotal === 0}
+        disabled={isCheckoutDisabled}
         sx={{
-          py: 2,
-          borderRadius: 2,
-          fontSize: "1.1rem",
-          fontWeight: "bold",
-          textTransform: "none",
-          background: "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+          mt: 3,
+          height: 48,
+          fontWeight: 600,
+          bgcolor: isCheckoutDisabled ? "grey.300" : "primary.main",
           "&:hover": {
-            background: "linear-gradient(45deg, #1976D2 30%, #1CB5E0 90%)",
+            bgcolor: isCheckoutDisabled ? "grey.300" : "primary.dark",
           },
-          mb: 2,
         }}
-      >
-        {isLoading ? (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        startIcon={
+          isLoading ? (
             <CircularProgress size={20} color="inherit" />
-            Processing...
-          </Box>
-        ) : (
-          "Proceed to Checkout"
-        )}
+          ) : (
+            <ShoppingCart size={20} />
+          )
+        }
+      >
+        {isLoading
+          ? "Processing..."
+          : selectedCount === 0
+          ? "Select Items to Checkout"
+          : hasErrors
+          ? "Resolve Issues to Continue"
+          : `Checkout (${selectedCount} items)`}
       </Button>
-    </Paper>
+
+      {/* Additional Info */}
+      <Box sx={{ mt: 3 }}>
+        <Grid container spacing={2}>
+          {/* Delivery Charges */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Box>
+              <Typography variant="body2" color="text.secondary">
+                • Delivery charges:
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                • In city : ৳ 70
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                • Out of city ৳ 120
+              </Typography>
+            </Box>
+          </Grid>
+
+          {/* Service Info */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Box>
+              <Typography variant="body2" color="text.secondary">
+                • Customer support available
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                • Fast delivery options
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                • Quality guaranteed
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+    </Box>
   );
 }

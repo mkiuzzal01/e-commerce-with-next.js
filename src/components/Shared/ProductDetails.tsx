@@ -28,7 +28,7 @@ import {
 } from "@mui/icons-material";
 import { useSingleProductBySlugQuery } from "@/redux/features/product/product.Api";
 import Loader from "@/utils/Loader";
-import { TProduct } from "@/Types/ProductType";
+import { TCartItem, TProduct } from "@/Types/ProductType";
 import { useToast } from "@/utils/tost-alert/ToastProvider";
 import { useDiscount } from "@/lib/useDiscount";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -118,9 +118,10 @@ export default function ProductDetails({ slug }: { slug: string }) {
 
   const handleAddToCart = () => {
     const variantInfo = getSelectedVariantInfo();
+
     if (product.variants && product.variants.length > 0) {
       if (selectedVariant === null) {
-        showToast({ message: "Please select a variant", type: "error" });
+        showToast({ message: "Please select a size", type: "error" });
         return;
       }
       if (selectedColor === null) {
@@ -137,18 +138,22 @@ export default function ProductDetails({ slug }: { slug: string }) {
       return;
     }
 
-    dispatch(
-      addToCart({
-        _id: product._id,
+    const cartItem: TCartItem = {
+      productId: product._id,
+      price: product.price,
+      discount: product.discount,
+      ...(product.variants.length > 0 && {
         selectedVariant: {
           name: variantInfo.variantName as string,
           attribute: {
             value: variantInfo.colorValue as string,
-            quantity: variantInfo.availableQuantity,
+            quantity: quantity,
           },
         },
-      })
-    );
+      }),
+    };
+
+    dispatch(addToCart(cartItem));
 
     showToast({
       message: "Product added to cart successfully!",
