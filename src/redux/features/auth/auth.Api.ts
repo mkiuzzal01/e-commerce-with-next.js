@@ -16,18 +16,20 @@ const authApi = baseApi.injectEndpoints({
         body: userInfo,
       }),
     }),
-    update: builder.mutation({
-      query: (id, ...data) => ({
+    updateUser: builder.mutation({
+      query: ({ id, data }) => ({
         url: `/user/update-user/${id}`,
-        method: "POST",
+        method: "PATCH",
         body: data,
       }),
     }),
+
     getProfileBySlug: builder.query({
       query: (slug: string) => ({
         url: `/user/single-user/${slug}`,
         method: "GET",
       }),
+      providesTags: ["User"],
     }),
   }),
 });
@@ -35,6 +37,6 @@ const authApi = baseApi.injectEndpoints({
 export const {
   useLoginMutation,
   useRegisterMutation,
-  useUpdateMutation,
+  useUpdateUserMutation,
   useGetProfileBySlugQuery,
 } = authApi;

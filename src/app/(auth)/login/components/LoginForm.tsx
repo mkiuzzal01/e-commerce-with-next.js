@@ -1,7 +1,7 @@
 "use client";
 import { Box, Button, Container, Typography, Paper, Grid } from "@mui/material";
 import { TextInput } from "@/components/Shared/input-fields/TextInput";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 import { useLoginMutation } from "@/redux/features/auth/auth.Api";
 import Loader from "@/utils/Loader";
@@ -12,10 +12,14 @@ import { setUser, TUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
 
 export default function LoginForm() {
-  const { showToast } = useToast();
+  const searchParams = useSearchParams();
   const router = useRouter();
+  const { showToast } = useToast();
   const dispatch = useAppDispatch();
   const [loginUser, { isLoading }] = useLoginMutation();
+
+  const redirectPath = searchParams.get("redirect") || "/";
+
   const handleSubmit = async (values: FieldValues) => {
     try {
       const { data } = await loginUser(values);
@@ -26,7 +30,7 @@ export default function LoginForm() {
           message: "User login successfully",
           type: "success",
         });
-        router.push("/");
+        router.push(redirectPath);
       }
     } catch {
       showToast({

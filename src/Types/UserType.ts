@@ -13,8 +13,9 @@ export type TLocation = {
   permanentAddress: string;
 };
 
-export type IUser = {
-  slug?: string;
+export type TUserProfile = {
+  _id: string;
+  slug: string;
   name: TName;
   email: string;
   phone: string;

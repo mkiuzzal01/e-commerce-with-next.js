@@ -12,4 +12,5 @@ export const tagTypes = [
   "view-product",
   "update-product",
   "product-by-key-word",
+  "User",
 ];

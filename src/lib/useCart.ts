@@ -11,9 +11,14 @@ import { useSelectionManagement } from "./useSelectionManagement";
 import { useCartValidation } from "./useInventoryValidation";
 import { useToast } from "@/utils/tost-alert/ToastProvider";
 import { useCreateOrderMutation } from "@/redux/features/order/order.Api";
+import { useUser } from "./useUser";
+import { usePathname, useRouter } from "next/navigation";
 
 export const useCart = (cartItems: TCartItem[], products: TProduct[]) => {
+  const pathname = usePathname();
+  const router = useRouter();
   const { showToast } = useToast();
+  const { userInfo, userComing } = useUser();
   const dispatch = useAppDispatch();
   const [createOrder, { isLoading }] = useCreateOrderMutation();
 
@@ -148,6 +153,15 @@ export const useCart = (cartItems: TCartItem[], products: TProduct[]) => {
 
   // Handle checkout
   const handleCheckout = () => {
+    if (
+      !userInfo?.address?.permanentAddress ||
+      !userInfo?.address?.permanentAddress
+    ) {
+      showToast({ message: "Please add your profile address", type: "error" });
+      return router.replace(
+        `/update-profile?redirect=${encodeURIComponent(pathname)}`
+      );
+    }
     if (!validation.isValid) {
       validation.errors.forEach((error) => {
         showToast({ message: error, type: "error" });

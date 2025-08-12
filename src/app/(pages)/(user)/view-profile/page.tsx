@@ -1,11 +1,11 @@
 import React from "react";
-import TrackOrder from "../components/TrackOrder";
+import ViewUser from "../components/ViewUser";
 import { PrivateRoute } from "@/utils/PrivateRoute";
 
-export default function page() {
+export default function () {
   return (
     <PrivateRoute>
-      <TrackOrder />
+      <ViewUser />
     </PrivateRoute>
   );
 }
