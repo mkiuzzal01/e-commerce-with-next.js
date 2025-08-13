@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Box, Typography } from "@mui/material";
 import SectionHeader from "@/components/Shared/SectionHeader";
@@ -17,7 +18,7 @@ const TopRatedProducts = () => {
   const { data, isLoading } = useAllProductByKeyWordQuery({
     queryParams: {},
     headerParams: {
-      params: { rating: { $gte: 1 } },
+      params: { totalRating: { $gte: 1 } },
     },
   });
   const topRatedProducts: TProduct[] = data?.data?.result || [];
@@ -55,15 +56,16 @@ const TopRatedProducts = () => {
                 1280: { slidesPerView: 4 },
               }}
             >
-              {topRatedProducts.map((product) => (
+              {topRatedProducts.map((product: any) => (
                 <SwiperSlide key={product?._id}>
                   <ProductCard2
+                    viewLink={`/${product?.categories?.mainCategory?.name}/${product?.slug}`}
                     product={{
                       id: product?._id,
                       name: product?.title,
                       image: product?.productImage?.photo?.url,
                       price: product?.price,
-                      rating: product?.rating,
+                      rating: product?.totalRating,
                       showWishlist: false,
                     }}
                   />

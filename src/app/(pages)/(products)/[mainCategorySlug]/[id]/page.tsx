@@ -1,16 +1,18 @@
 import ProductDetails from "@/components/Shared/ProductDetails";
+import { Box } from "@mui/material";
 
 type PageProps = {
   params: Promise<{
-    slug: string;
+    mainCategorySlug: string;
+    id: string;
   }>;
 };
 
 export default async function Page({ params }: PageProps) {
-  const { slug } = await params;
+  const { id } = await params;
   return (
-    <div>
-      <ProductDetails slug={slug} />
-    </div>
+    <Box>
+      <ProductDetails slug={id} />
+    </Box>
   );
 }

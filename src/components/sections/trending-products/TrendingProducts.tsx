@@ -8,7 +8,7 @@ import ReusableCarousel, {
 } from "@/components/Shared/ReusableCarousel";
 import SectionHeader from "@/components/Shared/SectionHeader";
 import { SwiperSlide } from "swiper/react";
-import ProductCard from "@/utils/cards/ProductCard1";
+import ProductCard1 from "@/utils/cards/ProductCard1";
 import SectionButton from "@/utils/buttons/sectionButton";
 import CarouselArrows from "@/components/Shared/CarouselArrows";
 import Loader from "@/utils/Loader";
@@ -63,7 +63,7 @@ export default function TrendingProducts() {
             >
               {trendingProducts.map((product) => (
                 <SwiperSlide key={product?._id}>
-                  <ProductCard
+                  <ProductCard1
                     viewLink={`/trending-products/${product?.slug}`}
                     product={{
                       id: String(product?._id),

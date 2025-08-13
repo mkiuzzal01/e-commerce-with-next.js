@@ -38,14 +38,14 @@ export default function ContactUsPage() {
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Mail size={20} />
                 <Typography variant="body1">
-                  <strong>Email:</strong> support@example.com
+                  <strong>Email:</strong>exportcornerkhulna@gmail.com
                 </Typography>
               </Stack>
 
               <Stack direction="row" alignItems="center" spacing={1}>
                 <MapPin size={20} />
                 <Typography variant="body1">
-                  <strong>Address:</strong> 123, Dhanmondi, Dhaka, Bangladesh
+                  <strong>Address:</strong> BL Collage gate, Khulna, Bangladesh
                 </Typography>
               </Stack>
 

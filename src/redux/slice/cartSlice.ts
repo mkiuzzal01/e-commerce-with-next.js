@@ -16,12 +16,10 @@ const cartSlice = createSlice({
     addToCart: (state, action: PayloadAction<TCartItem>) => {
       const { productId, selectedVariant } = action.payload;
 
-      // Create a unique identifier for the cart item
       const itemKey = selectedVariant
         ? `${productId}-${selectedVariant.name}-${selectedVariant.attribute.value}`
         : productId;
 
-      // Find existing item with same productId and variant combination
       const existingItemIndex = state.items.findIndex((item) => {
         const existingKey = item.selectedVariant
           ? `${item.productId}-${item.selectedVariant.name}-${item.selectedVariant.attribute.value}`
@@ -30,14 +28,12 @@ const cartSlice = createSlice({
       });
 
       if (existingItemIndex !== -1) {
-        // Update quantity for existing item
         const existingItem = state.items[existingItemIndex];
         if (existingItem.selectedVariant && selectedVariant) {
           existingItem.selectedVariant.attribute.quantity +=
             selectedVariant.attribute.quantity;
         }
       } else {
-        // Add new item to cart
         state.items.push(action.payload);
       }
     },
@@ -46,7 +42,7 @@ const cartSlice = createSlice({
       state,
       action: PayloadAction<{
         productId: string;
-        variantKey?: string; // Format: "variantName-colorValue"
+        variantKey?: string;
       }>
     ) => {
       const { productId, variantKey } = action.payload;
@@ -58,9 +54,22 @@ const cartSlice = createSlice({
           const itemVariantKey = `${item.selectedVariant.name}-${item.selectedVariant.attribute.value}`;
           return itemVariantKey !== variantKey;
         }
-
-        // If no variantKey provided, remove all items with this productId
         return variantKey !== undefined;
+      });
+    },
+
+    removeMultipleFromCart: (
+      state,
+      action: PayloadAction<{ productId: string; variantKey?: string }[]>
+    ) => {
+      state.items = state.items.filter((item) => {
+        const itemVariantKey = item.selectedVariant
+          ? `${item.selectedVariant.name}-${item.selectedVariant.attribute.value}`
+          : undefined;
+        return !action.payload.some(
+          (p) =>
+            p.productId === item.productId && p.variantKey === itemVariantKey
+        );
       });
     },
 
@@ -69,7 +78,7 @@ const cartSlice = createSlice({
       action: PayloadAction<{
         productId: string;
         quantity: number;
-        variantKey?: string; // Format: "variantName-colorValue"
+        variantKey?: string;
       }>
     ) => {
       const { productId, quantity, variantKey } = action.payload;
@@ -96,6 +105,11 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, updateCartItemQuantity, clearCart } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  removeMultipleFromCart,
+  updateCartItemQuantity,
+  clearCart,
+} = cartSlice.actions;
 export default cartSlice.reducer;

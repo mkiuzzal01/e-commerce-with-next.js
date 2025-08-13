@@ -25,7 +25,7 @@ export default function Cart() {
   const [page, setPage] = useState(1);
   const cartItems = useAppSelector((state) => state.cart.items);
   const productIds = cartItems.map((item) => item.productId);
-  const { data, isLoading } = useAllProductByKeyWordQuery({
+  const { data, isLoading: isProduct } = useAllProductByKeyWordQuery({
     queryParams: { page, limit: 12 },
     headerParams: { params: { _id: { $in: productIds } } },
   });
@@ -34,6 +34,8 @@ export default function Cart() {
   const totalPages = data?.data?.meta?.totalPages || 1;
 
   const {
+    isLoading,
+    userComing,
     mergedCartData,
     orderSummary,
     validation,
@@ -44,7 +46,7 @@ export default function Cart() {
     handleCheckout,
   } = useCart(cartItems, products);
 
-  if (isLoading) return <Loader />;
+  if (isProduct || userComing) return <Loader />;
 
   return (
     <Box
@@ -128,36 +130,38 @@ export default function Cart() {
                     </Typography>
                   </Box>
                 ) : (
-                  mergedCartData.map((item) => {
+                  mergedCartData.map((item: any) => {
                     if (!item) return null;
 
                     const maxAvailable = item.selectedVariant
                       ? item.variants
-                          ?.find((v) => v.name === item.selectedVariant?.name)
+                          ?.find(
+                            (v: any) => v?.name === item.selectedVariant?.name
+                          )
                           ?.attributes.find(
-                            (attr) =>
-                              attr.value ===
-                              item.selectedVariant?.attribute.value
+                            (attr: any) =>
+                              attr?.value ===
+                              item?.selectedVariant?.attribute.value
                           )?.quantity || 0
-                      : item.totalQuantity;
+                      : item?.totalQuantity;
 
                     return (
                       <CartItemCard
                         key={item.cartItemId}
                         id={item.cartItemId}
                         viewLink={`/${item?.categories?.mainCategory?.name}/${item?.slug}`}
-                        title={item.title}
-                        image={item.productImage.photo.url}
-                        price={item.price}
-                        discount={item.discount}
-                        variant={item.selectedVariant}
+                        title={item?.title}
+                        image={item?.productImage?.photo?.url}
+                        price={item?.price}
+                        discount={item?.discount}
+                        variant={item?.selectedVariant}
                         onRemove={handleRemoveItem}
-                        isSelected={item.isSelected}
+                        isSelected={item?.isSelected}
                         onSelect={handleSelectItem}
                         onQuantityUpdate={handleQuantityUpdate}
                         maxAvailable={maxAvailable}
                         currentQuantity={
-                          item.selectedVariant?.attribute.quantity || 1
+                          item.selectedVariant?.attribute?.quantity || 1
                         }
                       />
                     );

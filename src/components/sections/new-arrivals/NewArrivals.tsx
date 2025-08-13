@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useRef, useState } from "react";
 import { Box, Tabs, Tab, Typography } from "@mui/material";
@@ -117,15 +116,15 @@ export default function NewArrivals() {
               1280: { slidesPerView: 4 },
             }}
           >
-            {newArrivalProducts.map((product) => (
-              <SwiperSlide key={product?._id}>
+            {newArrivalProducts.map((item) => (
+              <SwiperSlide key={item?._id}>
                 <ProductCard2
-                  viewLink={`/${selected}/${product?.slug}`}
+                  viewLink={`/${selected}/${item?.slug}`}
                   product={{
-                    id: product?._id,
-                    name: product?.title,
-                    image: product?.productImage?.photo?.url,
-                    price: product?.price,
+                    id: item?._id,
+                    name: item?.title,
+                    image: item?.productImage?.photo?.url,
+                    price: item?.price,
                   }}
                 />
               </SwiperSlide>

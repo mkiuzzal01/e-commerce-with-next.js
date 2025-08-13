@@ -5,30 +5,48 @@ import { Box, Button, Card, Rating, Stack, Typography } from "@mui/material";
 import { ShoppingCart, Heart } from "lucide-react";
 import Image from "next/image";
 import AppLink from "../AppLink";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useToast } from "../tost-alert/ToastProvider";
+import { addToWishlist, removeFromWishlist } from "@/redux/slice/wishlistSlice";
 
 export type TProduct = {
-  id?: string;
+  id: string;
   name: string;
   image: any;
   price: number | string;
-  rating?: number | string;
+  rating?: number;
   showWishlist?: boolean;
 };
 
 type ProductCard2Props = {
   viewLink: string;
   product: TProduct;
-  onAddToCart?: () => void;
-  onWishlistToggle?: () => void;
 };
 
-const ProductCard2: React.FC<ProductCard2Props> = ({
-  viewLink,
-  product,
-  onAddToCart,
-  onWishlistToggle,
-}) => {
-  const { name, price, image, rating = 0, showWishlist = true } = product;
+const ProductCard2: React.FC<ProductCard2Props> = ({ viewLink, product }) => {
+  const { name, price, image, rating, showWishlist = true, id } = product;
+
+  const dispatch = useAppDispatch();
+  const wishlistItems = useAppSelector((state) => state.wishlist.items);
+  const isWishlisted = wishlistItems.some((item) => item._id === id);
+  const { showToast } = useToast();
+
+  const numericPrice = typeof price === "string" ? Number(price) : price;
+
+  const handleAddToWishlist = () => {
+    if (!id) return;
+
+    if (isWishlisted) {
+      dispatch(removeFromWishlist(id));
+      showToast({ message: "Removed from wishlist", type: "warning" });
+    } else {
+      dispatch(addToWishlist({ _id: id }));
+      showToast({
+        message: "Added to wishlist successfully!",
+        type: "success",
+      });
+    }
+  };
 
   return (
     <Card
@@ -43,6 +61,8 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
           transform: "translateY(-4px)",
         },
       }}
+      elevation={6}
+      aria-label={`Product card for ${name}`}
     >
       <Box className="relative aspect-[3/4] overflow-hidden">
         <Image
@@ -50,6 +70,8 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
           alt={name}
           fill
           className="object-cover transition-transform duration-700 hover:scale-110"
+          sizes="(max-width: 600px) 100vw, 33vw"
+          draggable={false}
         />
 
         {/* Glass Overlay */}
@@ -59,11 +81,11 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
             bottom: 0,
             left: 0,
             right: 0,
-            bgcolor: "rgba(255, 255, 255, 0.1)",
-            backdropFilter: "blur(5px)",
-            color: "#222",
+            bgcolor: "rgba(255, 255, 255, 0.15)",
+            backdropFilter: "blur(6px)",
+            color: "text.primary",
             px: 3,
-            py: 2.5,
+            py: 3,
             display: "flex",
             flexDirection: "column",
             gap: 1,
@@ -71,81 +93,95 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
             borderTopRightRadius: 20,
           }}
         >
-          <AppLink href={viewLink || ""}>
+          <AppLink href={viewLink} aria-label={`View details of ${name}`}>
             <Typography
               variant="subtitle1"
               fontWeight="bold"
               noWrap
               sx={{
-                color: "black",
-                fontSize: "16px",
-                fontWeight: "bold",
+                color: "text.primary",
+                fontSize: 16,
                 textTransform: "uppercase",
-                ":hover": {
+                transition: "color 0.3s ease",
+                "&:hover": {
                   color: "orange",
                 },
                 mb: 1,
               }}
+              title={name}
             >
               {name}
             </Typography>
           </AppLink>
 
-          {/* Rating */}
           <Rating
             size="small"
             name="product-rating"
             value={rating}
+            precision={0.5}
+            readOnly
             sx={{ color: "var(--color-brand-primary)" }}
+            aria-label={`Rating: ${rating} out of 5`}
           />
 
-          {/* Price */}
           <Typography
             fontWeight="bold"
-            sx={{
-              color: "red",
-            }}
+            color="error.main"
+            sx={{ fontSize: 18 }}
+            aria-label={`Price: ৳${numericPrice.toLocaleString()}`}
           >
-            ৳{price.toLocaleString()}
+            ৳{numericPrice.toLocaleString()}
           </Typography>
 
-          {/* Buttons */}
-          <Stack direction="row" spacing={1} mt={1}>
-            <Button
-              variant="contained"
-              fullWidth
-              startIcon={<ShoppingCart size={18} />}
-              onClick={onAddToCart}
-              sx={{
-                textTransform: "none",
-                fontWeight: 600,
-                bgcolor: "var(--color-brand-primary)",
-                color: "white",
-                boxShadow: "0 2px 12px rgb(255 107 107 / 0.4)",
-                "&:hover": {
-                  bgcolor: "var(--color-brand-secondary)",
-                  boxShadow: "0 4px 20px rgb(255 107 107 / 0.6)",
-                },
-              }}
-            >
-              Add to Cart
-            </Button>
+          <Stack direction="row" spacing={1} mt={1} alignItems="center">
+            <AppLink href={viewLink}>
+              <Button
+                variant="contained"
+                fullWidth
+                startIcon={<ShoppingCart size={18} />}
+                sx={{
+                  fontWeight: 600,
+                  bgcolor: "var(--color-brand-primary)",
+                  color: "white",
+                  boxShadow: "0 2px 12px rgb(255 107 107 / 0.4)",
+                  "&:hover": {
+                    bgcolor: "var(--color-brand-secondary)",
+                    boxShadow: "0 4px 20px rgb(255 107 107 / 0.6)",
+                  },
+                }}
+                aria-label={`View product ${name}`}
+              >
+                View Product
+              </Button>
+            </AppLink>
 
             {showWishlist && (
               <Button
-                variant="outlined"
-                onClick={onWishlistToggle}
+                variant={isWishlisted ? "contained" : "outlined"}
+                onClick={handleAddToWishlist}
+                disabled={!id}
                 sx={{
                   minWidth: 40,
                   px: 1.5,
                   borderWidth: 2,
-                  color: "var(--color-brand-secondary)",
+                  color: isWishlisted
+                    ? "white"
+                    : "var(--color-brand-secondary)",
                   borderColor: "var(--color-brand-secondary)",
+                  bgcolor: isWishlisted
+                    ? "var(--color-brand-secondary)"
+                    : "transparent",
                   "&:hover": {
                     bgcolor: "var(--color-brand-secondary)",
                     color: "white",
                   },
                 }}
+                aria-pressed={isWishlisted}
+                aria-label={
+                  isWishlisted
+                    ? `Remove ${name} from wishlist`
+                    : `Add ${name} to wishlist`
+                }
               >
                 <Heart size={20} />
               </Button>

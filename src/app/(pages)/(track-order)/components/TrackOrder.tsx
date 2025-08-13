@@ -1,100 +1,111 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  Avatar,
-  Divider,
-  Stepper,
-  Step,
-  StepLabel,
-  Tabs,
-  Tab,
-} from "@mui/material";
+import { Box, Tabs, Tab } from "@mui/material";
 import SectionHeader from "@/components/Shared/SectionHeader";
 import { Truck } from "lucide-react";
 import ReusablePagination from "@/components/Shared/ReusablePagination";
+import { useAllOrderByKeyWordQuery } from "@/redux/features/order/order.Api";
+import { useUser } from "@/lib/useUser";
+import Loader from "@/utils/Loader";
+import Upcoming from "./Upcoming";
+import Delivered from "./Delivered";
+import Canceled from "./Canceled";
+import { TOrder } from "@/Types/OrderType";
 
-const statusSteps = ["Processing", "Shipped", "Out for Delivery", "Delivered"];
+export default function TrackOrder() {
+  const [tabIndex, setTabIndex] = useState<number>(0);
 
-const orders = [
-  {
-    orderId: "ORD1001",
-    customerName: "Rahim Uddin",
-    placedAt: "2025-07-07",
-    status: "Out for Delivery",
-    total: 2750,
-    items: [
-      {
-        name: "Men's T-Shirt",
-        quantity: 2,
-        price: 650,
-        image: "/images/products/tshirt.jpg",
-      },
-      {
-        name: "Denim Jacket",
-        quantity: 1,
-        price: 1450,
-        image: "/images/products/jacket.jpg",
-      },
-    ],
-  },
-  {
-    orderId: "ORD1002",
-    customerName: "Fatema Khatun",
-    placedAt: "2025-07-05",
-    status: "Shipped",
-    total: 1980,
-    items: [
-      {
-        name: "Unisex Sunglasses",
-        quantity: 1,
-        price: 1450,
-        image: "/images/products/sunglasses.jpg",
-      },
-      {
-        name: "Cap",
-        quantity: 1,
-        price: 530,
-        image: "/images/products/cap.jpg",
-      },
-    ],
-  },
-  {
-    orderId: "ORD1003",
-    customerName: "Salman Rahman",
-    placedAt: "2025-07-03",
-    status: "Delivered",
-    total: 3280,
-    items: [
-      {
-        name: "Sports Shoes",
-        quantity: 1,
-        price: 1780,
-        image: "/images/products/shoes.jpg",
-      },
-      {
-        name: "Backpack",
-        quantity: 1,
-        price: 1500,
-        image: "/images/products/bag.jpg",
-      },
-    ],
-  },
-];
+  // Separate page states for each tab
+  const [pageUpcoming, setPageUpcoming] = useState<number>(1);
+  const [pageDelivered, setPageDelivered] = useState<number>(1);
+  const [pageCanceled, setPageCanceled] = useState<number>(1);
 
-const upcomingStatuses = ["Processing", "Shipped", "Out for Delivery"];
+  const { userInfo, userComing } = useUser();
 
-function TrackOrder() {
-  const [tabIndex, setTabIndex] = useState(0);
+  // Upcoming orders
+  const {
+    data: upcomingData,
+    isLoading: isUpcomingLoading,
+    refetch: refetchUpcoming,
+  } = useAllOrderByKeyWordQuery({
+    queryParams: { page: pageUpcoming, limit: 10 },
+    headerParams: {
+      params: {
+        customerId: userInfo?._id,
+        orderStatus: { $nin: ["DELIVERED", "CANCELLED"] },
+      },
+    },
+  });
 
-  const filteredOrders =
-    tabIndex === 0
-      ? orders.filter((o) => upcomingStatuses.includes(o.status))
-      : orders.filter((o) => o.status === "Delivered");
+  // Delivered orders
+  const { data: deliveredData, isLoading: isDeliveredLoading } =
+    useAllOrderByKeyWordQuery({
+      queryParams: { page: pageDelivered, limit: 10 },
+      headerParams: {
+        params: { customerId: userInfo?._id, orderStatus: "DELIVERED" },
+      },
+    });
+
+  // Canceled orders
+  const { data: canceledData, isLoading: isCanceledLoading } =
+    useAllOrderByKeyWordQuery({
+      queryParams: { page: pageCanceled, limit: 10 },
+      headerParams: {
+        params: { customerId: userInfo?._id, orderStatus: "CANCELLED" },
+      },
+    });
+
+  // Extract meta and orders
+  const upcomingMeta = upcomingData?.data?.meta ?? { totalPages: 1, total: 0 };
+  const deliveredMeta = deliveredData?.data?.meta ?? {
+    totalPages: 1,
+    total: 0,
+  };
+  const canceledMeta = canceledData?.data?.meta ?? { totalPages: 1, total: 0 };
+
+  const upcomingOrders: TOrder[] = upcomingData?.data?.result ?? [];
+  const deliveredOrders: TOrder[] = deliveredData?.data?.result ?? [];
+  const canceledOrders: TOrder[] = canceledData?.data?.result ?? [];
+
+  const upcomingCount = upcomingMeta.total;
+  const deliveredCount = deliveredMeta.total;
+  const canceledCount = canceledMeta.total;
+
+  // Determine current tab data
+  let currentOrders: TOrder[] = [];
+  let currentTotalPages = 1;
+  let currentPage = 1;
+  let isCurrentLoading = false;
+  let handlePageChange: (page: number) => void = () => {};
+
+  if (tabIndex === 0) {
+    currentOrders = upcomingOrders;
+    currentTotalPages = upcomingMeta.totalPages;
+    currentPage = pageUpcoming;
+    isCurrentLoading = isUpcomingLoading;
+    handlePageChange = setPageUpcoming;
+  } else if (tabIndex === 1) {
+    currentOrders = deliveredOrders;
+    currentTotalPages = deliveredMeta.totalPages;
+    currentPage = pageDelivered;
+    isCurrentLoading = isDeliveredLoading;
+    handlePageChange = setPageDelivered;
+  } else {
+    currentOrders = canceledOrders;
+    currentTotalPages = canceledMeta.totalPages;
+    currentPage = pageCanceled;
+    isCurrentLoading = isCanceledLoading;
+    handlePageChange = setPageCanceled;
+  }
+
+  if (
+    userComing ||
+    (tabIndex === 0 && isUpcomingLoading) ||
+    (tabIndex === 1 && isDeliveredLoading) ||
+    (tabIndex === 2 && isCanceledLoading)
+  ) {
+    return <Loader />;
+  }
 
   return (
     <Box
@@ -108,7 +119,7 @@ function TrackOrder() {
           <SectionHeader
             icon={<Truck />}
             title="Track Your Orders"
-            description="Track your orders and know when they are delivered"
+            description="Track your orders and know when they are delivered or canceled"
           />
         </Box>
 
@@ -121,113 +132,63 @@ function TrackOrder() {
           variant="fullWidth"
           sx={{ mb: 4 }}
         >
-          <Tab label="Upcoming Orders" />
-          <Tab label="Delivered Orders" />
+          <Tab
+            label={`Upcoming Orders${
+              upcomingCount > 0 ? ` (${upcomingCount})` : ""
+            }`}
+            sx={{ fontWeight: "medium" }}
+          />
+          <Tab
+            label={`Delivered Orders${
+              deliveredCount > 0 ? ` (${deliveredCount})` : ""
+            }`}
+            sx={{ fontWeight: "medium" }}
+          />
+          <Tab
+            label={`Canceled Orders${
+              canceledCount > 0 ? ` (${canceledCount})` : ""
+            }`}
+            sx={{ fontWeight: "medium" }}
+          />
         </Tabs>
 
-        <Grid container spacing={4}>
-          {filteredOrders.map((order, idx) => {
-            const activeStep = statusSteps.indexOf(order.status);
-            return (
-              <Grid size={{ xs: 12 }} key={idx}>
-                <Card elevation={3}>
-                  <CardContent>
-                    {/* Order Summary */}
-                    <Grid container spacing={2}>
-                      <Grid size={{ xs: 12 }}>
-                        <Typography variant="h6" fontWeight="bold">
-                          Order #{order.orderId}
-                        </Typography>
-                        <Typography>Customer: {order.customerName}</Typography>
-                        <Typography>Placed At: {order.placedAt}</Typography>
-                        <Typography>Status: {order.status}</Typography>
-                      </Grid>
-                      <Grid
-                        size={{ xs: 12 }}
-                        textAlign={{ xs: "left", md: "right" }}
-                      >
-                        <Typography variant="h6" fontWeight="bold">
-                          Total: ৳{order.total}
-                        </Typography>
-                      </Grid>
-                    </Grid>
+        {/* Tab Content */}
+        <Box>
+          {tabIndex === 0 && (
+            <Upcoming
+              orders={upcomingOrders}
+              isLoading={isUpcomingLoading}
+              refetch={refetchUpcoming}
+            />
+          )}
+          {tabIndex === 1 && (
+            <Delivered
+              orders={deliveredOrders}
+              isLoading={isDeliveredLoading}
+            />
+          )}
+          {tabIndex === 2 && (
+            <Canceled orders={canceledOrders} isLoading={isCanceledLoading} />
+          )}
+        </Box>
 
-                    <Divider sx={{ my: 2 }} />
+        {/* Pagination */}
+        {currentOrders.length > 0 && currentTotalPages > 1 && (
+          <Box textAlign="center" mt={4}>
+            <ReusablePagination
+              currentPage={currentPage}
+              totalPages={currentTotalPages}
+              onPageChange={handlePageChange}
+            />
+          </Box>
+        )}
 
-                    {/* Items */}
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight="bold"
-                      gutterBottom
-                    >
-                      Items
-                    </Typography>
-                    <Grid container spacing={2}>
-                      {order.items.map((item, index) => (
-                        <Grid size={{ xs: 12, md: 6 }} key={index}>
-                          <Box
-                            display="flex"
-                            alignItems="center"
-                            gap={2}
-                            border={1}
-                            borderColor="grey.200"
-                            p={1.5}
-                            borderRadius={2}
-                          >
-                            <Avatar
-                              variant="rounded"
-                              src={item.image}
-                              alt={item.name}
-                              sx={{ width: 56, height: 56 }}
-                            />
-                            <Box flexGrow={1}>
-                              <Typography fontWeight="medium">
-                                {item.name}
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                              >
-                                Qty: {item.quantity}
-                              </Typography>
-                            </Box>
-                            <Typography fontWeight="bold">
-                              ৳{item.price * item.quantity}
-                            </Typography>
-                          </Box>
-                        </Grid>
-                      ))}
-                    </Grid>
-
-                    <Divider sx={{ my: 3 }} />
-
-                    {/* Stepper */}
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight="bold"
-                      gutterBottom
-                    >
-                      Order Progress
-                    </Typography>
-                    <Stepper activeStep={activeStep} alternativeLabel>
-                      {statusSteps.map((label) => (
-                        <Step key={label}>
-                          <StepLabel>{label}</StepLabel>
-                        </Step>
-                      ))}
-                    </Stepper>
-                  </CardContent>
-                </Card>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Box>
-      <Box textAlign="center" py={4}>
-        <ReusablePagination currentPage={1} totalPages={10} />
+        {isCurrentLoading && (
+          <Box textAlign="center" mt={4}>
+            <Loader />
+          </Box>
+        )}
       </Box>
     </Box>
   );
 }
-
-export default TrackOrder;

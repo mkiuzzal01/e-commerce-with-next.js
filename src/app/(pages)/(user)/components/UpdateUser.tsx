@@ -2,13 +2,13 @@
 import React from "react";
 import { Box, Button, Container, Grid } from "@mui/material";
 import { FieldValues } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
 import { TextInput } from "@/components/Shared/input-fields/TextInput";
 import { SelectInput } from "@/components/Shared/input-fields/SelectInput";
 import ReusableForm from "@/components/Shared/ReusableForm";
 import { useUser } from "@/lib/useUser";
 import Loader from "@/utils/Loader";
-import { userValidationSchema } from "./updateUserValidation";
+// import { userValidationSchema } from "./updateUserValidation";
 import { useUpdateUserMutation } from "@/redux/features/auth/auth.Api";
 import { useToast } from "@/utils/tost-alert/ToastProvider";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -52,7 +52,7 @@ export default function UpdateUser() {
       <Container sx={{ my: 5 }}>
         <ReusableForm
           onSubmit={handleSubmit}
-          resolver={zodResolver(userValidationSchema)}
+          // resolver={zodResolver(userValidationSchema)}
           defaultValues={{
             name: {
               firstName: userInfo?.name?.firstName || "",

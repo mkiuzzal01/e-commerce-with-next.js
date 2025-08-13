@@ -195,7 +195,16 @@ export default function CartItemCard({
             >
               <Box>
                 <AppLink href={viewLink || ""}>
-                  <Typography variant="h6" fontWeight="bold" gutterBottom>
+                  <Typography
+                    variant="h6"
+                    fontWeight="bold"
+                    gutterBottom
+                    sx={{
+                      "&:hover": {
+                        color: "#fe6731",
+                      },
+                    }}
+                  >
                     {title}
                   </Typography>
                 </AppLink>

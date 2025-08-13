@@ -2,12 +2,15 @@
 "use client";
 import { useDiscount } from "@/lib/useDiscount";
 import { Box, Button, Card, Stack, Typography } from "@mui/material";
-import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import AppLink from "../AppLink";
+import { Heart } from "lucide-react";
+import { addToWishlist, removeFromWishlist } from "@/redux/slice/wishlistSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useToast } from "../tost-alert/ToastProvider";
 
 export type TProduct = {
-  id?: string;
+  id: string;
   name: string;
   image?: any;
   price: number | string;
@@ -22,7 +25,27 @@ type ProductCardProps = {
 const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
   const { originalPrice, finalPrice, discountAmount, isDiscounted } =
     useDiscount(product.price, product.discount);
+  const dispatch = useAppDispatch();
+  const wishlistItems = useAppSelector((state) => state.wishlist.items);
+  const isWishlisted = wishlistItems.some((item) => item._id === product?.id);
+  const { showToast } = useToast();
 
+  const handleAddToWishlist = () => {
+    if (isWishlisted) {
+      dispatch(removeFromWishlist(product.id));
+      showToast({ message: "Removed from wishlist", type: "warning" });
+    } else {
+      dispatch(
+        addToWishlist({
+          _id: product.id,
+        })
+      );
+      showToast({
+        message: "Added to wishlist successfully!",
+        type: "success",
+      });
+    }
+  };
   return (
     <Card
       sx={{
@@ -64,7 +87,7 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
               boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
             }}
           >
-            {product.discount < 100
+            {Number(product?.discount) < 100
               ? `-${product.discount}%`
               : `Save ৳${discountAmount.toLocaleString()}`}
           </Box>
@@ -124,7 +147,10 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
             <Button
               fullWidth
               variant="outlined"
-              startIcon={<ShoppingCart size={18} />}
+              startIcon={
+                <Heart color={isWishlisted ? "red" : "white"} size={20} />
+              }
+              onClick={handleAddToWishlist}
               sx={{
                 color: "white",
                 borderColor: "rgba(255,255,255,0.5)",
@@ -136,7 +162,7 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
                 },
               }}
             >
-              Add to Cart
+              {isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
             </Button>
             <AppLink href={viewLink || ""}>
               <Button

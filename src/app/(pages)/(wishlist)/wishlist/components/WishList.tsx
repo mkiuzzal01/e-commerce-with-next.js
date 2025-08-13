@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { List } from "lucide-react";
 import SectionHeader from "@/components/Shared/SectionHeader";
 import WishListCard from "@/utils/cards/WishListCard";
@@ -55,30 +55,49 @@ export default function Wishlist() {
           />
         </Box>
 
-        <Grid container spacing={4}>
-          {wishlistProducts.map((item) => (
-            <Grid size={{ xs: 12, md: 3 }} key={item._id}>
-              <WishListCard
-                id={item?._id}
-                slug={item?.slug}
-                title={item?.title}
-                price={item?.price}
-                discount={item?.discount}
-                image={item?.productImage?.photo?.url}
-                categories={item?.categories}
-                onRemove={(id) => dispatch(removeFromWishlist(id))}
-              />
+        {wishlistProducts.length === 0 ? (
+          <Box
+            sx={{
+              textAlign: "center",
+              py: 10,
+              color: "text.secondary",
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              Your wishlist is empty
+            </Typography>
+            <Typography variant="body1">
+              Save products you like to find them easily here later.
+            </Typography>
+          </Box>
+        ) : (
+          <>
+            <Grid container spacing={4}>
+              {wishlistProducts.map((item) => (
+                <Grid size={{ xs: 12, md: 3 }} key={item._id}>
+                  <WishListCard
+                    id={item?._id}
+                    slug={item?.slug}
+                    title={item?.title}
+                    price={item?.price}
+                    discount={item?.discount}
+                    image={item?.productImage?.photo?.url}
+                    categories={item?.categories}
+                    onRemove={(id) => dispatch(removeFromWishlist(id))}
+                  />
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
 
-        <Box textAlign="center">
-          <ReusablePagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={(newPage) => setPage(newPage)}
-          />
-        </Box>
+            <Box textAlign="center" mt={4}>
+              <ReusablePagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={(newPage) => setPage(newPage)}
+              />
+            </Box>
+          </>
+        )}
       </Box>
     </Box>
   );

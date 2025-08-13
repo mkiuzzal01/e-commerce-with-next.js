@@ -13,4 +13,5 @@ export const tagTypes = [
   "update-product",
   "product-by-key-word",
   "User",
+  "all-order-by-key-word",
 ];

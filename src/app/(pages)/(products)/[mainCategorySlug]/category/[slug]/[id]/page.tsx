@@ -2,15 +2,16 @@ import ProductDetails from "@/components/Shared/ProductDetails";
 
 type PageProps = {
   params: Promise<{
-    slug: string;
+    id: string;
   }>;
 };
 
 export default async function Page({ params }: PageProps) {
-  const { slug } = await params;
+  const { id } = await params;
+
   return (
     <div>
-      <ProductDetails slug={slug} />
+      <ProductDetails slug={id} />
     </div>
   );
 }

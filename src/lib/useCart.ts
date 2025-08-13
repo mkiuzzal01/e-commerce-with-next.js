@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo } from "react";
 import { useAppDispatch } from "@/redux/hooks";
 import {
   removeFromCart,
+  removeMultipleFromCart,
   updateCartItemQuantity,
 } from "@/redux/slice/cartSlice";
 import { TCartItem, TProduct } from "@/Types/ProductType";
@@ -22,21 +24,19 @@ export const useCart = (cartItems: TCartItem[], products: TProduct[]) => {
   const dispatch = useAppDispatch();
   const [createOrder, { isLoading }] = useCreateOrderMutation();
 
-  // Create cart item ID
-  const createCartItemId = (productId: string, variant?: any) => {
-    if (variant) {
-      return `${productId}-${variant.name}-${variant.attribute.value}`;
-    }
-    return `${productId}-default-default`;
-  };
+  /** Create unique ID for cart item */
+  const createCartItemId = (productId: string, variant?: any) =>
+    variant
+      ? `${productId}-${variant.name}-${variant.attribute.value}`
+      : `${productId}-default-default`;
 
-  // Merge cart data with product info
+  /** Merge cart state with product data */
   const mergeCartData = (
     cartItems: TCartItem[],
     products: TProduct[],
     selectedItems: Record<string, boolean>
-  ) => {
-    return cartItems
+  ) =>
+    cartItems
       .map((cartItem) => {
         const product = products.find((p) => p._id === cartItem.productId);
         if (!product) return null;
@@ -62,36 +62,32 @@ export const useCart = (cartItems: TCartItem[], products: TProduct[]) => {
         selectedVariant?: TCartItem["selectedVariant"];
       }
     >;
-  };
 
-  // Selection management
+  /** Selection management */
   const {
     selectedItems,
     handleSelectItem,
-    handleSelectAll: baseHandleSelectAll,
+    handleSelectAll: baseSelectAll,
   } = useSelectionManagement();
 
-  const handleSelectAll = (selectAll: boolean) => {
-    baseHandleSelectAll(
-      mergeCartData(cartItems, products, selectedItems),
-      selectAll
-    );
-  };
+  const handleSelectAll = (selectAll: boolean) =>
+    baseSelectAll(mergeCartData(cartItems, products, selectedItems), selectAll);
 
-  // Cart validation
+  /** Cart validation */
   const validation = useCartValidation(cartItems, products);
 
-  // Order summary
+  /** Merged cart data memoized */
   const mergedCartData = useMemo(
     () => mergeCartData(cartItems, products, selectedItems),
     [cartItems, products, selectedItems]
   );
 
+  /** Order summary */
   const orderSummary = useOrderSummary(mergedCartData);
 
-  // Remove item from cart
+  /** Remove an item from cart */
   const handleRemoveItem = (cartItemId: string) => {
-    const item = mergedCartData.find((item) => item.cartItemId === cartItemId);
+    const item = mergedCartData.find((i) => i.cartItemId === cartItemId);
     if (!item) return;
 
     const variantKey = item.selectedVariant
@@ -105,37 +101,29 @@ export const useCart = (cartItems: TCartItem[], products: TProduct[]) => {
       })
     );
 
-    // Remove from selected items
-    const newSelectedItems = { ...selectedItems };
-    delete newSelectedItems[cartItemId];
     handleSelectItem(cartItemId, false);
 
-    showToast({
-      message: "Item removed from cart",
-      type: "warning",
-    });
+    showToast({ message: "Item removed from cart", type: "warning" });
   };
 
-  // Update item quantity
+  /** Update cart item quantity */
   const handleQuantityUpdate = (
     cartItemId: string,
     newQuantity: number,
     maxAvailable: number
   ) => {
-    const item = mergedCartData.find((item) => item.cartItemId === cartItemId);
+    const item = mergedCartData.find((i) => i.cartItemId === cartItemId);
     if (!item) return;
 
     if (newQuantity > maxAvailable) {
-      showToast({
+      return showToast({
         message: `Maximum ${maxAvailable} items available`,
         type: "error",
       });
-      return;
     }
 
     if (newQuantity < 1) {
-      handleRemoveItem(cartItemId);
-      return;
+      return handleRemoveItem(cartItemId);
     }
 
     const variantKey = item.selectedVariant
@@ -151,47 +139,75 @@ export const useCart = (cartItems: TCartItem[], products: TProduct[]) => {
     );
   };
 
-  // Handle checkout
-  const handleCheckout = () => {
-    if (
-      !userInfo?.address?.permanentAddress ||
-      !userInfo?.address?.permanentAddress
-    ) {
+  /** Handle checkout */
+  const handleCheckout = async () => {
+    // Ensure address exists
+    if (!userInfo) {
+      showToast({ message: "Please login to checkout", type: "error" });
+      return router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
+    }
+    if (!userInfo?.address?.permanentAddress) {
       showToast({ message: "Please add your profile address", type: "error" });
       return router.replace(
         `/update-profile?redirect=${encodeURIComponent(pathname)}`
       );
     }
+
+    // Validate cart
     if (!validation.isValid) {
-      validation.errors.forEach((error) => {
-        showToast({ message: error, type: "error" });
-      });
+      validation.errors.forEach((error) =>
+        showToast({ message: error, type: "error" })
+      );
       return;
     }
 
+    // Ensure at least one selected item
     if (orderSummary.selectedCount === 0) {
-      showToast({ message: "Please select items to checkout", type: "error" });
-      return;
+      return showToast({
+        message: "Please select items to checkout",
+        type: "error",
+      });
     }
 
     const selectedProducts = mergedCartData.filter((item) => item.isSelected);
+
     const orderData = {
-      ...selectedProducts.map((item) => ({
+      orderItems: selectedProducts.map((item) => ({
         productId: item._id,
         size: item.selectedVariant?.name,
         color: item.selectedVariant?.attribute?.value,
         quantity: item.selectedVariant?.attribute.quantity || 1,
       })),
       totalPrice: orderSummary.total,
+      customerId: userInfo?._id,
+      deliveryAddress: userInfo.address,
     };
 
-    console.log("Proceeding to checkout with:", orderData);
-    showToast({
-      message: "Proceeding to checkout...",
-      type: "success",
-    });
+    const { data } = await createOrder(orderData);
+    if (data?.success) {
+      showToast({
+        message: "Order placed successfully",
+        type: "success",
+        duration: 3000,
+      });
+      dispatch(
+        removeMultipleFromCart(
+          selectedProducts.map((item) => ({
+            productId: item._id,
+            variantKey: item.selectedVariant
+              ? `${item.selectedVariant.name}-${item.selectedVariant.attribute.value}`
+              : undefined,
+          }))
+        )
+      );
 
-    return orderData;
+      router.push("/track-order");
+    } else {
+      showToast({
+        message: "Failed to place order",
+        type: "error",
+      });
+    }
   };
 
   return {
@@ -199,6 +215,8 @@ export const useCart = (cartItems: TCartItem[], products: TProduct[]) => {
     selectedItems,
     orderSummary,
     validation,
+    isLoading,
+    userComing,
     handleSelectItem,
     handleSelectAll,
     handleRemoveItem,

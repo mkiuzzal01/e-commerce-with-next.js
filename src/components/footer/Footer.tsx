@@ -82,12 +82,12 @@ export default function Footer() {
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 0.5 }}>
-              Email: support@yourshop.com
+              Email: exportcornerkhulna@gmail.com
             </Typography>
             <Typography variant="body2" sx={{ mb: 0.5 }}>
               Phone: +880-1234-567890
             </Typography>
-            <Typography variant="body2">Address: Dhaka, Bangladesh</Typography>
+            <Typography variant="body2">Address: Khulna, Bangladesh</Typography>
           </Grid>
         </Grid>
         <Box
@@ -99,7 +99,7 @@ export default function Footer() {
           }}
         >
           <Typography variant="caption" color="grey.500">
-            &copy; {year} YourShop. All rights reserved.
+            &copy; {year} Export corner. All rights reserved.
           </Typography>
         </Box>
       </Box>
