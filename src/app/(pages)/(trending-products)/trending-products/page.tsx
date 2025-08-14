@@ -1,4 +1,3 @@
-import React from "react";
 import TrendingProducts from "./components/TrendingProducts";
 
 export default function page() {

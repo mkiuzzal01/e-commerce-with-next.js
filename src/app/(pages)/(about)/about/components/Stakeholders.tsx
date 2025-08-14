@@ -1,6 +1,7 @@
+"use client";
 import { Avatar, Box, Chip, Grid, IconButton, Paper, Typography } from "@mui/material";
 import { Linkedin, TwitterIcon } from "lucide-react";
-import React from "react";
+
 
 const STAKEHOLDERS = [
   {

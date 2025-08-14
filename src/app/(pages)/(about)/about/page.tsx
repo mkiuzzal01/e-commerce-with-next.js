@@ -1,15 +1,14 @@
 "use client";
-import React from "react";
+import SectionHeader from "@/components/Shared/SectionHeader";
 import { Box, Divider } from "@mui/material";
 import { Store } from "lucide-react";
-import Map from "@/components/sections/map/Map";
-import SectionHeader from "@/components/Shared/SectionHeader";
 import MissionVision from "./components/MissionVision";
 import WhyShop from "./components/WhyShop";
-import Stakeholders from "./components/Stakeholders";
 import CoreValues from "./components/CoreValues";
+import Stakeholders from "./components/Stakeholders";
+import Map from "@/components/sections/map/Map";
 
-const AboutPage = () => {
+export default function page() {
   return (
     <Box
       sx={{
@@ -35,6 +34,4 @@ const AboutPage = () => {
       <Map />
     </Box>
   );
-};
-
-export default AboutPage;
+}

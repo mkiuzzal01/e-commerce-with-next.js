@@ -1,5 +1,6 @@
+"use client";
 import { Box, Grid, Paper, Typography } from "@mui/material";
-import React from "react";
+
 const missionVision = [
   {
     id: "mission",

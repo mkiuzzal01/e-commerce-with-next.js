@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import { icons } from "lucide-react";
 
