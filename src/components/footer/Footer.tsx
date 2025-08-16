@@ -13,6 +13,29 @@ import logo from "../../../public/assets/logo/logo.png";
 import { useAllMainCategoryQuery } from "@/redux/features/category/category.Api";
 import { TNavLink } from "../navbar/TNavbar";
 
+const icons = [
+  {
+    title: "Facebook",
+    icon: Facebook,
+    link: "https://www.facebook.com/profile.php?id=61552125565150",
+  },
+  {
+    title: "Twitter",
+    icon: Twitter,
+    link: "https://twitter.com/",
+  },
+  {
+    title: "Instagram",
+    icon: Instagram,
+    link: "https://www.instagram.com/",
+  },
+  {
+    title: "YouTube",
+    icon: YouTube,
+    link: "https://www.youtube.com/",
+  },
+];
+
 export default function Footer() {
   const year = new Date().getFullYear();
   const { data, isLoading } = useAllMainCategoryQuery({});
@@ -35,15 +58,18 @@ export default function Footer() {
               </Box>
             </MuiLink>
             <Box>
-              {[Facebook, Twitter, Instagram, YouTube].map((Icon, idx) => (
+              {icons.map(({ title, icon: Icon, link }, idx) => (
                 <IconButton
                   key={idx}
                   color="inherit"
                   size="large"
                   sx={{ p: 1 }}
-                  aria-label={Icon.name || "social icon"}
+                  title={title}
+                  aria-label={title}
                   component="a"
-                  href="#"
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Icon fontSize="medium" />
                 </IconButton>

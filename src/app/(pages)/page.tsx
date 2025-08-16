@@ -4,20 +4,21 @@ import NewArrivals from "@/components/sections/new-arrivals/NewArrivals";
 import TrendingProducts from "@/components/sections/trending-products/TrendingProducts";
 import TopRatedProducts from "@/components/sections/topRated-products/TopRatedProducts";
 import PromotionalBanner from "@/components/Hero/PromotionalBanner";
-import Testimonials from "@/components/sections/testimonials/Testimonials";
+// import Testimonials from "@/components/sections/testimonials/Testimonials";
 import Map from "@/components/sections/map/Map";
+import { Box } from "@mui/material";
 
 export default function Home() {
   return (
-    <div>
+    <Box>
       <Banner />
-      <PromotionalBanner />
       <TrendingProducts />
       <FlashSale />
       <NewArrivals />
       <TopRatedProducts />
-      <Testimonials />
+      <PromotionalBanner />
+      {/* <Testimonials /> */}
       <Map />
-    </div>
+    </Box>
   );
 }

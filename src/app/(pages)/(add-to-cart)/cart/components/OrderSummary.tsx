@@ -129,10 +129,10 @@ export default function OrderSummary({
         {isLoading
           ? "Processing..."
           : selectedCount === 0
-          ? "Select Items to Checkout"
+          ? "Select Items to Buy"
           : hasErrors
           ? "Resolve Issues to Continue"
-          : `Checkout (${selectedCount} items)`}
+          : `Buy (${selectedCount} items)`}
       </Button>
 
       {/* Additional Info */}
