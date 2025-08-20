@@ -52,6 +52,8 @@ export default function Navbar() {
   const { data, isLoading } = useAllMainCategoryQuery({});
   const navLinks: TNavLink[] = data?.data?.result || [];
 
+  console.log(navLinks);
+
   const handleMouseEnter = (index: number) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setActiveMenu(index);
@@ -408,7 +410,7 @@ export default function Navbar() {
                     <Box className="w-3/5 m-auto">
                       <Box className="relative aspect-[3/4] w-full mb-2">
                         <Image
-                          src={navLinks[activeMenu]?.image?.url}
+                          src={navLinks[activeMenu]?.image?.photo?.url}
                           alt="Featured"
                           fill
                           style={{ objectFit: "cover" }}

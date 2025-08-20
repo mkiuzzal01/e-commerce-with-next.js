@@ -6,6 +6,12 @@ export type TPhoto = {
 export type TProductImage = {
   photo?: TPhoto;
 };
+export type TReview = {
+  productId: string;
+  userId: string;
+  rating?: number | string;
+  comment?: string;
+};
 
 export type TProduct = {
   _id: string;
@@ -57,6 +63,7 @@ export type TOrder = {
   slug?: string;
   orderItems: TOrderItem[];
   customerId: TCustomer;
+  reviews: TReview;
   deliveryAddress: TLocation;
   totalPrice: number;
   orderStatus: TOrderStatus;

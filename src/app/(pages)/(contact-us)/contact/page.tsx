@@ -1,7 +1,7 @@
 "use client";
 import { Box, Stack, Typography } from "@mui/material";
 import Map from "@/components/sections/map/Map";
-import SectionHeader from "@/components/Shared/SectionHeader";
+import SectionHeader from "@/components/shared/SectionHeader";
 import { Contact, Mail, Phone, MapPin, Clock } from "lucide-react";
 import ContactForm from "./components/ContactForm";
 

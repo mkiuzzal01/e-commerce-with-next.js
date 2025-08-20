@@ -25,10 +25,25 @@ const orderApi = baseApi.injectEndpoints({
       },
       providesTags: ["all-order-by-key-word"],
     }),
+
+    singleOrder: builder.query({
+      query: (slug) => ({
+        url: `/order/single-order/${slug}`,
+        method: "GET",
+      }),
+      providesTags: ["single-order"],
+    }),
     createOrder: builder.mutation({
       query: (data) => ({
         url: "/order/create-order",
         method: "POST",
+        body: data,
+      }),
+    }),
+    updateOrder: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/order/update-order/${id}`,
+        method: "PATCH",
         body: data,
       }),
     }),
@@ -44,6 +59,8 @@ const orderApi = baseApi.injectEndpoints({
 
 export const {
   useAllOrderByKeyWordQuery,
+  useSingleOrderQuery,
   useCreateOrderMutation,
+  useUpdateOrderMutation,
   useOrderStatusChangeMutation,
 } = orderApi;

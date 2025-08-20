@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import {
   Box,
@@ -11,10 +10,11 @@ import {
   Stepper,
   Step,
   StepLabel,
-  Chip,
+  Button,
 } from "@mui/material";
 import { CheckCircle } from "lucide-react";
 import { TOrder } from "@/Types/OrderType";
+import Link from "next/link";
 
 const statusSteps = [
   "PENDING",
@@ -51,8 +51,6 @@ export default function Delivered({
     );
   }
 
-  const deliveredOrders = orders;
-
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -60,7 +58,7 @@ export default function Delivered({
       day: "2-digit",
     });
 
-  if (deliveredOrders.length === 0) {
+  if (orders.length === 0) {
     return (
       <Card elevation={3}>
         <CardContent sx={{ justifyItems: "center", py: 6 }}>
@@ -81,26 +79,16 @@ export default function Delivered({
 
   return (
     <Grid container spacing={4}>
-      {deliveredOrders.map((order, idx) => {
+      {orders.map((order, idx) => {
         const activeStep = statusSteps.indexOf(order.orderStatus);
         const customerName = `${order.customerId?.name?.firstName || ""} ${
           order.customerId?.name?.middleName || ""
         } ${order.customerId?.name?.lastName || ""}`.trim();
+        const isReviewed = Boolean(order.reviews?.productId);
 
         return (
           <Grid size={{ xs: 12 }} key={order._id || idx}>
             <Card elevation={3} sx={{ position: "relative" }}>
-              {/* Delivered Badge */}
-              <Box sx={{ position: "absolute", top: 16, right: 16, zIndex: 1 }}>
-                <Chip
-                  icon={<CheckCircle size={16} />}
-                  label="Delivered"
-                  color="success"
-                  variant="filled"
-                  size="small"
-                />
-              </Box>
-
               <CardContent>
                 {/* Order Summary */}
                 <Grid container spacing={2}>
@@ -130,8 +118,15 @@ export default function Delivered({
                     textAlign={{ xs: "left", md: "right" }}
                   >
                     <Typography variant="h6" fontWeight="bold">
-                      Total: ৳{order.totalPrice || 0}
+                      Total: ৳{order?.totalPrice || 0}
                     </Typography>
+                    <Box>
+                      {!isReviewed && (
+                        <Link href={`/review/${order?.slug}`}>
+                          <Button variant="contained">Review</Button>
+                        </Link>
+                      )}
+                    </Box>
                   </Grid>
                 </Grid>
 
@@ -142,7 +137,7 @@ export default function Delivered({
                   Items ({order.orderItems?.length || 0})
                 </Typography>
                 <Grid container spacing={2}>
-                  {order.orderItems?.map((item: any, index: number) => (
+                  {order.orderItems?.map((item, index) => (
                     <Grid size={{ xs: 12, md: 6 }} key={index}>
                       <Box
                         display="flex"

@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Box, Typography } from "@mui/material";
-import SectionHeader from "@/components/Shared/SectionHeader";
+import SectionHeader from "@/components/shared/SectionHeader";
 import { SwiperSlide } from "swiper/react";
 import ReusableCarousel, {
   CarouselRef,
-} from "@/components/Shared/ReusableCarousel";
+} from "@/components/shared/ReusableCarousel";
 import { useRef } from "react";
-import CarouselArrows from "@/components/Shared/CarouselArrows";
+import CarouselArrows from "@/components/shared/CarouselArrows";
 import ProductCard2 from "@/utils/cards/ProductCard2";
 import { TProduct } from "@/Types/ProductType";
 import Loader from "@/utils/Loader";

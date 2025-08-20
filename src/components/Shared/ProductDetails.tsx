@@ -509,41 +509,76 @@ export default function ProductDetails({ slug }: { slug: string }) {
 
           {product?.reviews ? (
             <Stack spacing={3}>
-              {product?.reviews.map((review, index) => (
-                <Card key={index} sx={{ p: 3 }}>
-                  <Stack direction="row" spacing={2}>
-                    <Avatar sx={{ bgcolor: "primary.main" }}>
-                      {review.user?.name?.charAt(0) || <Person />}
-                    </Avatar>
-                    <Box sx={{ flex: 1 }}>
-                      <Stack
-                        direction={{ xs: "column", sm: "row" }}
-                        justifyContent="space-between"
-                        spacing={1}
-                        sx={{ mb: 1 }}
-                      >
-                        <Typography variant="h6" fontWeight="bold">
-                          {review.user?.name || "Anonymous"}
-                        </Typography>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                          <AccessTime fontSize="small" color="action" />
-                          <Typography variant="body2" color="text.secondary">
-                            {new Date(review.createdAt).toLocaleDateString()}
+              {product?.reviews.map((review, index) => {
+                let name = "Anonymous";
+                if (
+                  review?.userId?.name &&
+                  typeof review.userId.name === "object" &&
+                  review.userId.name !== null &&
+                  "firstName" in review.userId.name &&
+                  "middleName" in review.userId.name &&
+                  "lastName" in review.userId.name
+                ) {
+                  const nameObj = review.userId.name as {
+                    firstName?: string;
+                    middleName?: string;
+                    lastName?: string;
+                  };
+                  name =
+                    (nameObj.firstName || "") +
+                    " " +
+                    (nameObj.middleName || "") +
+                    " " +
+                    (nameObj.lastName || "");
+                  name = name.trim();
+                } else if (
+                  review?.userId?.name &&
+                  typeof review.userId.name === "string"
+                ) {
+                  name = review.userId.name;
+                }
+                return (
+                  <Card key={index} sx={{ p: 3 }}>
+                    <Stack direction="row" spacing={2}>
+                      <Avatar sx={{ bgcolor: "primary.main" }}>
+                        {name.charAt(0) || <Person />}
+                      </Avatar>
+                      <Box sx={{ flex: 1 }}>
+                        <Stack
+                          direction={{ xs: "column", sm: "row" }}
+                          justifyContent="space-between"
+                          spacing={1}
+                          sx={{ mb: 1 }}
+                        >
+                          <Typography variant="h6" fontWeight="bold">
+                            {name || "Anonymous"}
                           </Typography>
+                          <Stack
+                            direction="row"
+                            spacing={1}
+                            alignItems="center"
+                          >
+                            <AccessTime fontSize="small" color="action" />
+                            <Typography variant="body2" color="text.secondary">
+                              {new Date(review.createdAt).toLocaleDateString()}
+                            </Typography>
+                          </Stack>
                         </Stack>
-                      </Stack>
-                      <Rating
-                        value={review.rating}
-                        precision={0.5}
-                        readOnly
-                        size="small"
-                        sx={{ mb: 1 }}
-                      />
-                      <Typography variant="body1">{review.comment}</Typography>
-                    </Box>
-                  </Stack>
-                </Card>
-              ))}
+                        <Rating
+                          value={review.rating}
+                          precision={0.5}
+                          readOnly
+                          size="small"
+                          sx={{ mb: 1 }}
+                        />
+                        <Typography variant="body1">
+                          {review.comment}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Card>
+                );
+              })}
             </Stack>
           ) : (
             <Box

@@ -28,7 +28,7 @@ export type TCategories = {
 };
 
 export type TReview = {
-  user: {
+  userId: {
     name: string;
     profileImage: string;
   };

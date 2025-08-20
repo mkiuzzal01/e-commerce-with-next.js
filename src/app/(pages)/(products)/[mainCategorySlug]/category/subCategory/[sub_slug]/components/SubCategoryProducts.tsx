@@ -10,7 +10,7 @@ import {
   useSingleSubCategoryQuery,
 } from "@/redux/features/category/category.Api";
 import { useAllProductByKeyWordQuery } from "@/redux/features/product/product.Api";
-import ReusablePagination from "@/components/Shared/ReusablePagination";
+import ReusablePagination from "@/components/shared/ReusablePagination";
 import { useState } from "react";
 
 type PageProps = {

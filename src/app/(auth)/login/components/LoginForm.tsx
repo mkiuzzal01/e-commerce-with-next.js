@@ -1,12 +1,12 @@
 "use client";
 import { Box, Button, Container, Typography, Paper, Grid } from "@mui/material";
-import { TextInput } from "@/components/Shared/input-fields/TextInput";
+import { TextInput } from "@/components/shared/input-fields/TextInput";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 import { useLoginMutation } from "@/redux/features/auth/auth.Api";
 import Loader from "@/utils/Loader";
 import { useToast } from "@/utils/tost-alert/ToastProvider";
-import ReusableForm from "@/components/Shared/ReusableForm";
+import ReusableForm from "@/components/shared/ReusableForm";
 import { verifyToken } from "@/lib/verifyToken";
 import { setUser, TUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";

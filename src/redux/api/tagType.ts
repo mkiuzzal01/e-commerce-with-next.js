@@ -14,4 +14,5 @@ export const tagTypes = [
   "product-by-key-word",
   "User",
   "all-order-by-key-word",
+  "single-order",
 ];

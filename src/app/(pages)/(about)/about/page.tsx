@@ -1,5 +1,5 @@
 "use client";
-import SectionHeader from "@/components/Shared/SectionHeader";
+import SectionHeader from "@/components/shared/SectionHeader";
 import { Box, Divider } from "@mui/material";
 import { Store } from "lucide-react";
 import MissionVision from "./components/MissionVision";

@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
 import { Box, Button, Container, Typography, Paper, Grid } from "@mui/material";
-import { TextInput } from "@/components/Shared/input-fields/TextInput";
+import { TextInput } from "@/components/shared/input-fields/TextInput";
 import { useRouter } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 import { useToast } from "@/utils/tost-alert/ToastProvider";
 import { useRegisterMutation } from "@/redux/features/auth/auth.Api";
 import Loader from "@/utils/Loader";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ReusableForm from "@/components/Shared/ReusableForm";
+import ReusableForm from "@/components/shared/ReusableForm";
 import { RegisterFormValidation } from "./RegisterFormValidation";
 
 export default function RegisterForm() {

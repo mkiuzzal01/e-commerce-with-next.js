@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface TSubCategory {
   _id: string;
   name: string;
@@ -11,6 +12,7 @@ export interface TCategory {
 }
 
 export interface TImage {
+  photo: any;
   _id: string;
   name: string;
   url: string;
