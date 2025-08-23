@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+
 import React, { useState, useEffect, useMemo } from "react";
 import { Box, Container, Typography, Grid, Button } from "@mui/material";
 import ReusableForm from "@/components/shared/ReusableForm";
@@ -11,7 +12,7 @@ import {
 } from "@/redux/features/order/order.Api";
 import { FieldValues } from "react-hook-form";
 import Loader from "../Loader";
-import { TOrder, TOrderItem } from "@/Types/OrderType";
+import { TOrder, TOrderItem, TReview } from "@/Types/OrderType";
 import { useToast } from "../tost-alert/ToastProvider";
 import { useRouter } from "next/navigation";
 
@@ -26,30 +27,42 @@ interface ReviewState {
 }
 
 export default function ClientReviewForm({ slug }: ClientReviewFormProps) {
-  const pathname = useRouter();
+  const router = useRouter();
   const { showToast } = useToast();
   const { data, isLoading } = useSingleOrderQuery(slug || "", {
     skip: !slug,
   });
   const [updateOrder, { isLoading: updating }] = useUpdateOrderMutation();
-  const [reviews, setReviews] = useState<Record<string, ReviewState>>({});
 
   const order: TOrder | undefined = data?.data;
+  const [reviews, setReviews] = useState<Record<string, ReviewState>>({});
 
-  // Get unique products from order items
+  // Filter order items: only unique & not yet reviewed by this user
   const uniqueOrderItems: TOrderItem[] = useMemo(() => {
     if (!order?.orderItems) return [];
 
     const seen = new Set<string>();
+    const reviewsArray = Array.isArray(order.reviews) ? order.reviews : [];
+
     return order.orderItems.filter((item) => {
       const productId = item?.productId?._id;
       if (!productId || seen.has(productId)) return false;
+
+      // Check if this product is already reviewed by this user
+      const alreadyReviewed = reviewsArray.some(
+        (rev: TReview) =>
+          rev.productId.toString() === productId.toString() &&
+          rev.userId.toString() === order.customerId.toString()
+      );
+
+      if (alreadyReviewed) return false;
+
       seen.add(productId);
       return true;
     });
   }, [order]);
 
-  // Initialize reviews state
+  // Initialize review state for all products
   useEffect(() => {
     if (uniqueOrderItems.length > 0) {
       const initialReviews: Record<string, ReviewState> = {};
@@ -65,6 +78,19 @@ export default function ClientReviewForm({ slug }: ClientReviewFormProps) {
     }
   }, [uniqueOrderItems]);
 
+  // Redirect to track-order if all reviews are submitted
+  useEffect(() => {
+    const allSubmitted =
+      uniqueOrderItems.length > 0 &&
+      uniqueOrderItems.every(
+        (item) => reviews[item.productId._id]?.isSubmitted
+      );
+
+    if (allSubmitted) {
+      router.push("/track-order");
+    }
+  }, [reviews, uniqueOrderItems, router]);
+
   const handleRatingChange = (productId: string, value: number) => {
     setReviews((prev) => ({
       ...prev,
@@ -76,22 +102,22 @@ export default function ClientReviewForm({ slug }: ClientReviewFormProps) {
   };
 
   const handleSubmit = async (productId: string, values: FieldValues) => {
+    if (!order) return;
+
     try {
       const reviewData = {
         reviews: {
           productId,
-          userId: order?.customerId,
+          userId: order.customerId,
           comment: values.comment || "",
           rating: reviews[productId]?.rating || 2,
         },
       };
 
       await updateOrder({
-        id: order?._id,
+        id: order._id,
         data: reviewData,
       }).unwrap();
-
-      // Mark this review as submitted
       setReviews((prev) => ({
         ...prev,
         [productId]: {
@@ -115,7 +141,20 @@ export default function ClientReviewForm({ slug }: ClientReviewFormProps) {
   if (isLoading) return <Loader />;
 
   if (uniqueOrderItems.length === 0) {
-    pathname.push("/track-order");
+    return (
+      <Box
+        sx={{
+          minHeight: "80vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography variant="h6" color="text.secondary">
+          All products are reviewed. Redirecting...
+        </Typography>
+      </Box>
+    );
   }
 
   return (
@@ -132,7 +171,7 @@ export default function ClientReviewForm({ slug }: ClientReviewFormProps) {
           const productTitle = item.productId.title;
           const review = reviews[productId];
 
-          if (!review) return null;
+          if (!review || review.isSubmitted) return null;
 
           return (
             <Container
@@ -155,57 +194,51 @@ export default function ClientReviewForm({ slug }: ClientReviewFormProps) {
                 Review: {productTitle}
               </Typography>
 
-              {review.isSubmitted ? (
-                <Typography variant="body1" align="center" sx={{ py: 3 }}>
-                  Thank you! Your review has been submitted.
-                </Typography>
-              ) : (
-                <ReusableForm
-                  onSubmit={(values) => handleSubmit(productId, values)}
-                >
-                  <Grid container spacing={2}>
-                    <Grid size={{ xs: 12 }}>
-                      <TextInput
-                        name="comment"
-                        label="Write your opinion"
-                        multiline
-                        row={4}
-                        fullWidth
-                        required
-                      />
-                    </Grid>
-
-                    <Grid size={{ xs: 12 }} sx={{ textAlign: "center" }}>
-                      <Typography variant="body1" sx={{ mb: 1 }}>
-                        Your Rating
-                      </Typography>
-                      <RatingInput
-                        value={review.rating}
-                        setValue={(val: any) =>
-                          handleRatingChange(productId, val)
-                        }
-                      />
-                    </Grid>
-
-                    <Grid size={{ xs: 12 }} sx={{ textAlign: "center" }}>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        disabled={updating}
-                        sx={{
-                          textTransform: "none",
-                          px: 4,
-                          py: 1.2,
-                          fontWeight: 600,
-                        }}
-                      >
-                        {updating ? "Submitting..." : "Submit Review"}
-                      </Button>
-                    </Grid>
+              <ReusableForm
+                onSubmit={(values) => handleSubmit(productId, values)}
+              >
+                <Grid container spacing={2}>
+                  <Grid size={{ xs: 12 }}>
+                    <TextInput
+                      name="comment"
+                      label="Write your opinion"
+                      multiline
+                      row={4}
+                      fullWidth
+                      required
+                    />
                   </Grid>
-                </ReusableForm>
-              )}
+
+                  <Grid size={{ xs: 12 }} sx={{ textAlign: "center" }}>
+                    <Typography variant="body1" sx={{ mb: 1 }}>
+                      Your Rating
+                    </Typography>
+                    <RatingInput
+                      value={review.rating}
+                      setValue={(val: any) =>
+                        handleRatingChange(productId, val)
+                      }
+                    />
+                  </Grid>
+
+                  <Grid size={{ xs: 12 }} sx={{ textAlign: "center" }}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      disabled={updating}
+                      sx={{
+                        textTransform: "none",
+                        px: 4,
+                        py: 1.2,
+                        fontWeight: 600,
+                      }}
+                    >
+                      {updating ? "Submitting..." : "Submit Review"}
+                    </Button>
+                  </Grid>
+                </Grid>
+              </ReusableForm>
             </Container>
           );
         })}

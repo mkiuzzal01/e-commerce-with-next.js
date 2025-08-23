@@ -63,7 +63,7 @@ export type TOrder = {
   slug?: string;
   orderItems: TOrderItem[];
   customerId: TCustomer;
-  reviews: TReview;
+  reviews: TReview[];
   deliveryAddress: TLocation;
   totalPrice: number;
   orderStatus: TOrderStatus;

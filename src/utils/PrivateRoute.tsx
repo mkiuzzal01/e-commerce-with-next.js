@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { useUser } from "@/lib/useUser";
+import { useUser } from "@/lib/hooks/useUser";
 import Loader from "./Loader";
 
 export function PrivateRoute({ children }: { children: React.ReactNode }) {

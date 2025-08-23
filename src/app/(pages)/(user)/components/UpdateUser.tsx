@@ -6,7 +6,7 @@ import { FieldValues } from "react-hook-form";
 import { TextInput } from "@/components/shared/input-fields/TextInput";
 import { SelectInput } from "@/components/shared/input-fields/SelectInput";
 import ReusableForm from "@/components/shared/ReusableForm";
-import { useUser } from "@/lib/useUser";
+import { useUser } from "@/lib/hooks/useUser";
 import Loader from "@/utils/Loader";
 // import { userValidationSchema } from "./updateUserValidation";
 import { useUpdateUserMutation } from "@/redux/features/auth/auth.Api";

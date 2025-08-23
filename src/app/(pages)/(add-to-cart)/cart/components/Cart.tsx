@@ -19,7 +19,7 @@ import Loader from "@/utils/Loader";
 import { useState } from "react";
 import CartItemCard from "@/utils/cards/CartItemCard";
 import OrderSummary from "./OrderSummary";
-import { useCart } from "@/lib/useCart";
+import { useCart } from "@/lib/hooks/useCart";
 
 export default function Cart() {
   const [page, setPage] = useState(1);
@@ -67,9 +67,9 @@ export default function Cart() {
         </Box>
 
         {/* Validation Errors */}
-        {!validation.isValid && validation.errors.length > 0 && (
+        {!validation?.isValid && validation?.errors.length > 0 && (
           <Box sx={{ mb: 3 }}>
-            {validation.errors.map((error, index) => (
+            {validation?.errors.map((error, index) => (
               <Alert key={index} severity="warning" sx={{ mb: 1 }}>
                 {error}
               </Alert>
@@ -80,7 +80,7 @@ export default function Cart() {
         {/* Main Content */}
         <Grid container spacing={3}>
           {/* Cart Items */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 7 }}>
             <Stack spacing={2}>
               {mergedCartData.length > 0 && (
                 <FormControlLabel
@@ -172,7 +172,7 @@ export default function Cart() {
           </Grid>
 
           {/* Order Summary */}
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid size={{ xs: 12, md: 5 }}>
             <OrderSummary
               subtotal={orderSummary.subtotal}
               total={orderSummary.total}

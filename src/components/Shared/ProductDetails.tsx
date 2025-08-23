@@ -30,13 +30,14 @@ import { useSingleProductBySlugQuery } from "@/redux/features/product/product.Ap
 import Loader from "@/utils/Loader";
 import { TCartItem, TProduct } from "@/Types/ProductType";
 import { useToast } from "@/utils/tost-alert/ToastProvider";
-import { useDiscount } from "@/lib/useDiscount";
+import { useDiscount } from "@/lib/hooks/useDiscount";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addToWishlist, removeFromWishlist } from "@/redux/slice/wishlistSlice";
 import { addToCart } from "@/redux/slice/cartSlice";
+import { dateTimeFormatter } from "@/lib/dateTimeFormatter";
 
 export default function ProductDetails({ slug }: { slug: string }) {
-  const { data, isLoading } = useSingleProductBySlugQuery(slug || "");
+  const { data, isLoading, refetch } = useSingleProductBySlugQuery(slug || "");
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState<number | null>(null);
   const [selectedColor, setSelectedColor] = useState<number | null>(null);
@@ -49,6 +50,8 @@ export default function ProductDetails({ slug }: { slug: string }) {
   const product: TProduct = data?.data;
   const { finalPrice } = useDiscount(product?.price, product?.discount);
   const isWishlisted = wishlistItems.some((item) => item._id === product?._id);
+
+  console.log(product);
 
   if (isLoading) return <Loader />;
   if (!product) {
@@ -72,11 +75,6 @@ export default function ProductDetails({ slug }: { slug: string }) {
     product.productImage?.photo?.url,
     ...(product.optionalImages?.map((img) => img.photo?.url) || []),
   ].filter(Boolean);
-
-  const averageRating = product.reviews?.length
-    ? product.reviews.reduce((sum, review) => sum + (review.rating || 0), 0) /
-      product.reviews.length
-    : 0;
 
   const handleQuantityChange = (change: number) => {
     const newQuantity = quantity + change;
@@ -159,6 +157,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
       message: "Product added to cart successfully!",
       type: "success",
     });
+    refetch();
   };
 
   const handleAddToWishlist = () => {
@@ -175,6 +174,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
         message: "Added to wishlist successfully!",
         type: "success",
       });
+      refetch();
     }
   };
 
@@ -295,10 +295,10 @@ export default function ProductDetails({ slug }: { slug: string }) {
                 spacing={2}
                 sx={{ mb: 3 }}
               >
-                <Rating value={averageRating} precision={0.5} readOnly />
+                <Rating value={product?.totalRating} precision={0.5} readOnly />
                 <Typography variant="body2" color="text.secondary">
-                  {averageRating.toFixed(1)} ({product.reviews?.length || 0}{" "}
-                  reviews)
+                  {product?.totalRating.toFixed(1)} (
+                  {product?.reviews?.length || 0} reviews)
                 </Typography>
               </Stack>
 
@@ -501,25 +501,26 @@ export default function ProductDetails({ slug }: { slug: string }) {
         </Grid>
 
         {/* Reviews Section */}
-        <Box sx={{ mt: 6 }}>
-          <Divider sx={{ mb: 4 }} />
-          <Typography variant="h4" sx={{ mb: 3, fontWeight: "bold" }}>
-            Customer Reviews
-          </Typography>
+        {product?.reviews && product.reviews.length > 0 && (
+          <Box sx={{ mt: 6 }}>
+            <Divider sx={{ mb: 4 }} />
+            <Typography variant="h4" sx={{ mb: 3, fontWeight: "bold" }}>
+              Customer Reviews
+            </Typography>
 
-          {product?.reviews ? (
             <Stack spacing={3}>
-              {product?.reviews.map((review, index) => {
+              {product.reviews.map((review, index) => {
+                // Determine reviewer name
                 let name = "Anonymous";
                 if (
                   review?.userId?.name &&
                   typeof review.userId.name === "object" &&
                   review.userId.name !== null &&
-                  "firstName" in review.userId.name &&
-                  "middleName" in review.userId.name &&
-                  "lastName" in review.userId.name
+                  "firstName" in review?.userId?.name &&
+                  "middleName" in review?.userId?.name &&
+                  "lastName" in review?.userId?.name
                 ) {
-                  const nameObj = review.userId.name as {
+                  const nameObj = review?.userId?.name as {
                     firstName?: string;
                     middleName?: string;
                     lastName?: string;
@@ -533,10 +534,11 @@ export default function ProductDetails({ slug }: { slug: string }) {
                   name = name.trim();
                 } else if (
                   review?.userId?.name &&
-                  typeof review.userId.name === "string"
+                  typeof review?.userId?.name === "string"
                 ) {
-                  name = review.userId.name;
+                  name = review?.userId?.name;
                 }
+
                 return (
                   <Card key={index} sx={{ p: 3 }}>
                     <Stack direction="row" spacing={2}>
@@ -560,19 +562,19 @@ export default function ProductDetails({ slug }: { slug: string }) {
                           >
                             <AccessTime fontSize="small" color="action" />
                             <Typography variant="body2" color="text.secondary">
-                              {new Date(review.createdAt).toLocaleDateString()}
+                              {dateTimeFormatter(review?.createdAt as string)}
                             </Typography>
                           </Stack>
                         </Stack>
                         <Rating
-                          value={review.rating}
+                          value={review?.rating}
                           precision={0.5}
                           readOnly
                           size="small"
                           sx={{ mb: 1 }}
                         />
                         <Typography variant="body1">
-                          {review.comment}
+                          {review?.comment}
                         </Typography>
                       </Box>
                     </Stack>
@@ -580,24 +582,8 @@ export default function ProductDetails({ slug }: { slug: string }) {
                 );
               })}
             </Stack>
-          ) : (
-            <Box
-              sx={{
-                textAlign: "center",
-                py: 4,
-                bgcolor: "background.paper",
-                borderRadius: 2,
-              }}
-            >
-              <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
-                No Reviews Yet
-              </Typography>
-              <Typography variant="body1" color="text.secondary">
-                Be the first to review this product
-              </Typography>
-            </Box>
-          )}
-        </Box>
+          </Box>
+        )}
       </Box>
     </Box>
   );

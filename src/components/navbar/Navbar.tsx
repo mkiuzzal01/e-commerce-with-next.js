@@ -34,7 +34,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { TCartItem, TWishlistItem } from "@/Types/ProductType";
 import UserMenu from "@/utils/modal/UserInfoModal";
 import { userRouteLinks } from "./userRouteLinks";
-import { useUser } from "@/lib/useUser";
+import { useUser } from "@/lib/hooks/useUser";
 
 export default function Navbar() {
   const { user, userInfo, userComing } = useUser();
@@ -51,8 +51,6 @@ export default function Navbar() {
   const theme = useTheme();
   const { data, isLoading } = useAllMainCategoryQuery({});
   const navLinks: TNavLink[] = data?.data?.result || [];
-
-  console.log(navLinks);
 
   const handleMouseEnter = (index: number) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);

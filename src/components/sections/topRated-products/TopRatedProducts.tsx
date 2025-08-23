@@ -23,6 +23,8 @@ const TopRatedProducts = () => {
   });
   const topRatedProducts: TProduct[] = data?.data?.result || [];
 
+  // console.log(topRatedProducts);
+
   if (isLoading) return <Loader />;
 
   return (

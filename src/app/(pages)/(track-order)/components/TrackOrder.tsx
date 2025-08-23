@@ -5,7 +5,7 @@ import SectionHeader from "@/components/shared/SectionHeader";
 import { Truck } from "lucide-react";
 import ReusablePagination from "@/components/shared/ReusablePagination";
 import { useAllOrderByKeyWordQuery } from "@/redux/features/order/order.Api";
-import { useUser } from "@/lib/useUser";
+import { useUser } from "@/lib/hooks/useUser";
 import Loader from "@/utils/Loader";
 import Upcoming from "./Upcoming";
 import Delivered from "./Delivered";

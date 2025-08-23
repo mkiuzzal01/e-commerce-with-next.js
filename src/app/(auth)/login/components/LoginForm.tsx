@@ -7,9 +7,9 @@ import { useLoginMutation } from "@/redux/features/auth/auth.Api";
 import Loader from "@/utils/Loader";
 import { useToast } from "@/utils/tost-alert/ToastProvider";
 import ReusableForm from "@/components/shared/ReusableForm";
-import { verifyToken } from "@/lib/verifyToken";
 import { setUser, TUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
+import { verifyToken } from "@/lib/verifyToken";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();

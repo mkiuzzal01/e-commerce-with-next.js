@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useDiscount } from "@/lib/useDiscount";
+import { useDiscount } from "@/lib/hooks/useDiscount";
 import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import AppLink from "../AppLink";

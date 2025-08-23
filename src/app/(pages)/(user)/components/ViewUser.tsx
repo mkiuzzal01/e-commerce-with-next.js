@@ -12,7 +12,7 @@ import {
   Divider,
   Button,
 } from "@mui/material";
-import { useUser } from "@/lib/useUser";
+import { useUser } from "@/lib/hooks/useUser";
 import Loader from "@/utils/Loader";
 import AppLink from "@/utils/AppLink";
 
@@ -53,7 +53,7 @@ export default function ViewUser() {
   const role = userInfo?.role;
   const status = userInfo?.status;
   const address = userInfo?.address;
-  
+
   if (userComing) return <Loader />;
 
   return (

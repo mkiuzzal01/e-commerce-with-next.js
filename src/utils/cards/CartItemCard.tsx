@@ -17,7 +17,7 @@ import { Delete } from "lucide-react";
 import AppLink from "../AppLink";
 import { useState } from "react";
 import { Add, Remove } from "@mui/icons-material";
-import { useDiscount } from "@/lib/useDiscount";
+import { useDiscount } from "@/lib/hooks/useDiscount";
 
 type CartVariant = {
   name: string;

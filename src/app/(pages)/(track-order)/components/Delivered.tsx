@@ -15,6 +15,8 @@ import {
 import { CheckCircle } from "lucide-react";
 import { TOrder } from "@/Types/OrderType";
 import Link from "next/link";
+import Loader from "@/utils/Loader";
+import { dateTimeFormatter } from "@/lib/dateTimeFormatter";
 
 const statusSteps = [
   "PENDING",
@@ -39,24 +41,7 @@ export default function Delivered({
   orders: TOrder[];
   isLoading?: boolean;
 }) {
-  if (isLoading) {
-    return (
-      <Card elevation={3}>
-        <CardContent sx={{ textAlign: "center", py: 6 }}>
-          <Typography variant="h6" color="text.secondary">
-            Loading delivered orders...
-          </Typography>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  const formatDate = (dateString: string) =>
-    new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    });
+  if (isLoading) return <Loader />;
 
   if (orders.length === 0) {
     return (
@@ -84,7 +69,14 @@ export default function Delivered({
         const customerName = `${order.customerId?.name?.firstName || ""} ${
           order.customerId?.name?.middleName || ""
         } ${order.customerId?.name?.lastName || ""}`.trim();
-        const isReviewed = Boolean(order.reviews?.productId);
+
+        const allItemsReviewed = order.orderItems?.every((item) =>
+          order.reviews?.some(
+            (rev) =>
+              rev.productId?.toString() === item.productId?._id?.toString() &&
+              rev.userId?.toString() === order.customerId?._id?.toString()
+          )
+        );
 
         return (
           <Grid size={{ xs: 12 }} key={order._id || idx}>
@@ -101,7 +93,7 @@ export default function Delivered({
                       Email: {order.customerId?.email || "N/A"}
                     </Typography>
                     <Typography>
-                      Placed At: {formatDate(order.createdAt as string)}
+                      Placed At: {dateTimeFormatter(order?.createdAt as string)}
                     </Typography>
                     <Typography>
                       Delivered To:{" "}
@@ -109,7 +101,8 @@ export default function Delivered({
                     </Typography>
                     {order.updatedAt && (
                       <Typography color="success.main" fontWeight="medium">
-                        Delivered On: {formatDate(order.updatedAt)}
+                        Delivered On:{" "}
+                        {dateTimeFormatter(order?.updatedAt as string)}
                       </Typography>
                     )}
                   </Grid>
@@ -121,7 +114,7 @@ export default function Delivered({
                       Total: ৳{order?.totalPrice || 0}
                     </Typography>
                     <Box>
-                      {!isReviewed && (
+                      {!allItemsReviewed && (
                         <Link href={`/review/${order?.slug}`}>
                           <Button variant="contained">Review</Button>
                         </Link>

@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import Loader from "@/utils/Loader";
 import { TOrder } from "@/Types/OrderType";
+import { dateTimeFormatter } from "@/lib/dateTimeFormatter";
 
 // Display names for statuses
 const statusDisplayNames: Record<string, string> = {
@@ -28,15 +29,6 @@ export default function Canceled({
   isLoading = false,
 }: CanceledProps) {
   const canceledOrders = orders;
-
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    });
-  };
 
   if (isLoading) return <Loader />;
 
@@ -77,7 +69,7 @@ export default function Canceled({
                       Email: {order?.customerId?.email || "N/A"}
                     </Typography>
                     <Typography>
-                      Placed At: {formatDate(order?.createdAt as string)}
+                      Placed At: {dateTimeFormatter(order?.createdAt as string)}
                     </Typography>
                     <Typography color="error" fontWeight="bold">
                       Status:{" "}

@@ -17,6 +17,7 @@ import Loader from "@/utils/Loader";
 import { TOrder } from "@/Types/OrderType";
 import { useOrderStatusChangeMutation } from "@/redux/features/order/order.Api";
 import { useToast } from "@/utils/tost-alert/ToastProvider";
+import { dateTimeFormatter } from "@/lib/dateTimeFormatter";
 
 // Order status steps in sequence
 const statusSteps = ["PENDING", "PROCESSING", "SHIPPED", "DELIVERED"];
@@ -44,15 +45,6 @@ export default function Upcoming({
   const upcomingOrders = orders;
   const [orderStatusChange, { isLoading: changing }] =
     useOrderStatusChangeMutation();
-
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    });
-  };
 
   const handleCancelOrder = async (orderId: string) => {
     const { data } = await orderStatusChange({
@@ -113,7 +105,7 @@ export default function Upcoming({
                       Email: {order?.customerId?.email || "N/A"}
                     </Typography>
                     <Typography>
-                      Placed At: {formatDate(order?.createdAt as string)}
+                      Placed At: {dateTimeFormatter(order?.createdAt as string)}
                     </Typography>
                     <Typography>
                       Status:{" "}

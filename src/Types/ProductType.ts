@@ -45,6 +45,7 @@ export type TProduct = {
   title: string;
   subTitle?: string;
   totalQuantity: number;
+  totalRating: number;
   variants: TProductVariant[];
   price: number;
   discount: number;
