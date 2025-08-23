@@ -8,8 +8,8 @@ import { useToast } from "@/utils/tost-alert/ToastProvider";
 import { useRegisterMutation } from "@/redux/features/auth/auth.Api";
 import Loader from "@/utils/Loader";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ReusableForm from "@/components/shared/ReusableForm";
 import { RegisterFormValidation } from "./RegisterFormValidation";
+import ReusableForm from "@/components/shared/ReusableForm";
 
 export default function RegisterForm() {
   const router = useRouter();

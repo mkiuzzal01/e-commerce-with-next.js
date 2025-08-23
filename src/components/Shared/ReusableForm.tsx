@@ -15,7 +15,7 @@ type FormProps<T extends FieldValues> = {
   resolver?: Resolver<T>;
 };
 
-function ReusableForm<T extends FieldValues>({
+export default function ReusableForm<T extends FieldValues>({
   children,
   onSubmit,
   defaultValues,
@@ -34,5 +34,3 @@ function ReusableForm<T extends FieldValues>({
     </FormProvider>
   );
 }
-
-export default ReusableForm;

@@ -1,5 +1,4 @@
 "use client";
-import SectionHeader from "@/components/shared/SectionHeader";
 import { Box, Divider } from "@mui/material";
 import { Store } from "lucide-react";
 import MissionVision from "./components/MissionVision";
@@ -7,6 +6,7 @@ import WhyShop from "./components/WhyShop";
 import CoreValues from "./components/CoreValues";
 import Stakeholders from "./components/Stakeholders";
 import Map from "@/components/sections/map/Map";
+import SectionHeader from "@/components/shared/SectionHeader";
 
 export default function page() {
   return (
