@@ -29,7 +29,10 @@ export default function FlashSale() {
 
   const { data, isLoading } = useAllProductByKeyWordQuery({
     queryParams: {},
-    headerParams: { params: { productPlace: "flash-sale" } },
+    headerParams: {
+      params: { productPlace: "flash-sale" },
+      activity: "market-launch",
+    },
   });
   const flashProducts: TProduct[] = data?.data?.result || [];
   const meta = data?.data?.meta || { totalPages: 1 };

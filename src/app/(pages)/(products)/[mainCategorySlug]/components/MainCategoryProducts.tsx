@@ -42,6 +42,7 @@ export default function MainCategoryProducts({
     queryParams,
     headerParams: {
       params: { "categories.mainCategory": singleMainCategoryData?.data?._id },
+      activity: "market-launch",
     },
   });
 

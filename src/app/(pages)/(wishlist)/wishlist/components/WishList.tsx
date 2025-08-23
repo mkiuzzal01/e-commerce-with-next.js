@@ -29,6 +29,7 @@ export default function Wishlist() {
     queryParams,
     headerParams: {
       params: { _id: { $in: wishListIds } },
+      activity: "market-launch",
     },
   });
 

@@ -12,6 +12,7 @@ import Image from "next/image";
 import logo from "../../../public/assets/logo/logo.png";
 import { useAllMainCategoryQuery } from "@/redux/features/category/category.Api";
 import { TNavLink } from "../navbar/TNavbar";
+import AppLink from "@/utils/AppLink";
 
 const icons = [
   {
@@ -44,10 +45,11 @@ export default function Footer() {
   return (
     <Box sx={{ bgcolor: "#111827", color: "white", pt: 6, pb: 3 }}>
       <Box className="container mx-auto px-4">
-        <Grid container spacing={3}>
+        <Grid container spacing={4}>
+          {/* Logo and Social Media Section */}
           <Grid size={{ xs: 12, md: 3 }}>
             <MuiLink href="/" underline="none" color="inherit">
-              <Box sx={{ mb: 2 }}>
+              <Box sx={{ mb: 3 }}>
                 <Image
                   src={logo}
                   alt="YourShop Logo"
@@ -57,13 +59,23 @@ export default function Footer() {
                 />
               </Box>
             </MuiLink>
-            <Box>
+            <Typography variant="body2" sx={{ mb: 2, color: "grey.400" }}>
+              Your trusted partner for quality products and exceptional service.
+            </Typography>
+            <Box sx={{ display: "flex", gap: 1 }}>
               {icons.map(({ title, icon: Icon, link }, idx) => (
                 <IconButton
                   key={idx}
                   color="inherit"
-                  size="large"
-                  sx={{ p: 1 }}
+                  size="medium"
+                  sx={{
+                    p: 1,
+                    "&:hover": {
+                      bgcolor: "rgba(255, 255, 255, 0.1)",
+                      transform: "translateY(-2px)",
+                    },
+                    transition: "all 0.2s ease-in-out",
+                  }}
                   title={title}
                   aria-label={title}
                   component="a"
@@ -71,61 +83,183 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Icon fontSize="medium" />
+                  <Icon fontSize="small" />
                 </IconButton>
               ))}
             </Box>
           </Grid>
-          {!isLoading &&
-            navLinks.map((main, index) => (
-              <Grid size={{ xs: 6, md: 2 }} key={index}>
-                <Typography variant="subtitle1" gutterBottom fontWeight="bold">
-                  {main.name.toUpperCase()}
-                </Typography>
-                {main.category?.map((cat, idx) => (
-                  <Box key={idx} sx={{ mb: 1 }}>
-                    <MuiLink
-                      href={`/${main.slug}/category/${cat.slug}`}
-                      underline="hover"
-                      color="inherit"
-                    >
-                      {cat.name.charAt(0).toUpperCase() + cat.name.slice(1)}
-                    </MuiLink>
-                  </Box>
-                ))}
-              </Grid>
-            ))}
-          <Grid size={{ xs: 12, md: 3 }}>
+
+          {/* Dynamic Navigation Categories Section */}
+          <Grid size={{ xs: 12, md: 6 }}>
             <Typography
-              variant="subtitle1"
+              variant="h6"
               gutterBottom
               fontWeight="bold"
-              sx={{
-                textTransform: "uppercase",
-              }}
+              sx={{ mb: 3, textTransform: "uppercase", color: "white" }}
+            >
+              Categories
+            </Typography>
+            {!isLoading && navLinks.length > 0 ? (
+              <Grid container spacing={3}>
+                {navLinks.map((main, index) => (
+                  <Grid
+                    size={{
+                      xs: 12,
+                      sm: navLinks.length > 2 ? 6 : 12 / navLinks.length,
+                      md: navLinks.length > 3 ? 4 : 12 / navLinks.length,
+                    }}
+                    key={index}
+                  >
+                    <AppLink href={`/${main?.slug}`}>
+                      <Typography
+                        variant="subtitle2"
+                        gutterBottom
+                        fontWeight="bold"
+                        sx={{
+                          mb: 2,
+                          color: "var(--color-brand-primary)",
+                          textTransform: "uppercase",
+                          fontSize: "0.875rem",
+                          cursor: "pointer",
+                          "&:hover": {
+                            color: "white",
+                          },
+                          transition: "all 0.2s ease-in-out",
+                        }}
+                      >
+                        {main?.name}
+                      </Typography>
+                    </AppLink>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.5,
+                        maxHeight: "200px",
+                        overflowY: "auto",
+                        "&::-webkit-scrollbar": {
+                          width: "4px",
+                        },
+                        "&::-webkit-scrollbar-track": {
+                          background: "rgba(255, 255, 255, 0.1)",
+                        },
+                        "&::-webkit-scrollbar-thumb": {
+                          background: "var(--color-brand-primary)",
+                          borderRadius: "2px",
+                        },
+                        "&::-webkit-scrollbar-thumb:hover": {
+                          background: "white",
+                        },
+                      }}
+                    >
+                      {main?.category?.map((cat, idx) => (
+                        <AppLink
+                          key={idx}
+                          href={`/${main?.slug}/category/${cat.slug}`}
+                        >
+                          <Box
+                            sx={{
+                              color: "grey.400",
+                              fontSize: "0.875rem",
+                              display: "block",
+                              cursor: "pointer",
+                              "&:hover": {
+                                color: "var(--color-brand-primary)",
+                                paddingLeft: "4px",
+                              },
+                              transition: "all 0.2s ease-in-out",
+                            }}
+                          >
+                            {cat.name.charAt(0).toUpperCase() +
+                              cat.name.slice(1)}
+                          </Box>
+                        </AppLink>
+                      ))}
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
+            ) : (
+              <Typography variant="body2" color="grey.400">
+                {isLoading
+                  ? "Loading categories..."
+                  : "No categories available"}
+              </Typography>
+            )}
+          </Grid>
+
+          {/* Contact Information Section */}
+          <Grid size={{ xs: 12, md: 3 }}>
+            <Typography
+              variant="h6"
+              gutterBottom
+              fontWeight="bold"
+              sx={{ mb: 3, textTransform: "uppercase", color: "white" }}
             >
               Contact Us
             </Typography>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+              <Box>
+                <Typography variant="body2" fontWeight="bold" sx={{ mb: 0.5 }}>
+                  Email:
+                </Typography>
+                <MuiLink
+                  href="mailto:exportcornerkhulna@gmail.com"
+                  color="grey.400"
+                  underline="hover"
+                  sx={{
+                    fontSize: "0.875rem",
+                    "&:hover": { color: "var(--color-brand-primary)" },
+                  }}
+                >
+                  exportcornerkhulna@gmail.com
+                </MuiLink>
+              </Box>
 
-            <Typography variant="body2" sx={{ mb: 0.5 }}>
-              Email: exportcornerkhulna@gmail.com
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 0.5 }}>
-              Phone: +880-1234-567890
-            </Typography>
-            <Typography variant="body2">Address: Khulna, Bangladesh</Typography>
+              <Box>
+                <Typography variant="body2" fontWeight="bold" sx={{ mb: 0.5 }}>
+                  Phone:
+                </Typography>
+                <MuiLink
+                  href="tel:+8801234567890"
+                  color="grey.400"
+                  underline="hover"
+                  sx={{
+                    fontSize: "0.875rem",
+                    "&:hover": { color: "var(--color-brand-primary)" },
+                  }}
+                >
+                  +880-1234-567890
+                </MuiLink>
+              </Box>
+
+              <Box>
+                <Typography variant="body2" fontWeight="bold" sx={{ mb: 0.5 }}>
+                  Address:
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="grey.400"
+                  sx={{ fontSize: "0.875rem" }}
+                >
+                  Khulna, Bangladesh
+                </Typography>
+              </Box>
+            </Box>
           </Grid>
         </Grid>
+
+        {/* Copyright Section */}
         <Box
           sx={{
             textAlign: "center",
-            mt: 5,
-            borderTop: "1px solid #333",
-            pt: 2,
+            mt: 6,
+            pt: 3,
+            borderTop: "1px solid #374151",
           }}
         >
-          <Typography variant="caption" color="grey.500">
-            &copy; {year} Export corner. All rights reserved.
+          <Typography variant="body2" color="grey.500">
+            &copy; {year} Export Corner. All rights reserved.
           </Typography>
         </Box>
       </Box>

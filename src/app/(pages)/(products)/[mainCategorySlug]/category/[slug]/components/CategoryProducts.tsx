@@ -51,6 +51,7 @@ export default function CategoryProducts({ params }: PageProps) {
         "categories.mainCategory": singleMainCategory?.data?._id,
         "categories.category": singleCategory?.data?._id,
       },
+      activity: "market-launch",
     },
   });
 

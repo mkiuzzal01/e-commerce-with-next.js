@@ -482,7 +482,59 @@ export default function Navbar() {
               alignItems="center"
               mb={2}
             >
-              <Image src={logo} alt="Logo" width={60} height={40} />
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                gap={3}
+              >
+                <AppLink href="/track-order">
+                  <Box
+                    sx={{
+                      color: "inherit",
+                      fontSize: "0.875rem",
+                      cursor: "pointer",
+                      "&:hover": { color: "blue.main" },
+                      textDecoration: "none",
+                    }}
+                  >
+                    Track Order
+                  </Box>
+                </AppLink>
+
+                <AppLink href="/about">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                      color: "inherit",
+                      fontSize: "0.875rem",
+                      cursor: "pointer",
+                      "&:hover": { color: "orange.main" },
+                      textDecoration: "none",
+                    }}
+                  >
+                    About us
+                  </Box>
+                </AppLink>
+                <AppLink href="/contact">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                      color: "inherit",
+                      fontSize: "0.875rem",
+                      cursor: "pointer",
+                      "&:hover": { color: "orange.main" },
+                      textDecoration: "none",
+                    }}
+                  >
+                    Contact us
+                  </Box>
+                </AppLink>
+              </Box>
               <IconButton
                 aria-label="Close mobile menu"
                 onClick={handleCloseMobileMenu}

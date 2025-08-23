@@ -37,7 +37,10 @@ export default function FlashSale() {
   const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(SALE_END));
   const { data, isLoading } = useAllProductByKeyWordQuery({
     queryParams: {},
-    headerParams: { params: { productPlace: "flash-sale" } },
+    headerParams: {
+      params: { productPlace: "flash-sale" },
+      activity: "market-launch",
+    },
   });
   const flashSaleProducts: TProduct[] = data?.data?.result || [];
 

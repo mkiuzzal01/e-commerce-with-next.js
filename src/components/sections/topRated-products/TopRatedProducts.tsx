@@ -19,6 +19,7 @@ const TopRatedProducts = () => {
     queryParams: {},
     headerParams: {
       params: { totalRating: { $gte: 1 } },
+      activity: "market-launch",
     },
   });
   const topRatedProducts: TProduct[] = data?.data?.result || [];

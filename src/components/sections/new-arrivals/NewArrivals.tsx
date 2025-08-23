@@ -34,6 +34,7 @@ export default function NewArrivals() {
         selected && selected !== "all"
           ? { "categories.mainCategory": selected }
           : {},
+      activity: "market-launch",
     },
   });
 

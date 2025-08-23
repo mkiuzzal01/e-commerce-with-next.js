@@ -27,7 +27,10 @@ export default function Cart() {
   const productIds = cartItems.map((item) => item.productId);
   const { data, isLoading: isProduct } = useAllProductByKeyWordQuery({
     queryParams: { page, limit: 12 },
-    headerParams: { params: { _id: { $in: productIds } } },
+    headerParams: {
+      params: { _id: { $in: productIds } },
+      activity: "market-launch",
+    },
   });
 
   const products: TProduct[] = data?.data?.result || [];

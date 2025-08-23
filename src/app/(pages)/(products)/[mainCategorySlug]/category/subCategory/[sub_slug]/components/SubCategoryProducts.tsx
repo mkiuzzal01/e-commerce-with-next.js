@@ -50,6 +50,7 @@ export default function SubCategoryProducts({ params }: PageProps) {
         "categories.mainCategory": singleMainCategory?.data?._id,
         "categories.subCategory": singleSubCategory?.data?._id,
       },
+      activity: "market-launch",
     },
   });
 

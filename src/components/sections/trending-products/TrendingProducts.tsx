@@ -19,7 +19,10 @@ export default function TrendingProducts() {
   const carouselRef = useRef<CarouselRef>(null);
   const { data, isLoading } = useAllProductByKeyWordQuery({
     queryParams: {},
-    headerParams: { params: { productPlace: "trending" } },
+    headerParams: {
+      params: { productPlace: "trending" },
+      activity: "market-launch",
+    },
   });
   const trendingProducts: TProduct[] = data?.data?.result || [];
 
