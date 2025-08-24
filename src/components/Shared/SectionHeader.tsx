@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import { Box, Typography, Stack, useTheme } from "@mui/material";
 
 type SectionHeaderProps = {

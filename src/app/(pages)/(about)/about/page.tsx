@@ -6,7 +6,7 @@ import WhyShop from "./components/WhyShop";
 import CoreValues from "./components/CoreValues";
 import Stakeholders from "./components/Stakeholders";
 import Map from "@/components/sections/map/Map";
-import SectionHeader from "@/components/shared/SectionHeader";
+import SectionHeader from "../../../../components/shared/SectionHeader";
 
 export default function page() {
   return (

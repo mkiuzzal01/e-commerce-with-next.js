@@ -29,13 +29,18 @@ interface IBannerItem {
 
 export default function Banner() {
   const { data, isLoading } = useAllContentQuery({});
-  const bannerData: IBannerItem[] = data?.data?.result;
+  const bannerData: IBannerItem[] = data?.data?.result || [];
 
   if (isLoading) return <Loader />;
 
   return (
     <Box className="relative third-color overflow-hidden">
       <Box className="relative z-10">
+        {bannerData.length === 0 && (
+          <Typography className="text-center text-2xl py-5 text-white">
+            No Banner Available!
+          </Typography>
+        )}
         <ReusableCarousel
           autoplay
           pagination

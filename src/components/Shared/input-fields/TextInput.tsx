@@ -20,12 +20,12 @@ type TextInputProps = {
 export default function TextInput({
   name,
   label,
-  placeholder,
-  type,
+  placeholder = "",
+  type = "text",
   variant,
   required,
   defaultValue,
-  fullWidth,
+  fullWidth = true,
   multiline,
   row,
 }: TextInputProps) {
