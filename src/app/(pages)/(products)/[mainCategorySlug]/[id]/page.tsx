@@ -1,4 +1,4 @@
-import ProductDetails from "@/components/shared/ProductDetails";
+import ProductDetails from "@/components/Shared/ProductDetails";
 import { Box } from "@mui/material";
 
 type PageProps = {

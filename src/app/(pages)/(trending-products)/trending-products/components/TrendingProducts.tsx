@@ -3,7 +3,7 @@
 import ProductCard1 from "@/utils/cards/ProductCard1";
 import { Box } from "@mui/material";
 import React, { useState } from "react";
-import ReusablePagination from "@/components/shared/ReusablePagination";
+import ReusablePagination from "@/components/Shared/ReusablePagination";
 import FilteringForm from "@/utils/forms/FilteringForm";
 import Loader from "@/utils/Loader";
 import { useAllProductByKeyWordQuery } from "@/redux/features/product/product.Api";

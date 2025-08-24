@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import { SwiperSlide } from "swiper/react";
 import { ShoppingBag } from "@mui/icons-material";
-import ReusableCarousel from "../shared/ReusableCarousel";
+import ReusableCarousel from "../Shared/ReusableCarousel";
 import { PromotionalBannerData } from "./PromotionalBannerData";
-import SectionHeader from "../shared/SectionHeader";
+import SectionHeader from "../Shared/SectionHeader";
 
 export default function PromotionalBanners() {
   return (

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import ReusablePagination from "@/components/shared/ReusablePagination";
+import ReusablePagination from "@/components/Shared/ReusablePagination";
 import {
   useSingleCategoryQuery,
   useSingleMainCategoryQuery,

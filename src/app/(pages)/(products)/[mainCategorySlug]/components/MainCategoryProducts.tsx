@@ -2,7 +2,7 @@
 "use client";
 import ProductCard1 from "@/utils/cards/ProductCard1";
 import { Box, Typography } from "@mui/material";
-import ReusablePagination from "@/components/shared/ReusablePagination";
+import ReusablePagination from "@/components/Shared/ReusablePagination";
 import { TProduct } from "@/Types/ProductType";
 import { useAllProductByKeyWordQuery } from "@/redux/features/product/product.Api";
 import Loader from "@/utils/Loader";

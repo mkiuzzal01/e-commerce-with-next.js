@@ -3,8 +3,8 @@ import React from "react";
 import { Box, Button, Container, Grid } from "@mui/material";
 import { FieldValues } from "react-hook-form";
 // import { zodResolver } from "@hookform/resolvers/zod";
-import { SelectInput } from "@/components/shared/input-fields/SelectInput";
-import ReusableForm from "@/components/shared/ReusableForm";
+import { SelectInput } from "@/components/Shared/input-fields/SelectInput";
+import ReusableForm from "@/components/Shared/ReusableForm";
 import { useUser } from "@/lib/hooks/useUser";
 import Loader from "@/utils/Loader";
 // import { userValidationSchema } from "./updateUserValidation";
@@ -13,7 +13,7 @@ import { useToast } from "@/utils/tost-alert/ToastProvider";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/redux/hooks";
 import { updateUser } from "@/redux/features/auth/authSlice";
-import TextInput from "@/components/shared/input-fields/TextInput";
+import TextInput from "@/components/Shared/input-fields/TextInput";
 
 export default function UpdateUser() {
   const dispatch = useAppDispatch();

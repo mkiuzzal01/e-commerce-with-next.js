@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { SwiperSlide } from "swiper/react";
-import ReusableCarousel from "../shared/ReusableCarousel";
+import ReusableCarousel from "../Shared/ReusableCarousel";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { useAllContentQuery } from "@/redux/features/banner-content/content.Api";
 import Loader from "@/utils/Loader";

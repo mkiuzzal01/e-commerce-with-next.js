@@ -2,12 +2,12 @@
 import React, { useRef, useState } from "react";
 import { Box, Tabs, Tab, Typography } from "@mui/material";
 import { Sparkles } from "lucide-react";
-import SectionHeader from "@/components/shared/SectionHeader";
+import SectionHeader from "@/components/Shared/SectionHeader";
 import ReusableCarousel, {
   CarouselRef,
-} from "@/components/shared/ReusableCarousel";
+} from "@/components/Shared/ReusableCarousel";
 import { SwiperSlide } from "swiper/react";
-import CarouselArrows from "@/components/shared/CarouselArrows";
+import CarouselArrows from "@/components/Shared/CarouselArrows";
 import ProductCard2 from "@/utils/cards/ProductCard2";
 import Loader from "@/utils/Loader";
 import { TProduct } from "@/Types/ProductType";

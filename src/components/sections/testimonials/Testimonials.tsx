@@ -3,8 +3,8 @@ import { useRef } from "react";
 import { SwiperSlide } from "swiper/react";
 import ReusableCarousel, {
   CarouselRef,
-} from "@/components/shared/ReusableCarousel";
-import SectionHeader from "@/components/shared/SectionHeader";
+} from "@/components/Shared/ReusableCarousel";
+import SectionHeader from "@/components/Shared/SectionHeader";
 
 import {
   Box,
@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { testimonialsData } from "./TestimonialsData";
 import { Zap } from "lucide-react";
-import CarouselArrows from "@/components/shared/CarouselArrows";
+import CarouselArrows from "@/components/Shared/CarouselArrows";
 
 const Testimonials = () => {
   const carouselRef = useRef<CarouselRef>(null);
