@@ -5,12 +5,12 @@ import { Box, Typography } from "@mui/material";
 import { Flame } from "lucide-react";
 import ReusableCarousel, {
   CarouselRef,
-} from "@/components/Shared/ReusableCarousel";
-import SectionHeader from "@/components/Shared/SectionHeader";
+} from "@/components/shared/ReusableCarousel";
+import SectionHeader from "@/components/shared/SectionHeader";
 import { SwiperSlide } from "swiper/react";
 import ProductCard1 from "@/utils/cards/ProductCard1";
 import SectionButton from "@/utils/buttons/sectionButton";
-import CarouselArrows from "@/components/Shared/CarouselArrows";
+import CarouselArrows from "@/components/shared/CarouselArrows";
 import Loader from "@/utils/Loader";
 import { TProduct } from "@/Types/ProductType";
 import { useAllProductByKeyWordQuery } from "@/redux/features/product/product.Api";

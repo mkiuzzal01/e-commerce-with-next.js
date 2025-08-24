@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { Box, Tabs, Tab } from "@mui/material";
-import SectionHeader from "@/components/Shared/SectionHeader";
+import SectionHeader from "@/components/shared/SectionHeader";
 import { Truck } from "lucide-react";
-import ReusablePagination from "@/components/Shared/ReusablePagination";
+import ReusablePagination from "@/components/shared/ReusablePagination";
 import { useAllOrderByKeyWordQuery } from "@/redux/features/order/order.Api";
 import { useUser } from "@/lib/hooks/useUser";
 import Loader from "@/utils/Loader";

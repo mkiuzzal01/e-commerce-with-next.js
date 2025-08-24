@@ -9,9 +9,9 @@ import {
   FormControlLabel,
   Alert,
 } from "@mui/material";
-import SectionHeader from "@/components/Shared/SectionHeader";
+import SectionHeader from "@/components/shared/SectionHeader";
 import { ShoppingCart } from "lucide-react";
-import ReusablePagination from "@/components/Shared/ReusablePagination";
+import ReusablePagination from "@/components/shared/ReusablePagination";
 import { useAppSelector } from "@/redux/hooks";
 import { TProduct } from "@/Types/ProductType";
 import { useAllProductByKeyWordQuery } from "@/redux/features/product/product.Api";

@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import { List } from "lucide-react";
-import SectionHeader from "@/components/Shared/SectionHeader";
+import SectionHeader from "@/components/shared/SectionHeader";
 import WishListCard from "@/utils/cards/WishListCard";
-import ReusablePagination from "@/components/Shared/ReusablePagination";
+import ReusablePagination from "@/components/shared/ReusablePagination";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { TProduct, TWishlistItem } from "@/Types/ProductType";
 import Loader from "@/utils/Loader";

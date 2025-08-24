@@ -1,4 +1,4 @@
-import ProductDetails from "@/components/Shared/ProductDetails";
+import ProductDetails from "@/components/shared/ProductDetails";
 
 type PageProps = {
   params: Promise<{

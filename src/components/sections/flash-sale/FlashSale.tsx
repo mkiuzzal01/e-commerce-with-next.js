@@ -4,10 +4,10 @@ import { Typography, Chip, Box } from "@mui/material";
 import { Zap } from "lucide-react";
 import ReusableCarousel, {
   CarouselRef,
-} from "@/components/Shared/ReusableCarousel";
-import SectionHeader from "@/components/Shared/SectionHeader";
+} from "@/components/shared/ReusableCarousel";
+import SectionHeader from "@/components/shared/SectionHeader";
 import { SwiperSlide } from "swiper/react";
-import CarouselArrows from "@/components/Shared/CarouselArrows";
+import CarouselArrows from "@/components/shared/CarouselArrows";
 import ProductCard from "@/utils/cards/ProductCard1";
 import SectionButton from "@/utils/buttons/sectionButton";
 import { useAllProductByKeyWordQuery } from "@/redux/features/product/product.Api";
