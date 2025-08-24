@@ -42,8 +42,8 @@ export default function SectionHeader({
             justifyContent="center"
             borderRadius="50%"
             sx={{
-              background: `linear-gradient(to right, ${theme.palette.warning.main}, ${theme.palette.error.main})`,
-              color: theme.palette.common.white,
+              background: `linear-gradient(to right, ${theme?.palette?.warning?.main}, ${theme?.palette?.error?.main})`,
+              color: theme?.palette?.common?.white,
             }}
           >
             {icon}
@@ -53,7 +53,7 @@ export default function SectionHeader({
           <Typography
             variant="subtitle2"
             sx={{
-              color: theme.palette.warning.main,
+              color: theme?.palette?.warning?.main,
               textTransform: "uppercase",
               letterSpacing: 1,
               fontWeight: 600,

@@ -8,8 +8,8 @@ import { useToast } from "@/utils/tost-alert/ToastProvider";
 import { setUser, TUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { verifyToken } from "@/lib/verifyToken";
-import TextInput from "../../../../components/shared/input-fields/TextInput";
-import ReusableForm from "../../../../components/shared/ReusableForm";
+import ReusableForm from "@/components/shared/ReusableForm";
+import TextInput from "@/components/shared/input-fields/TextInput";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
