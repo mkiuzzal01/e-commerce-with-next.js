@@ -17,18 +17,18 @@ type TextInputProps = {
   row?: number;
 };
 
-export const TextInput = ({
+export default function TextInput({
   name,
   label,
   placeholder,
-  type = "text",
-  variant = "outlined",
+  type,
+  variant,
   required,
-  defaultValue = "",
-  fullWidth = true,
+  defaultValue,
+  fullWidth,
   multiline,
-  row = 1,
-}: TextInputProps) => {
+  row,
+}: TextInputProps) {
   const { control } = useFormContext();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -69,4 +69,4 @@ export const TextInput = ({
       )}
     />
   );
-};
+}

@@ -71,7 +71,7 @@ export default function Footer() {
                   sx={{
                     p: 1,
                     "&:hover": {
-                      bgcolor: "rgba(255, 255, 255, 0.1)",
+                      bgcolor: "var(--color-brand-primary)",
                       transform: "translateY(-2px)",
                     },
                     transition: "all 0.2s ease-in-out",

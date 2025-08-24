@@ -1,4 +1,4 @@
-import { TextInput } from "@/components/shared/input-fields/TextInput";
+import TextInput from "@/components/shared/input-fields/TextInput";
 import ReusableForm from "@/components/shared/ReusableForm";
 import { Box, Button, Grid } from "@mui/material";
 import React from "react";
