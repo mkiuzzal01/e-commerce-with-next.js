@@ -29,7 +29,6 @@ export default function Cart() {
     queryParams: { page, limit: 12 },
     headerParams: {
       params: { _id: { $in: productIds } },
-      activity: "market-launch",
     },
   });
 

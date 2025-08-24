@@ -47,8 +47,14 @@ export default function TextInput({
           placeholder={placeholder}
           variant={variant}
           fullWidth={fullWidth}
-          error={!!fieldState.error}
-          helperText={fieldState.error?.message}
+          error={!!fieldState?.error}
+          helperText={
+            fieldState?.error?.types
+              ? Object.values(fieldState.error.types).map((msg, idx) => (
+                  <div key={idx}>{msg as string}</div>
+                ))
+              : fieldState?.error?.message
+          }
           type={isPassword ? (showPassword ? "text" : "password") : type}
           multiline={multiline}
           rows={multiline ? row : undefined}

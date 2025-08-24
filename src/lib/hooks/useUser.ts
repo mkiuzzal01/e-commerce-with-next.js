@@ -1,11 +1,11 @@
-import { useGetProfileBySlugQuery } from "@/redux/features/auth/auth.Api";
+import { useGetProfileQuery } from "@/redux/features/auth/auth.Api";
 import { TUser } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { TUserProfile } from "@/Types/UserType";
 
 export function useUser() {
   const user: TUser | null = useAppSelector((state) => state.auth.user);
-  const slug = user?.slug ?? "";
+  const id = user?.id ?? "";
 
   const {
     data,
@@ -13,8 +13,8 @@ export function useUser() {
     isError,
     error,
     refetch,
-  } = useGetProfileBySlugQuery(slug, {
-    skip: !slug,
+  } = useGetProfileQuery(id, {
+    skip: !id,
   });
 
   const userInfo: TUserProfile = data?.data ?? null;

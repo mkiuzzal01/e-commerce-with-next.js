@@ -26,7 +26,7 @@ export default function TrackOrder() {
   const {
     data: upcomingData,
     isLoading: isUpcomingLoading,
-    refetch: refetchUpcoming,
+    refetch,
   } = useAllOrderByKeyWordQuery({
     queryParams: { page: pageUpcoming, limit: 10 },
     headerParams: {
@@ -158,7 +158,7 @@ export default function TrackOrder() {
             <Upcoming
               orders={upcomingOrders}
               isLoading={isUpcomingLoading}
-              refetch={refetchUpcoming}
+              refetch={refetch}
             />
           )}
           {tabIndex === 1 && (

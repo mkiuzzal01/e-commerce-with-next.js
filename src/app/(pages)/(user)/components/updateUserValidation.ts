@@ -12,8 +12,6 @@ export const userValidationSchema = z.object({
   email: z.string().email("Invalid email address"),
   phone: z.string().optional(),
   gender: z.enum(["male", "female", "other"]).optional(),
-  role: z.enum(["super-admin", "admin", "user"]).optional(),
-  status: z.enum(["in-progress", "blocked"]).optional(),
   address: z.object({
     presentAddress: z.string({ message: "Please enter present address." }),
     permanentAddress: z.string({ message: "Please enter permanent address." }),

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Box, Button, Container, Typography, Paper, Grid } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 import { useToast } from "@/utils/tost-alert/ToastProvider";
 import { useRegisterMutation } from "@/redux/features/auth/auth.Api";
@@ -10,11 +10,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterFormValidation } from "./RegisterFormValidation";
 import ReusableForm from "@/components/shared/ReusableForm";
 import TextInput from "@/components/shared/input-fields/TextInput";
+import { useAppDispatch } from "@/redux/hooks";
+import { verifyToken } from "@/lib/verifyToken";
+import { setUser, TUser } from "@/redux/features/auth/authSlice";
 
 export default function RegisterForm() {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const { showToast } = useToast();
+  const dispatch = useAppDispatch();
   const [register, { isLoading }] = useRegisterMutation();
+
+  const redirectPath = searchParams.get("redirect") || "/";
 
   const handleSubmit = async (values: FieldValues) => {
     if (values?.password !== values?.confirmPassword) {
@@ -28,7 +35,9 @@ export default function RegisterForm() {
 
       if (data?.success) {
         showToast({ message: "User registered successfully", type: "success" });
-        router.push("/login");
+        const user = verifyToken(data?.data?.accessToken) as TUser;
+        dispatch(setUser({ user: user, token: data?.data?.accessToken }));
+        router.push(redirectPath);
       }
     } catch (error) {
       console.error(error);

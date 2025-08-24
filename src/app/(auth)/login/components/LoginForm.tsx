@@ -23,13 +23,13 @@ export default function LoginForm() {
   const handleSubmit = async (values: FieldValues) => {
     try {
       const { data } = await loginUser(values);
-      const user = verifyToken(data?.data?.accessToken) as TUser;
-      dispatch(setUser({ user: user, token: data?.data?.accessToken }));
       if (data?.success) {
         showToast({
           message: "User login successfully",
           type: "success",
         });
+        const user = verifyToken(data?.data?.accessToken) as TUser;
+        dispatch(setUser({ user: user, token: data?.data?.accessToken }));
         router.push(redirectPath);
       }
     } catch {

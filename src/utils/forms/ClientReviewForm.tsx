@@ -67,7 +67,7 @@ export default function ClientReviewForm({ slug }: ClientReviewFormProps) {
     if (uniqueOrderItems.length > 0) {
       const initialReviews: Record<string, ReviewState> = {};
       uniqueOrderItems.forEach((item) => {
-        const productId = item.productId._id;
+        const productId = item?.productId?._id;
         initialReviews[productId] = {
           rating: 2,
           comment: "",
@@ -108,8 +108,8 @@ export default function ClientReviewForm({ slug }: ClientReviewFormProps) {
       const reviewData = {
         reviews: {
           productId,
-          userId: order.customerId,
-          comment: values.comment || "",
+          userId: order?.customerId?._id,
+          comment: values?.comment || "",
           rating: reviews[productId]?.rating || 2,
         },
       };

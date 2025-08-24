@@ -31,6 +31,14 @@ const authApi = baseApi.injectEndpoints({
       }),
       providesTags: ["User"],
     }),
+
+    getProfile: builder.query({
+      query: (id: string) => ({
+        url: `/user/user/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["User"],
+    }),
   }),
 });
 
@@ -38,5 +46,6 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useUpdateUserMutation,
+  useGetProfileQuery,
   useGetProfileBySlugQuery,
 } = authApi;

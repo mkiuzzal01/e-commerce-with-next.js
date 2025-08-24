@@ -15,7 +15,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { updateUser } from "@/redux/features/auth/authSlice";
 import TextInput from "@/components/shared/input-fields/TextInput";
 
-export default function UpdateUser() {
+export default function UpdateUserForm() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -34,7 +34,8 @@ export default function UpdateUser() {
       if (res.success) {
         showToast({ message: "Profile updated successfully", type: "success" });
         refetch();
-        dispatch(updateUser({ slug: res?.data.slug }));
+        dispatch(updateUser({ id: res?.data?.id }));
+
         router.push(redirectPath);
       }
     } catch {
@@ -94,6 +95,7 @@ export default function UpdateUser() {
                 name="gender"
                 label="Gender"
                 options={["male", "female", "other"]}
+                requiredMessage="Gender is required"
               />
             </Grid>
 
