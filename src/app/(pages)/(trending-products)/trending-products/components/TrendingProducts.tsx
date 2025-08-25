@@ -64,7 +64,7 @@ export default function TrendingProducts() {
               key={product?._id}
               viewLink={`/trending-products/${product?.slug}`}
               product={{
-                id: product?._id,
+                slug: product?.slug,
                 name: product?.title,
                 image: product?.productImage?.photo?.url,
                 price: product?.price,

@@ -10,6 +10,8 @@ import { useAppDispatch } from "@/redux/hooks";
 import { verifyToken } from "@/lib/verifyToken";
 import ReusableForm from "@/components/shared/ReusableForm";
 import TextInput from "@/components/shared/input-fields/TextInput";
+import { loginValidationSchema } from "./LoginValidation";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -72,7 +74,10 @@ export default function LoginForm() {
             Please login to your account
           </Typography>
 
-          <ReusableForm onSubmit={handleSubmit}>
+          <ReusableForm
+            onSubmit={handleSubmit}
+            resolver={zodResolver(loginValidationSchema)}
+          >
             <Grid container spacing={2}>
               <Grid size={{ xs: 12 }}>
                 <TextInput

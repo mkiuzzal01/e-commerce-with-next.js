@@ -12,7 +12,7 @@ export const RegisterFormValidation = z
     email: z.string({ message: "Enter your valid email" }).email(),
     phone: z
       .string({ message: "Phone number is required" })
-      .length(12, "Phone number must be exactly 12 digits")
+      .length(11, "Phone number must be exactly 11 digits")
       .regex(/^\d+$/, "Phone number must contain only digits"),
     password: z
       .string({ message: "Password is required" })

@@ -64,7 +64,7 @@ export default function FlashSale() {
               key={product?._id}
               viewLink={`/flash-sale/${product?.slug}`}
               product={{
-                id: String(product?._id),
+                slug: product?.slug,
                 name: product?.title,
                 image: product?.productImage?.photo?.url,
                 price: product?.price,

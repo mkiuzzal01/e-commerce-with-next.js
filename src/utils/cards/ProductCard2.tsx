@@ -11,6 +11,7 @@ import { addToWishlist, removeFromWishlist } from "@/redux/slice/wishlistSlice";
 
 export type TProduct = {
   id: string;
+  slug: string | any;
   name: string;
   image: any;
   price: number | string;
@@ -24,7 +25,7 @@ type ProductCard2Props = {
 };
 
 const ProductCard2: React.FC<ProductCard2Props> = ({ viewLink, product }) => {
-  const { name, price, image, rating, showWishlist = true, id } = product;
+  const { name, price, image, rating, showWishlist = true, slug, id } = product;
 
   const dispatch = useAppDispatch();
   const wishlistItems = useAppSelector((state) => state.wishlist.items);
@@ -49,147 +50,155 @@ const ProductCard2: React.FC<ProductCard2Props> = ({ viewLink, product }) => {
   };
 
   return (
-    <Card
-      sx={{
-        height: "100%",
-        borderRadius: 4,
-        overflow: "hidden",
-        backgroundColor: "var(--color-brand-background)",
-        boxShadow: "0 4px 16px rgba(0, 0, 0, 0.15)",
-        transition: "transform 0.3s ease",
-        "&:hover": {
-          transform: "translateY(-4px)",
-        },
-      }}
-      elevation={6}
-      aria-label={`Product card for ${name}`}
-    >
-      <Box className="relative aspect-[3/4] overflow-hidden">
-        <Image
-          src={image}
-          alt={name}
-          fill
-          className="object-cover transition-transform duration-700 hover:scale-110"
-          sizes="(max-width: 600px) 100vw, 33vw"
-          draggable={false}
-        />
-
-        {/* Glass Overlay */}
-        <Box
+    <Box>
+      <Box component="a" href={viewLink} aria-label={`View details of ${name}`}>
+        <Card
           sx={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            bgcolor: "rgba(255, 255, 255, 0.15)",
-            backdropFilter: "blur(6px)",
-            color: "text.primary",
-            px: 3,
-            py: 3,
-            display: "flex",
-            flexDirection: "column",
-            gap: 1,
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
+            height: "100%",
+            borderRadius: 4,
+            overflow: "hidden",
+            backgroundColor: "var(--color-brand-background)",
+            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.15)",
+            transition: "transform 0.3s ease",
+            "&:hover": {
+              transform: "translateY(-4px)",
+            },
           }}
+          elevation={6}
+          aria-label={`Product card for ${name}`}
         >
-          <AppLink href={viewLink} aria-label={`View details of ${name}`}>
-            <Typography
-              variant="subtitle1"
-              fontWeight="bold"
-              noWrap
+          <Box className="relative aspect-[3/4] overflow-hidden">
+            <Image
+              src={image}
+              alt={name}
+              fill
+              className="object-cover transition-transform duration-700 hover:scale-110"
+              sizes="(max-width: 600px) 100vw, 33vw"
+              draggable={false}
+            />
+
+            {/* Glass Overlay */}
+            <Box
               sx={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                bgcolor: "rgba(255, 255, 255, 0.15)",
+                backdropFilter: "blur(6px)",
                 color: "text.primary",
-                fontSize: 16,
-                textTransform: "uppercase",
-                transition: "color 0.3s ease",
-                "&:hover": {
-                  color: "orange",
-                },
-                mb: 1,
+                px: 3,
+                py: 3,
+                display: "flex",
+                flexDirection: "column",
+                gap: 1,
+                borderTopLeftRadius: 20,
+                borderTopRightRadius: 20,
               }}
-              title={name}
             >
-              {name}
-            </Typography>
-          </AppLink>
+              <AppLink href={viewLink} aria-label={`View details of ${name}`}>
+                <Typography
+                  variant="subtitle1"
+                  fontWeight="bold"
+                  noWrap
+                  sx={{
+                    color: "text.primary",
+                    fontSize: 16,
+                    textTransform: "uppercase",
+                    transition: "color 0.3s ease",
+                    "&:hover": {
+                      color: "orange",
+                    },
+                    mb: 1,
+                  }}
+                  title={name}
+                >
+                  {name}
+                </Typography>
+              </AppLink>
 
-          <Rating
-            size="small"
-            name="product-rating"
-            value={rating}
-            precision={0.5}
-            readOnly
-            sx={{ color: "var(--color-brand-primary)" }}
-            aria-label={`Rating: ${rating} out of 5`}
-          />
+              <Rating
+                size="small"
+                name="product-rating"
+                value={rating}
+                precision={0.5}
+                readOnly
+                sx={{ color: "var(--color-brand-primary)" }}
+                aria-label={`Rating: ${rating} out of 5`}
+              />
 
-          <Typography
-            fontWeight="bold"
-            color="error.main"
-            sx={{ fontSize: 18 }}
-            aria-label={`Price: ৳${numericPrice.toLocaleString()}`}
-          >
-            ৳{numericPrice.toLocaleString()}
-          </Typography>
-
-          <Stack direction="row" spacing={1} mt={1} alignItems="center">
-            <AppLink href={viewLink}>
-              <Button
-                variant="contained"
-                fullWidth
-                startIcon={<ShoppingCart size={18} />}
-                sx={{
-                  fontWeight: 600,
-                  bgcolor: "var(--color-brand-primary)",
-                  color: "white",
-                  boxShadow: "0 2px 12px rgb(255 107 107 / 0.4)",
-                  "&:hover": {
-                    bgcolor: "var(--color-brand-secondary)",
-                    boxShadow: "0 4px 20px rgb(255 107 107 / 0.6)",
-                  },
-                }}
-                aria-label={`View product ${name}`}
+              <Typography
+                fontWeight="bold"
+                color="error.main"
+                sx={{ fontSize: 18 }}
+                aria-label={`Price: ৳${numericPrice.toLocaleString()}`}
               >
-                View Product
-              </Button>
-            </AppLink>
+                ৳{numericPrice.toLocaleString()}
+              </Typography>
 
-            {showWishlist && (
-              <Button
-                variant={isWishlisted ? "contained" : "outlined"}
-                onClick={handleAddToWishlist}
-                disabled={!id}
-                sx={{
-                  minWidth: 40,
-                  px: 1.5,
-                  borderWidth: 2,
-                  color: isWishlisted
-                    ? "white"
-                    : "var(--color-brand-secondary)",
-                  borderColor: "var(--color-brand-secondary)",
-                  bgcolor: isWishlisted
-                    ? "var(--color-brand-secondary)"
-                    : "transparent",
-                  "&:hover": {
-                    bgcolor: "var(--color-brand-secondary)",
-                    color: "white",
-                  },
-                }}
-                aria-pressed={isWishlisted}
-                aria-label={
-                  isWishlisted
-                    ? `Remove ${name} from wishlist`
-                    : `Add ${name} to wishlist`
-                }
-              >
-                <Heart size={20} />
-              </Button>
-            )}
-          </Stack>
-        </Box>
+              <Stack direction="row" spacing={1} mt={1} alignItems="center">
+                <Box width={"100%"}>
+                  <AppLink href={`/check-out/${slug || " "}`}>
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      startIcon={<ShoppingCart size={18} />}
+                      sx={{
+                        px: 3,
+                        py: 1.5,
+                        fontWeight: 600,
+                        bgcolor: "var(--color-brand-primary)",
+                        color: "white",
+                        boxShadow: "0 2px 12px rgb(255 107 107 / 0.4)",
+                        "&:hover": {
+                          bgcolor: "var(--color-brand-secondary)",
+                          boxShadow: "0 4px 20px rgb(255 107 107 / 0.6)",
+                        },
+                      }}
+                      aria-label={`View product ${name}`}
+                    >
+                      Buy Now
+                    </Button>
+                  </AppLink>
+                </Box>
+
+                {showWishlist && (
+                  <Button
+                    variant={isWishlisted ? "contained" : "outlined"}
+                    onClick={handleAddToWishlist}
+                    disabled={!id}
+                    sx={{
+                      px: 3,
+                      py: 1.5,
+                      borderWidth: 2,
+                      color: isWishlisted
+                        ? "white"
+                        : "var(--color-brand-secondary)",
+                      borderColor: "var(--color-brand-secondary)",
+                      bgcolor: isWishlisted
+                        ? "var(--color-brand-secondary)"
+                        : "transparent",
+                      "&:hover": {
+                        bgcolor: "var(--color-brand-secondary)",
+                        color: "white",
+                      },
+                    }}
+                    aria-pressed={isWishlisted}
+                    aria-label={
+                      isWishlisted
+                        ? `Remove ${name} from wishlist`
+                        : `Add ${name} to wishlist`
+                    }
+                  >
+                    <Heart size={20} />
+                  </Button>
+                )}
+              </Stack>
+            </Box>
+          </Box>
+        </Card>
       </Box>
-    </Card>
+    </Box>
   );
 };
 

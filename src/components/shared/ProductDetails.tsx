@@ -51,8 +51,6 @@ export default function ProductDetails({ slug }: { slug: string }) {
   const { finalPrice } = useDiscount(product?.price, product?.discount);
   const isWishlisted = wishlistItems.some((item) => item._id === product?._id);
 
-  console.log(product);
-
   if (isLoading) return <Loader />;
   if (!product) {
     return (

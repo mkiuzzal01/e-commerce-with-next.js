@@ -42,6 +42,8 @@ export default function NewArrivals() {
 
   if (isLoading || isMainCategoryLoading) return <Loader />;
 
+  console.log(products);
+
   return (
     <Box className="py-6 bg-gradient-to-br from-orange-50 via-white to-red-50">
       <Box className="container mx-auto px-4">
@@ -123,6 +125,7 @@ export default function NewArrivals() {
                   viewLink={`/${selected}/${item?.slug}`}
                   product={{
                     id: item?._id,
+                    slug: item?.slug,
                     name: item?.title,
                     image: item?.productImage?.photo?.url,
                     price: item?.price,

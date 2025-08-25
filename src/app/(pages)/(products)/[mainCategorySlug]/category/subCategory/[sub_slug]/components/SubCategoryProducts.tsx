@@ -96,7 +96,7 @@ export default function SubCategoryProducts({ params }: PageProps) {
                   key={idx}
                   viewLink={`/${params?.mainCategorySlug}/category/subCategory/${params?.sub_slug}/${item?.slug}`}
                   product={{
-                    id: item?._id,
+                    slug: item?.slug,
                     name: item?.title,
                     image: item?.productImage?.photo?.url,
                     price: item?.price,

@@ -69,7 +69,7 @@ export default function TrendingProducts() {
                   <ProductCard1
                     viewLink={`/trending-products/${product?.slug}`}
                     product={{
-                      id: String(product?._id),
+                      slug: product?.slug,
                       name: product?.title,
                       image: product?.productImage?.photo?.url,
                       price: product?.price,

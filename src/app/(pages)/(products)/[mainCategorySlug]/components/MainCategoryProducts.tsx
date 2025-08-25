@@ -86,7 +86,7 @@ export default function MainCategoryProducts({
                   key={item._id || idx}
                   viewLink={`/${mainCategorySlug}/${item?.slug}`}
                   product={{
-                    id: item?._id,
+                    slug: item?.slug,
                     name: item?.title,
                     image: item?.productImage?.photo?.url,
                     price: item?.price,

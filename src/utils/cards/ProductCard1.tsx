@@ -4,13 +4,10 @@ import { useDiscount } from "@/lib/hooks/useDiscount";
 import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import AppLink from "../AppLink";
-import { Heart } from "lucide-react";
-import { addToWishlist, removeFromWishlist } from "@/redux/slice/wishlistSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { useToast } from "../tost-alert/ToastProvider";
+import { ShoppingCartIcon } from "lucide-react";
 
 export type TProduct = {
-  id: string;
+  slug: string | any;
   name: string;
   image?: any;
   price: number | string;
@@ -25,27 +22,7 @@ type ProductCardProps = {
 const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
   const { originalPrice, finalPrice, discountAmount, isDiscounted } =
     useDiscount(product.price, product.discount);
-  const dispatch = useAppDispatch();
-  const wishlistItems = useAppSelector((state) => state.wishlist.items);
-  const isWishlisted = wishlistItems.some((item) => item._id === product?.id);
-  const { showToast } = useToast();
 
-  const handleAddToWishlist = () => {
-    if (isWishlisted) {
-      dispatch(removeFromWishlist(product.id));
-      showToast({ message: "Removed from wishlist", type: "warning" });
-    } else {
-      dispatch(
-        addToWishlist({
-          _id: product.id,
-        })
-      );
-      showToast({
-        message: "Added to wishlist successfully!",
-        type: "success",
-      });
-    }
-  };
   return (
     <Card
       sx={{
@@ -64,8 +41,8 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
     >
       <Box className="relative aspect-[3/4] overflow-hidden">
         <Image
-          src={product.image}
-          alt={product.name}
+          src={product?.image}
+          alt={product?.name}
           fill
           className="object-cover transition-transform duration-500 hover:scale-105"
         />
@@ -88,7 +65,7 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
             }}
           >
             {Number(product?.discount) < 100
-              ? `-${product.discount}%`
+              ? `-${product?.discount}%`
               : `Save ৳${discountAmount.toLocaleString()}`}
           </Box>
         )}
@@ -144,42 +121,47 @@ const ProductCard1: React.FC<ProductCardProps> = ({ viewLink, product }) => {
 
           {/* Buttons */}
           <Stack direction="row" spacing={1} mt={2}>
-            <Button
-              fullWidth
-              variant="outlined"
-              startIcon={
-                <Heart color={isWishlisted ? "red" : "white"} size={20} />
-              }
-              onClick={handleAddToWishlist}
-              sx={{
-                color: "white",
-                borderColor: "rgba(255,255,255,0.5)",
-                backdropFilter: "blur(4px)",
-                fontWeight: 600,
-                "&:hover": {
-                  borderColor: "white",
-                  backgroundColor: "rgba(255,255,255,0.1)",
-                },
-              }}
-            >
-              {isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
-            </Button>
-            <AppLink href={viewLink || ""}>
-              <Button
-                fullWidth
-                variant="contained"
-                className="btn-primary"
-                sx={{
-                  whiteSpace: "nowrap",
-                  color: "white",
-                  fontWeight: 600,
-                  px: 3,
-                  py: 1.5,
-                }}
-              >
-                View
-              </Button>
-            </AppLink>
+            <Box width={"100%"}>
+              <AppLink href={`/check-out/${product?.slug || ""}`}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  startIcon={<ShoppingCartIcon />}
+                  sx={{
+                    px: 3,
+                    py: 1.5,
+                    color: "white",
+                    borderColor: "rgba(255,255,255,0.5)",
+                    backdropFilter: "blur(4px)",
+                    fontWeight: 600,
+                    "&:hover": {
+                      borderColor: "white",
+                      backgroundColor: "rgba(255,255,255,0.1)",
+                    },
+                  }}
+                >
+                  Buy Now
+                </Button>
+              </AppLink>
+            </Box>
+            <Box>
+              <AppLink href={viewLink || ""}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  className="btn-primary"
+                  sx={{
+                    whiteSpace: "nowrap",
+                    color: "white",
+                    fontWeight: 600,
+                    px: 3,
+                    py: 1.5,
+                  }}
+                >
+                  View
+                </Button>
+              </AppLink>
+            </Box>
           </Stack>
         </Box>
       </Box>

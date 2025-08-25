@@ -101,7 +101,7 @@ export default function CategoryProducts({ params }: PageProps) {
                   key={idx}
                   viewLink={`/${params?.mainCategorySlug}/category/${params?.slug}/${item?.slug}`}
                   product={{
-                    id: item?._id,
+                    slug: item?.slug,
                     name: item?.title,
                     image: item?.productImage?.photo?.url,
                     price: item?.price,
